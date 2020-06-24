@@ -28,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    private TabLayout tabLayout;
+
     int currentPage = 0;
     final long DELAYS_MS = 500;
     final long PERIOD_MS = 3000;
@@ -75,12 +78,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager = findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
+        tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager, true);
 
         final Handler handler = new Handler();
         final Runnable update = new Runnable() {
             @Override
             public void run() {
-                if(currentPage == 6)
+                if(currentPage == 5)
                     currentPage = 0;
                 viewPager.setCurrentItem(currentPage++, true);
             }

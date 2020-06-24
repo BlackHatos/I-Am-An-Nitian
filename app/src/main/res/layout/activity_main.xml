@@ -22,8 +22,8 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
             <androidx.appcompat.widget.Toolbar
-                android:layout_margin="10dp"
-                android:elevation="4dp"
+                android:layout_margin="0dp"
+                android:elevation="0dp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:contentInsetStart="0dp"
                 app:contentInsetLeft="0dp"
@@ -53,7 +53,7 @@
               android:layout_margin="10dp"
               app:cardCornerRadius="15dp"
               android:id="@+id/lineal"
-              android:elevation="0dp"
+              app:cardElevation="0dp"
               android:layout_width="match_parent"
               android:layout_height="180dp">
 
@@ -67,10 +67,20 @@
                       android:layout_width="match_parent"
                       android:layout_height="180dp"/>
 
+                  <com.google.android.material.tabs.TabLayout
+                      android:layout_alignParentBottom="true"
+                     android:layout_centerHorizontal="true"
+                      app:tabGravity="center"
+                      app:tabBackground="@drawable/tab_selector"
+                      app:tabIndicatorHeight="0dp"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/tabLayout"
+                      />
+
               </RelativeLayout>
 
           </androidx.cardview.widget.CardView>
-
 
       </androidx.core.widget.NestedScrollView>
 
