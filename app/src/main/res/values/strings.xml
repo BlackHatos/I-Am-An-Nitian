@@ -4,13 +4,13 @@
     <string name="close_drawer">Close Drawer</string>
 
     <!--============== Welcome Screen Strings =================-->
-    <string name="login_or_signup">Log in Or sign up</string>
-    <string name="facebook">Continue With facebook</string>
+    <string name="login_or_signup">Log in or sign up</string>
+    <string name="facebook">Continue With Facebook</string>
     <string name="google">Continue With Google</string>
 
     <!--============== Login Strings =================-->
-    <string name="login">Log In</string>
-    <string name="signup">Sign Up</string>
+    <string name="login">Log in</string>
+    <string name="signup">Sign up</string>
     <string name="email_phone_hint">Email or Phone</string>
     <string name="pass_hint">Password</string>
     <string name="pass_forg">forgot password?</string>
@@ -31,5 +31,8 @@
     <!--========= Drawer Headers Strings ==========-->
     <string name="user_name">Shubham Maurya</string>
     <string name="nit_name">NIT Srinagar</string>
+
+    <string name="facebook_app_id">576919333023662</string>
+    <string name="fb_login_protocol_scheme">fb576919333023662</string>
 
 </resources>

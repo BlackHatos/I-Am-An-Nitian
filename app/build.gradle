@@ -49,8 +49,15 @@ dependencies {
     //facebook shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    //youtube API
+    //youtube Data API
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+
+    //facebook Graph API
+    implementation files('libs/facebook-login.aar')
+    implementation files('libs/facebook.aar')
+    implementation files('libs/facebook-core.aar')
+    implementation files('libs/facebook-common.aar')
+
 
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 

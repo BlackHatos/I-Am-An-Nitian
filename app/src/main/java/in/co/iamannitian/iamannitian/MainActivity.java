@@ -40,6 +40,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -117,8 +120,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initializing facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
-        //initializing youtube related widgets
+
+      //initializing youtube related widgets
         video1 = findViewById(R.id.video1);
         video2 = findViewById(R.id.video2);
         video3 = findViewById(R.id.video3);
@@ -321,7 +327,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     /*=======>>>>>>> Logout function <<<<<<<<<=========*/
-    void logout() {
+    void logout()
+    {
+      Profile  profile = Profile.getCurrentProfile().getCurrentProfile();
+        if (profile != null)  //if user logged in
+        {
+            LoginManager.getInstance().logOut();
+        }
+
         sharedPreferences.edit().clear().apply();
         Intent intent = new Intent(MainActivity.this, LoginOrSignupActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
