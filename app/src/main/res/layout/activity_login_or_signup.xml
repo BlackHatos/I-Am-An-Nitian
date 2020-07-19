@@ -98,20 +98,37 @@
             android:textColor="#ffffff"/>
     </FrameLayout>
 
-        <Button
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/work_sans_semibold"
-            android:stateListAnimator="@null"
-            android:elevation="0dp"
-            android:layout_gravity="center"
+        <FrameLayout
+            android:id="@+id/FrameLayout2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/mybutton3"
-            android:text="Continue with Google"
-            android:textColor="@color/textColor1"
-            android:textSize="16sp"
-            android:drawableEnd="@drawable/googleicon_small"/>
+            android:layout_marginTop="10dp"
+            >
+
+            <Button
+                android:id="@+id/signInGoogle"
+                android:onClick="signIn"
+                android:textAllCaps="false"
+                android:fontFamily="@font/work_sans_semibold"
+                android:stateListAnimator="@null"
+                android:elevation="0dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/mybutton3"
+                android:text="Continue with Google"
+                android:textColor="@color/textColor1"
+                android:textSize="16sp"
+                android:drawableEnd="@drawable/googleicon_small"/>
+
+            <com.google.android.gms.common.SignInButton
+                 android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

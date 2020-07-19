@@ -59,6 +59,9 @@ dependencies {
     implementation files('libs/facebook-common.aar')
 
 
+    //Login with google API
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

@@ -44,6 +44,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -325,15 +328,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-
     /*=======>>>>>>> Logout function <<<<<<<<<=========*/
     void logout()
     {
+        //logout from facebook sign in
       Profile  profile = Profile.getCurrentProfile().getCurrentProfile();
         if (profile != null)  //if user logged in
         {
             LoginManager.getInstance().logOut();
         }
+
+        //logout from google sign in
+        GoogleSignIn.getClient(this,new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()).signOut();
 
         sharedPreferences.edit().clear().apply();
         Intent intent = new Intent(MainActivity.this, LoginOrSignupActivity.class);

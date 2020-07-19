@@ -1,7 +1,9 @@
 package in.co.iamannitian.iamannitian;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,18 +18,30 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.json.JSONObject;
 import java.util.Arrays;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class LoginOrSignupActivity extends AppCompatActivity {
-
-    private Button login,fb;
+public class LoginOrSignupActivity extends AppCompatActivity
+{
+    private Button login,fb, googlesignInButton;
     private LoginButton fb_login;
     private CallbackManager callbackManager;
     private SharedPreferences sharedPreferences;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +64,17 @@ public class LoginOrSignupActivity extends AppCompatActivity {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
         login= findViewById(R.id.logsignbtn);
         fb_login = findViewById(R.id.fb_login);
 		fb = findViewById(R.id.fb);
+		googlesignInButton = findViewById(R.id.signInGoogle);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,9 +89,8 @@ public class LoginOrSignupActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         fb_login.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            public void onSuccess(LoginResult loginResult)
+            {
 
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -124,30 +145,53 @@ public class LoginOrSignupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 5)
+        {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            GoogleSignInAccount acct = result.getSignInAccount();
+
+            if(acct != null)
+            {
+                String email  = acct.getEmail();
+                String name = acct.getDisplayName();
+                String id = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+
+                sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("userId",id);
+                editor.putString("userName", name);
+                editor.putString("userEmail",email);
+                editor.apply();
+
+                startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
+            }
+        }
     }
 
     public void onClick(View v)
     {
         fb.setText("Logging you in....");
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         if (v == fb)
         {
             fb_login.performClick();
         }
     }
 
-    public void loadUserProfile(AccessToken accessToken)
+    public void signIn(View v)
     {
+        googlesignInButton.setText("Logging you in....");
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        googleSignIn();
     }
+
+
+    private  void googleSignIn()
+    {
+        Intent intent = googleSignInClient.getSignInIntent();
+        startActivityForResult(intent, 5);
+    }
+
 }
-
-
-/*=========================== shared preferences saving user data started ============================*/
-  /*                */
-/*=========================== shared preferences saving user data finished ============================*/
-
-           /* String id = object.getString("id");
-                    String name = object.getString("name");
-                    String email = object.getString("email");
-                    String gender = object.getString("gender");
-                    String imageUrl = "https://graph.facebook.com"+ id +"/picture?return_ssl_resources=1";
-                    */
