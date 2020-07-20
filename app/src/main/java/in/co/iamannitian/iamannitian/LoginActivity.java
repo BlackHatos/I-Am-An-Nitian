@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,7 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
-    private TextView forgot_password, go_to_sign_up;
+    private TextView go_to_sign_up;
     private Button click_to_login;
 
     //progress dialog
@@ -56,13 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
-
-        forgot_password = findViewById(R.id.forgot_password);
         go_to_sign_up = findViewById(R.id.go_to_sign_up);
-
         click_to_login = findViewById(R.id.click_to_login);
 
         //initializing progress dialog
@@ -72,26 +66,20 @@ public class LoginActivity extends AppCompatActivity {
         click_to_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //initializing errors
                 email.setError(null);
                 password.setError(null);
 
                 //getting credentials on click the login button
-
                 String user_email = email.getText().toString().trim().replaceAll("\\s+","");
                 String user_password = password.getText().toString().trim().replaceAll("\\s+","");
                 //checking user email
-
                 if (user_email.isEmpty())
                 {
                     email.requestFocus();
                     email.setError("required");
                     return;
                 }
-
                 //checking user password
-
                 if (user_password.isEmpty())
                 {
                     password.requestFocus();
@@ -115,10 +103,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     private void proceedToLogin(final String user_email, final String user_password)
     {
-
         // show progress bar first
         progressDialog.setMessage("Authenticating....");
         progressDialog.show();
@@ -136,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                         if(response_array[0].equals("1"))
                         {
                             progressDialog.dismiss();
-
 
                             /*=========================== shared preferences saving user data started ============================*/
                             SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -157,13 +142,10 @@ public class LoginActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             //on dialog dismiss back to interaction mode
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                             Toast.makeText(LoginActivity.this,
                                     response_array[1], Toast.LENGTH_LONG).show();
                         }
 
-
-                       //Log.d("The Output is : ",response);
                     }
                 }, new Response.ErrorListener() { //error
             @Override

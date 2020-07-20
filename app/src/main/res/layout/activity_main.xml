@@ -39,7 +39,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
       <androidx.core.widget.NestedScrollView
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fitsSystemWindows="true"
@@ -106,16 +105,14 @@
                           android:layout_marginStart="2dp"
                           android:textSize="18sp"
                           android:fontFamily="@font/work_sans_semibold"
-                          android:text="Headlines"
+                          android:text="@string/headline"
                           android:textColor="?attr/textColor"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"/>
 
                   </LinearLayout>
 
-
                   <RelativeLayout
-                      android:foreground="?attr/selectableItemBackground"
                       android:background="@drawable/toolbar_backgound"
                       android:layout_below="@id/head3"
                       android:id="@+id/head2"
@@ -147,7 +144,6 @@
 
                   </RelativeLayout>
 
-
                   <LinearLayout
                       android:id="@+id/head1"
                       android:layout_width="match_parent"
@@ -170,7 +166,7 @@
                           android:layout_height="wrap_content"
                           android:layout_marginStart="2dp"
                           android:fontFamily="@font/work_sans_semibold"
-                          android:text="Useful Links"
+                          android:text="@string/links"
                           android:textColor="?attr/textColor"
                           android:textSize="18sp" />
 
@@ -191,7 +187,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -221,10 +216,9 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="News"/>
+                              android:text="@string/news"/>
 
                       </LinearLayout>
-
 
                       <LinearLayout
                           android:gravity="center"
@@ -233,7 +227,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -263,7 +256,7 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="Blog"/>
+                              android:text="@string/blog"/>
 
                       </LinearLayout>
 
@@ -274,7 +267,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -304,7 +296,7 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="College"/>
+                              android:text="@string/college"/>
 
                       </LinearLayout>
                   </LinearLayout>
@@ -326,7 +318,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -356,7 +347,7 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="Placement"/>
+                              android:text="@string/placement"/>
 
                       </LinearLayout>
 
@@ -367,7 +358,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -397,7 +387,7 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="Ranking"/>
+                              android:text="@string/ranking"/>
 
                       </LinearLayout>
 
@@ -408,7 +398,6 @@
                           android:layout_height="120dp">
 
                           <androidx.cardview.widget.CardView
-                              android:foreground="?attr/selectableItemBackground"
                               app:cardBackgroundColor="@color/first"
                               app:cardElevation="0dp"
                               app:cardCornerRadius="15dp"
@@ -438,13 +427,12 @@
                               android:textAlignment="center"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="Jossa"/>
+                              android:text="@string/jossa"/>
 
                       </LinearLayout>
                   </LinearLayout>
 
               </RelativeLayout>
-
 
               <RelativeLayout
                   android:layout_centerVertical="true"
@@ -456,6 +444,7 @@
                   android:layout_height="200dp">
 
                   <com.airbnb.lottie.LottieAnimationView
+                      android:contentDescription="@string/cnt_desp"
                       android:id="@+id/studentWithLaptop"
                       android:layout_gravity="center"
                       android:layout_width="170dp"
@@ -469,31 +458,33 @@
                   <RelativeLayout
                       android:gravity="center"
                       android:paddingStart="8dp"
-                      android:layout_toRightOf="@id/studentWithLaptop"
+                      android:layout_toEndOf="@id/studentWithLaptop"
                       android:orientation="vertical"
                       android:layout_width="match_parent"
                       android:layout_height="match_parent">
 
                       <TextView
-                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentStart="true"
                           android:id="@+id/textMotivation"
                           android:fontFamily="@font/work_sans_semibold"
                           android:textSize="16sp"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="Read Inspirational Success Stories"
+                          android:text="@string/success_story_read"
                           />
 
                       <Button
+                          android:textAllCaps="false"
+                          android:foreground="?attr/selectableItemBackground"
                           android:paddingStart="40dp"
                           android:paddingEnd="40dp"
-                          android:layout_alignParentLeft="true"
+                          android:layout_alignParentStart="true"
                           android:layout_below="@id/textMotivation"
                           android:background="@drawable/otp_button_shape"
                           android:textColor="@color/textColor1"
                           android:elevation="0dp"
                           android:layout_marginTop="8dp"
-                          android:text="Read"
+                          android:text="@string/read"
                           android:textSize="15sp"
                           android:fontFamily="@font/work_sans_semibold"
                           android:layout_width="wrap_content"
@@ -526,7 +517,7 @@
                       android:layout_height="wrap_content"
                       android:layout_marginStart="2dp"
                       android:fontFamily="@font/work_sans_semibold"
-                      android:text="Trending Now"
+                      android:text="@string/trending"
                       android:textColor="?attr/textColor"
                       android:textSize="18sp" />
 
@@ -561,6 +552,7 @@
                               android:layout_height="wrap_content">
 
                               <ImageView
+                                  android:contentDescription="@string/cnt_desp"
                                   android:clickable="true"
                                   android:focusable="true"
                                   android:onClick="firstVideo"
@@ -572,6 +564,7 @@
                                   />
 
                               <ImageView
+                                  android:contentDescription="@string/cnt_desp"
                                   android:layout_centerInParent="true"
                                   android:layout_width="50dp"
                                   android:layout_height="50dp"
@@ -587,7 +580,7 @@
                           android:textSize="14sp"
                           android:textColor="?attr/textColor"
                           android:layout_marginTop="5dp"
-                          android:text="This is my First ever Video I have seen"
+                          android:text="@string/loading"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"/>
 
@@ -599,7 +592,8 @@
                       android:layout_below="@id/layout1"
                       android:id="@+id/layout2"
                       android:layout_width="match_parent"
-                      android:layout_height="180dp">
+                      android:layout_height="180dp"
+                      android:baselineAligned="false">
 
 
                       <LinearLayout
@@ -631,9 +625,10 @@
                                       android:layout_width="match_parent"
                                       android:layout_height="85dp"
                                       android:id="@+id/video2"
-                                      />
+                                      android:contentDescription="@string/cnt_desp" />
 
                                   <ImageView
+                                      android:contentDescription="@string/cnt_desp"
                                       android:layout_centerInParent="true"
                                       android:layout_width="40dp"
                                       android:layout_height="40dp"
@@ -649,7 +644,7 @@
                               android:textSize="14sp"
                               android:textColor="?attr/textColor"
                               android:layout_marginTop="5dp"
-                              android:text="This is my First"
+                              android:text="@string/loading"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
                               />
@@ -676,6 +671,7 @@
                                   android:layout_height="wrap_content">
 
                                   <ImageView
+                                      android:contentDescription="@string/cnt_desp"
                                       android:clickable="true"
                                       android:focusable="true"
                                       android:onClick="thirdVideo"
@@ -687,6 +683,7 @@
                                       />
 
                                   <ImageView
+                                      android:contentDescription="@string/cnt_desp"
                                       android:layout_centerInParent="true"
                                       android:layout_width="40dp"
                                       android:layout_height="40dp"
@@ -702,7 +699,7 @@
                               android:textSize="14sp"
                               android:textColor="?attr/textColor"
                               android:layout_marginTop="5dp"
-                              android:text="This is my First"
+                              android:text="@string/loading"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"/>
 

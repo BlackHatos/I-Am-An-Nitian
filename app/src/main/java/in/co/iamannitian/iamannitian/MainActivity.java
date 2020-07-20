@@ -18,7 +18,6 @@ import android.icu.text.Edits;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -312,17 +311,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about:
-                Toast.makeText(this, "about is clicked!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, AboutUs.class));
                 break;
             case R.id.app_info:
-                Toast.makeText(this, "app-info is clicked!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, AppInfo.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -446,9 +444,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-
-            Log.e("Response:", response);
-
             if(response!=null)
                 try{
                     JSONObject jsonObject = new JSONObject(response);

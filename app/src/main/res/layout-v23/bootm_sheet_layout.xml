@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:background="@drawable/bottom_sheet_shape"
+    android:background="@drawable/bottom_sheet_shape"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,8 +60,10 @@
         android:layout_marginTop="20dp"
         android:autofillHints="" />
 
+
     <Button
-          android:textAllCaps="false"
+           android:textAllCaps="false"
+           android:foreground="?attr/selectableItemBackground"
             android:stateListAnimator="@null"
             android:fontFamily="@font/work_sans_semibold"
             android:textColor="@color/white"
@@ -74,5 +76,6 @@
            android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginBottom="30dp"
-            tools:targetApi="m"/>
+            />
+
 </LinearLayout>

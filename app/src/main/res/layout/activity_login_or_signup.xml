@@ -12,7 +12,7 @@
 
     <RelativeLayout
         android:stateListAnimator="@null"
-        android:layout_marginLeft="-45dp"
+        android:layout_marginStart="-45dp"
         android:layout_marginTop="-40dp"
         android:background="@drawable/top"
         android:orientation="vertical"
@@ -20,12 +20,12 @@
         android:layout_height="250dp">
 
         <TextView
-            android:layout_marginLeft="63dp"
+            android:layout_marginStart="63dp"
             android:layout_centerVertical="true"
             android:fontFamily="@font/roboto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Join The \nBiggest\nStudent Community"
+            android:text="@string/join"
             android:textColor="@color/white"
             android:textSize="26sp"
             />
@@ -52,6 +52,7 @@
             />
 
         <Button
+            android:foreground="?attr/selectableItemBackground"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:fontFamily="@font/work_sans_semibold"
@@ -67,21 +68,19 @@
             android:textColor="@color/white"
             />
 
-
        <FrameLayout
         android:id="@+id/FrameLayout1"
         android:layout_width="match_parent"
         android:layout_height="50dp" 
 		android:layout_marginTop="10dp"
 		>
-
         <com.facebook.login.widget.LoginButton
             android:id="@+id/fb_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
-
        <Button
+           android:foreground="?attr/selectableItemBackground"
            android:textAllCaps="false"
            android:onClick="onClick"
 	        android:id="@+id/fb"
@@ -94,7 +93,7 @@
             android:textSize="16sp"
             android:background="@drawable/mybutton2"
             android:drawableEnd="@drawable/fbicon_small"
-            android:text="Continue with facebook"
+            android:text="@string/facebook"
             android:textColor="#ffffff"/>
     </FrameLayout>
 
@@ -104,8 +103,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             >
-
             <Button
+                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/signInGoogle"
                 android:onClick="signIn"
                 android:textAllCaps="false"
@@ -116,11 +115,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/mybutton3"
-                android:text="Continue with Google"
+                android:text="@string/google"
                 android:textColor="@color/textColor1"
                 android:textSize="16sp"
                 android:drawableEnd="@drawable/googleicon_small"/>
-
             <com.google.android.gms.common.SignInButton
                  android:visibility="gone"
                 android:layout_marginTop="10dp"
@@ -129,7 +127,5 @@
                 android:layout_height="wrap_content" />
 
         </FrameLayout>
-
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,9 +1,7 @@
-//this class is used to increase the size of the humberger Icon
 package in.co.iamannitian.iamannitian;
 
 import android.content.Context;
 import android.graphics.Canvas;
-
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
 
 class HumbergerDrawable  extends DrawerArrowDrawable
