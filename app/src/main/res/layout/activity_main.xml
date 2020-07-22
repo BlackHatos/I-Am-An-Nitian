@@ -8,6 +8,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/refreshScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
@@ -580,7 +586,6 @@
                           android:textSize="14sp"
                           android:textColor="?attr/textColor"
                           android:layout_marginTop="5dp"
-                          android:text="@string/loading"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"/>
 
@@ -644,7 +649,6 @@
                               android:textSize="14sp"
                               android:textColor="?attr/textColor"
                               android:layout_marginTop="5dp"
-                              android:text="@string/loading"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
                               />
@@ -699,7 +703,6 @@
                               android:textSize="14sp"
                               android:textColor="?attr/textColor"
                               android:layout_marginTop="5dp"
-                              android:text="@string/loading"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"/>
 
@@ -727,6 +730,8 @@
             />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
