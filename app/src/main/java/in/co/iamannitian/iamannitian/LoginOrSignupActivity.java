@@ -1,8 +1,15 @@
 package in.co.iamannitian.iamannitian;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONObject;
 import java.util.Arrays;
@@ -34,6 +42,7 @@ import java.util.Arrays;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class LoginOrSignupActivity extends AppCompatActivity
 {
@@ -42,7 +51,8 @@ public class LoginOrSignupActivity extends AppCompatActivity
     private CallbackManager callbackManager;
     private SharedPreferences sharedPreferences;
     private GoogleSignInClient googleSignInClient;
-
+    private NetworkInfo activeNetworkInfo;
+    private BroadcastReceiver broadCastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -62,6 +72,19 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_login_or_signup);
 
+           broadCastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                //======> check internet connection
+                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
+            }
+        };
+
+        registerReceiver(broadCastReceiver,
+                new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,8 +92,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
+        
         login= findViewById(R.id.logsignbtn);
         fb_login = findViewById(R.id.fb_login);
 		fb = findViewById(R.id.fb);
@@ -97,19 +119,19 @@ public class LoginOrSignupActivity extends AppCompatActivity
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try
                         {
-                            String  name = object.getString("name");
-                            String  email = object.getString("email");
-                            String  id = object.getString("id");
-                            String imageUrl = "https://graph.facebook.com/"+id+"";
+                                String name = object.getString("name");
+                                String email = object.getString("email");
+                                String id = object.getString("id");
+                                String imageUrl = "https://graph.facebook.com/" + id + "";
 
-                            sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("userId",id);
-                            editor.putString("userName", name);
-                            editor.putString("userEmail",email);
-                            editor.apply();
+                                sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("userId", id);
+                                editor.putString("userName", name);
+                                editor.putString("userEmail", email);
+                                editor.apply();
 
-                            startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -127,20 +149,27 @@ public class LoginOrSignupActivity extends AppCompatActivity
             public void onCancel() {
                 Toast.makeText(LoginOrSignupActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                fb.setClickable(true);
             }
 
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(LoginOrSignupActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                fb.setClickable(true);
             }
         });
 
     }
 
-
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(broadCastReceiver);
+    }
+    
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -153,45 +182,67 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
             if(acct != null)
             {
-                String email  = acct.getEmail();
-                String name = acct.getDisplayName();
-                String id = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
+                    String email = acct.getEmail();
+                    String name = acct.getDisplayName();
+                    String id = acct.getId();
+                    Uri personPhoto = acct.getPhotoUrl();
 
-                sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("userId",id);
-                editor.putString("userName", name);
-                editor.putString("userEmail",email);
-                editor.apply();
-
-                startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
+                    sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("userId", id);
+                    editor.putString("userName", name);
+                    editor.putString("userEmail", email);
+                    editor.apply();
+                    startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
             }
         }
     }
 
     public void onClick(View v)
     {
-        fb.setText("Logging you in....");
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        if (v == fb)
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
         {
-            fb_login.performClick();
+            fb.setText("Logging you in....");
+            fb.setClickable(false);
+            if (v == fb) {
+                fb_login.performClick();
+            }
         }
+        else
+            showSnackBar();
     }
 
     public void signIn(View v)
     {
-        googlesignInButton.setText("Logging you in....");
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        googleSignIn();
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+        {
+            googlesignInButton.setText("Logging you in....");
+            googleSignIn();
+        }
+        else
+            showSnackBar();
     }
-
 
     private  void googleSignIn()
     {
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent, 5);
+    }
+
+    public void showSnackBar()
+    {
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.myRelativeLayout),
+                Html.fromHtml("<font color=#ffffff>No Internet connection. Turn on WiFi or mobile data</font>"),
+                Snackbar.LENGTH_INDEFINITE);
+        snackbar.setActionTextColor(Color.YELLOW);
+
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 
 }

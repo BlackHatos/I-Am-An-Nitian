@@ -27,4 +27,9 @@
     <!--============ Color used in bottom navigation drawer ====================-->
     <color name="navigation_background">@color/colorPrimary</color>
 
+    <!--============ Colors used in refreshh Icon ====================-->
+    <color name="color1">#ff6347</color>
+    <color name="color2">#4E4EFF</color>
+    <color name="color3">#0EAC0E</color>
+
   </resources>

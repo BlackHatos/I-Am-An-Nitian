@@ -8,12 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/refreshScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
@@ -44,6 +38,12 @@
                 />
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/refreshScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
       <androidx.core.widget.NestedScrollView
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -716,6 +716,8 @@
 
       </androidx.core.widget.NestedScrollView>
 
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:background="?attr/backgroundColor"
             app:itemTextColor="@drawable/bottom_nav_selector"
@@ -731,7 +733,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"

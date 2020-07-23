@@ -15,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.Edits;
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private HeadLineViewPagerAdapter adapter2;
     private TabLayout tabLayout;
     private SwipeRefreshLayout refreshScreen;
+    private NetworkInfo activeNetworkInfo;
+    private BroadcastReceiver broadcastReceiver;
+    private Snackbar snackbar;
 
     int currentPage = 0;
     int currentHeadline = 0;
@@ -246,27 +250,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerUpdate();
         showBadge();
 
-        //check Internet Connection
+        //registering facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
-        if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
-        {
-            //initializing facebook sdk
-            FacebookSdk.sdkInitialize(getApplicationContext());
-            new RequestYoutubeAPI().execute();
-            sendRequest();
-        }
-        else
-        {
-            showSnackBar();
-        }
-
-
-        refreshScreen.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        //broadcast receiver to check Internet connectivity
+           broadcastReceiver = new BroadcastReceiver()
+           {
             @Override
-            public void onRefresh() {
-                Toast.makeText(MainActivity.this,"Hello",Toast.LENGTH_SHORT).show();
+            public void onReceive(Context context, Intent intent) {
+                //======> check internet connection
+                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
+                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+                {
+                    new RequestYoutubeAPI().execute();
+                    sendRequest();
+                    if(snackbar != null)
+                        snackbar.dismiss();
+                }
+                else
+                {
+                    showSnackBar();
+                }
+            }
+        };
+
+        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+        refreshScreen.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                sendRequest();
+                new RequestYoutubeAPI().execute();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                            refreshScreen.setRefreshing(false);
+                    }
+                }, 3000);
             }
         });
     }
@@ -279,10 +302,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
-        if (mode) {
+        if (mode)
+        {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
             actionBar.setIcon(R.drawable.app_logo_dark);
-        } else {
+        }
+        else
+            {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
             actionBar.setIcon(R.drawable.app_logo);
         }
@@ -390,7 +416,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
-    public void sendRequest() {
+    public void sendRequest()
+    {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 request_url, null, new Response.Listener<JSONArray>() {
             @SuppressLint("LongLogTag")
@@ -433,10 +460,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String channel_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+channelId+"&key="+apiKey+"&order=date";
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(Void... params)
+        {
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(channel_url);
-
             try{
                 HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity httpEntity = response.getEntity();
@@ -496,7 +523,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         setYoutubeData();
-
     }
 
     private void setYoutubeData()
@@ -560,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void showSnackBar()
     {
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.drawerLayout),
+         snackbar = Snackbar.make(findViewById(R.id.drawerLayout),
                 Html.fromHtml("<font color=#ffffff>No Internet connection. Turn on WiFi or mobile data</font>"),
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(Color.YELLOW);
@@ -572,5 +598,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         snackbar.show();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 }
