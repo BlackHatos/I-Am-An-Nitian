@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     RequestQueue rq;
     private List<SlideUtils> sliderImg;
+    private List<SlideUtils> headline;
 
     String request_url = "https://iamannitian.co.in/app/get_slider_image.php";
 
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         rq = Volley.newRequestQueue(this);
         sliderImg = new ArrayList<>();
+        headline = new ArrayList<>();
 
         navigationView = findViewById(R.id.navigationView);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -151,8 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Slider
         viewPager = findViewById(R.id.viewPager);
         viewPager2 = findViewById(R.id.viewPager2);
-        adapter2 = new HeadLineViewPagerAdapter(this);
-        viewPager2.setAdapter(adapter2);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager2, true);
 
@@ -328,7 +328,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerToggle.syncState();
     }
 
-    private void closeDrawer() {
+    private void closeDrawer()
+    {
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
@@ -356,7 +357,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -426,20 +426,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 for (int i = 0; i < response.length(); i++) {
                     SlideUtils slideUtils = new SlideUtils();
+                    SlideUtils slideUtils1 = new SlideUtils();
                     try {
                         JSONObject object = response.getJSONObject(i);
                         slideUtils.setSlideImageUrl
                                 ("https://iamannitian.co.in/images/" + object.getString("url"));
                         slideUtils.setDescp(object.getString("descp"));
+                        slideUtils1.setDescp(object.getString("descp"));
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
                     sliderImg.add(slideUtils);
+                    headline.add(slideUtils1);
                 }
 
                 adapter = new ViewPagerAdapter(sliderImg, MainActivity.this);
+                adapter2 = new HeadLineViewPagerAdapter(headline,MainActivity.this);
                 viewPager.setAdapter(adapter);
+                viewPager2.setAdapter(adapter2);
             }
 
         }, new Response.ErrorListener() { //error

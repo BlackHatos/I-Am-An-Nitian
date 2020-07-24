@@ -78,52 +78,6 @@
                 android:fontFamily="@font/work_sans"
                 android:text="Founder I Am An NITian" />
 
-      <!--      <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_below="@id/founder"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:src="@drawable/fbx"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/facebook"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:onClick="goToFb"
-                    tools:ignore="OnClick"
-                    android:layout_marginEnd="10dp"
-                    />
-
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/instax"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/instagram"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:onClick="goToInsta"
-                    tools:ignore="OnClick"
-                    />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/youtube"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/youtube"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:onClick="goToYoutube"
-                    tools:ignore="OnClick"
-                    />
-
-            </LinearLayout> -->
-
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>

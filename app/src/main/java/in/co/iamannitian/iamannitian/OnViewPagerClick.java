@@ -1,18 +1,18 @@
 package in.co.iamannitian.iamannitian;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.facebook.shimmer.ShimmerFrameLayout;
-
-import java.util.logging.Handler;
-
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_URL;
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_NEWS_TITLE;
 
@@ -20,16 +20,24 @@ public class OnViewPagerClick extends AppCompatActivity {
 
     private ImageView newsImage;
     private TextView newsTitle;
-    private ShimmerFrameLayout shimmer1;
+    private Toolbar toolbar;
 
-    @Override
+      @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+          /*=========>>> Setting Up dark Mode <<<==========*/
+          boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
+          if (mode) {
+              setTheme(R.style.DarkTheme);
+          } else {
+              setTheme(R.style.AppTheme);
+          }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_view_pager_click);
 
         newsImage = findViewById(R.id.newImage);
         newsTitle = findViewById(R.id.newsTitle);
-        shimmer1 = findViewById(R.id.shimmer1);
 
         Intent intent = getIntent();
         String imageUrl = intent.getStringExtra(EXTRA_URL);
@@ -42,14 +50,52 @@ public class OnViewPagerClick extends AppCompatActivity {
                 .into(newsImage);
 
         newsTitle.setText(newsTitleX);
-
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shimmer1.stopShimmer();
-                shimmer1.setVisibility(View.GONE);
-                newsImage.setVisibility(View.VISIBLE);
-            }
-        }, 4000);
+        setUpToolbarMenu(mode);
     }
+
+    /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
+    private void setUpToolbarMenu(boolean mode) {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("News");
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+
+        if (mode)
+        {
+            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
+            actionBar.setIcon(R.drawable.app_logo_dark);
+        }
+        else
+        {
+            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+            actionBar.setIcon(R.drawable.app_logo);
+        }
+
+        actionBar.setDisplayShowHomeEnabled(true);
+    }
+
+    /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(getApplicationContext(), AboutUs.class));
+                break;
+            case R.id.app_info:
+                startActivity(new Intent(getApplicationContext(), AppInfo.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

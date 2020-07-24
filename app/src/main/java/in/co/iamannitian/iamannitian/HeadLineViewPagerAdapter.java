@@ -27,20 +27,15 @@ public class HeadLineViewPagerAdapter extends PagerAdapter {
                     R.drawable.nittrichy
             };
 
-    String str[] = {
-            "NIT Srinagar suffering from worst Cyber attack",
-            "IIT Bombay touched highest placement record",
-            "Jee Mains 2020 dates announced by NAT",
-            "NIT Delhi has now its own building",
-            "MHRD announces 10 million budget for NIT Trichy"
-    };
+    private List<SlideUtils> headline;
 
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public HeadLineViewPagerAdapter(Context context)
+    public HeadLineViewPagerAdapter(List<SlideUtils> headline,Context context)
     {
         this.context = context;
+        this.headline = headline;
     }
 
     @Override
@@ -60,7 +55,7 @@ public class HeadLineViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = layoutInflater.inflate(R.layout.head_lines, container, false);
         TextView textView = itemView.findViewById(R.id.headlines);
-        textView.setText(str[position]);
+        textView.setText(headline.get(position).descp);
         container.addView(itemView);
         return itemView;
     }

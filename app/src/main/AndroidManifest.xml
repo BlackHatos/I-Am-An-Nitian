@@ -15,7 +15,11 @@
         <activity android:name=".ContactUs"></activity>
         <activity android:name=".AboutUs" />
         <activity android:name=".AppInfo" />
-        <activity android:name=".YoutubePlayer" />
+
+        <activity
+            android:name=".YoutubePlayer"
+            android:parentActivityName=".MainActivity"
+            />
         <activity android:name=".MainNewsActivity" />
         <activity android:name=".OnViewPagerClick" />
         <activity

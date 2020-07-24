@@ -2,6 +2,9 @@ package in.co.iamannitian.iamannitian;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -19,11 +22,12 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_youtube_player);
 
         Intent intent = getIntent();
         videoId = intent.getStringExtra("videoId");
-
         youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.playerFragment);
         youTubePlayerFragment.initialize(key, this);
 

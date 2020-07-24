@@ -2,20 +2,13 @@ package in.co.iamannitian.iamannitian;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.android.volley.toolbox.ImageLoader;
-import com.facebook.shimmer.Shimmer;
-import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.util.List;
-import java.util.logging.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -25,7 +18,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
   public static final String EXTRA_URL = "imageUrl";
   public static final String EXTRA_NEWS_TITLE = "newsTitle";
-  public static final String EXTRA_NEWS_DESCRIPTION = "newDescription";
 
   private int image_resources[] =
           {
@@ -38,14 +30,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
   private List<SlideUtils> sliderImg;
   private ImageLoader imageLoader;
-
-  String str[] = {
-          "NIT Srinagar suffering from worst Cyber attack",
-          "IIT Bombay touched highest placement record",
-          "Jee Mains 2020 dates announced by NAT",
-          "NIT Delhi has now its own building",
-          "MHRD announces 10 million budget for NIT Trichy"
-  };
 
   private Context context;
   private LayoutInflater layoutInflater;
