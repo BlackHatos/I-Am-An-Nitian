@@ -53,7 +53,6 @@
             />
 
         <Button
-            android:foreground="?attr/selectableItemBackground"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:fontFamily="@font/work_sans_semibold"
@@ -81,7 +80,6 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
        <Button
-           android:foreground="?attr/selectableItemBackground"
            android:textAllCaps="false"
            android:onClick="onClick"
 	        android:id="@+id/fb"
@@ -105,7 +103,6 @@
             android:layout_marginTop="10dp"
             >
             <Button
-                android:foreground="?attr/selectableItemBackground"
                 android:id="@+id/signInGoogle"
                 android:onClick="signIn"
                 android:textAllCaps="false"

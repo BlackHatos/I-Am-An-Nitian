@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
+    android:fitsSystemWindows="true"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -67,7 +68,8 @@
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         android:paddingHorizontal="15dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        />
 
     <EditText
         android:stateListAnimator="@null"
@@ -104,7 +106,6 @@
         android:textSize="16sp" />
 
     <Button
-        android:foreground="?attr/selectableItemBackground"
         android:textAllCaps="false"
         android:fontFamily="@font/work_sans_semibold"
         android:stateListAnimator="@null"

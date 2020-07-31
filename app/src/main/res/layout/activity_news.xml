@@ -1,69 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:background="?attr/backgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewsActivity"
+    >
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/coordinatorLayout"
-        android:background="?attr/backgroundColor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".NewsActivity">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:background="?attr/backgroundColor"
+            app:elevation="0dp"
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
+            <androidx.appcompat.widget.Toolbar
+                android:layout_margin="0dp"
+                android:elevation="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleMarginStart="6dp"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:expandedTitleMarginBottom="20dp"
-                app:expandedTitleMarginStart="15dp"
-                app:contentScrim="?attr/colorPrimaryDark"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/bannermain"
-                    app:layout_collapseMode="parallax"
-                    android:contentDescription="@string/cnt_desp" />
-
-                <androidx.appcompat.widget.Toolbar
-                    app:layout_collapseMode="pin"
-                    app:contentInsetStart="0dp"
-                    app:contentInsetStartWithNavigation="0dp"
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:elevation="2dp"
-                    app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
-                    />
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
+                android:layout_height="wrap_content"
+                android:background="?attr/backgroundColor"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-
-            android:id="@+id/nestedScrollview"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fitsSystemWindows="true"
+            android:clipToPadding="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <androidx.recyclerview.widget.RecyclerView
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tag_recycler_view"
+                android:orientation="horizontal"
+                />
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_below="@id/tag_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+              <TextView
+                  android:layout_marginTop="5dp"
+                  android:layout_marginBottom="5dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Latest News"
+                  android:textSize="25sp"
+                  android:paddingStart="15dp"
+                  android:fontFamily="sans-serif"
+                  android:textStyle="bold"
+                  />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/news_recycler_view"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp"
+                    />
+            </LinearLayout>
+
+         </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:background="?attr/backgroundColor"
@@ -80,4 +112,17 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginEnd="10dp"
+        android:background="?attr/backgroundColor"
+        app:menu="@menu/main_menu"
+        app:itemTextColor="?attr/textColor"
+        app:itemIconTint="?attr/textColor"
+        android:theme="@style/NavigationViewHorizontalLineColor"
+        app:headerLayout="@layout/drawer_header"/>
 
+</androidx.drawerlayout.widget.DrawerLayout>

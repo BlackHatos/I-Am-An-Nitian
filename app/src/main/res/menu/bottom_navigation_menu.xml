@@ -10,6 +10,12 @@
         android:icon="@drawable/ic_user_profile"
         android:id="@+id/profile"
         android:title="Profile" />
+
+    <item
+        android:icon="@drawable/ic_news_24dp"
+        android:id="@+id/news_icon"
+        android:title="News" />
+
 <!--
     <item
         android:id="@+id/buy"

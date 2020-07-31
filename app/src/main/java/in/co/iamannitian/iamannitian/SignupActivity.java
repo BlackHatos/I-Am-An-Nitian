@@ -56,9 +56,16 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        //lets take advantage of the notch
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        else
+        {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         setContentView(R.layout.activity_signup);
 
         username = findViewById(R.id.username);
@@ -258,7 +265,7 @@ public class SignupActivity extends AppCompatActivity {
                             Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
                             startActivity(intent);
-
+                            finish();
                         }
                         else if(response_array[0].equals("0"))
                         {

@@ -22,6 +22,7 @@ import android.icu.text.Edits;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -30,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -78,7 +80,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -132,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         super.onCreate(savedInstanceState);
+        //registering facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
       //initializing youtube related widgets
@@ -228,15 +231,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //do nothing
                         break;
                     case R.id.notification:
-                        startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
                         overridePendingTransition(0, 0);
                         break;
                     case R.id.chat:
-                        startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                         overridePendingTransition(0, 0);
                         break;
                     case R.id.profile:
-                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        overridePendingTransition(0, 0);
+                        break;
+                    case R.id.news_icon:
+                        startActivity(new Intent(getApplicationContext(), NewsActivity.class));
                         overridePendingTransition(0, 0);
                         break;
                 }
@@ -250,8 +257,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerUpdate();
         showBadge();
 
-        //registering facebook sdk
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         //broadcast receiver to check Internet connectivity
            broadcastReceiver = new BroadcastReceiver()
@@ -263,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
-                    new RequestYoutubeAPI().execute();
+                   // new RequestYoutubeAPI().execute();
                     sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
@@ -283,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onRefresh()
             {
                 sendRequest();
-                new RequestYoutubeAPI().execute();
+                //new RequestYoutubeAPI().execute();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -334,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*=======>>>>>>> Navigation Item Click Listener <<<<<<<<<========*/
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -381,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         //logout from google sign in
-        GoogleSignIn.getClient(this,new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignIn.getClient( this,new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()).signOut();
 
@@ -404,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
     public void showBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
-        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(3);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.notification_badge, menuView, false);
         itemView.addView(notificationBadge);
     }
@@ -610,5 +614,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
+    }
+
+    public void goToNews(View view)
+    {
+        startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+    }
+
+    public void goToStory(View view)
+    {
+        startActivity(new Intent(getApplicationContext(), SuccessStory.class));
     }
 }

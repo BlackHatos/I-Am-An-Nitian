@@ -5,6 +5,7 @@
 package in.co.iamannitian.iamannitian;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -42,8 +43,16 @@ public class SplashScreen extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //lets take advantage of the notch
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        else
+        {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         setContentView(R.layout.activity_splash_screen);
 
@@ -70,9 +79,7 @@ public class SplashScreen extends AppCompatActivity
                     startActivity(intent);
                     finish();
                 }
-
             }
         }, SPLASH_TIME_OUT);
-
     }
 }

@@ -57,7 +57,7 @@
     </style>
 
     <!-- ===============    Hiding toolbar and status bar   ================= -->
-    <style name="HideAppBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="HideAppBar" parent="android:Theme.Translucent.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

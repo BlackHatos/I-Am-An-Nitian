@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -23,6 +24,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -67,8 +70,24 @@ public class LoginOrSignupActivity extends AppCompatActivity
         }
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        //lets take advantage of the notch
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        else
+        {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         setContentView(R.layout.activity_login_or_signup);
 
@@ -85,13 +104,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
         registerReceiver(broadCastReceiver,
                 new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
         
         login= findViewById(R.id.logsignbtn);
         fb_login = findViewById(R.id.fb_login);
@@ -113,25 +125,17 @@ public class LoginOrSignupActivity extends AppCompatActivity
             @Override
             public void onSuccess(LoginResult loginResult)
             {
-
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try
                         {
-                                String name = object.getString("name");
-                                String email = object.getString("email");
-                                String id = object.getString("id");
-                                String imageUrl = "https://graph.facebook.com/" + id + "";
-
-                                sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                                sharedPreferences = getApplicationContext().getSharedPreferences("appData", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("userId", id);
-                                editor.putString("userName", name);
-                                editor.putString("userEmail", email);
+                                editor.putString("userId", object.getString("id"));
+                                editor.putString("userName", object.getString("name"));
+                                 editor.putString("userEmail", object.getString("email"));
                                 editor.apply();
-
-                                startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -143,6 +147,12 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 parameters.putString("fields","id,name,email,gender");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
+
+                //go to home page
+                Intent intent = new Intent(LoginOrSignupActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
 
             @Override
@@ -193,7 +203,11 @@ public class LoginOrSignupActivity extends AppCompatActivity
                     editor.putString("userName", name);
                     editor.putString("userEmail", email);
                     editor.apply();
-                    startActivity(new Intent(LoginOrSignupActivity.this, MainActivity.class));
+
+                    Intent intent = new Intent(LoginOrSignupActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
             }
         }
     }

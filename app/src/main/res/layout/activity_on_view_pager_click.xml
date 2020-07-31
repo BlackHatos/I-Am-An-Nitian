@@ -17,8 +17,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <androidx.appcompat.widget.Toolbar
-            android:paddingStart="16dp"
-            android:paddingEnd="4dp"
             android:layout_margin="0dp"
             android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -36,7 +34,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_below="@id/appBarLayout"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -52,14 +49,14 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="61dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_centerHorizontal="true"
                 app:cardPreventCornerOverlap="false"
                 app:cardCornerRadius="10dp"
@@ -78,43 +75,143 @@
                     android:id="@+id/newImage"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="195dp"
                     />
 
             </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:textStyle="bold"
                     android:layout_marginStart="5dp"
-                    android:lineSpacingExtra="2dp"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/mainCard"
                     android:textColor="?attr/textColor"
-                    android:text="NIt Jalandhar student placed
+                    android:text="NIT Jalandhar student placed
                      at Google Bagged 1.2 Crores"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="23sp"
+                    android:fontFamily="sans-serif"
                     android:id="@+id/newsTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:background="@drawable/toolbar_backgound"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="#434343"
+                    android:id="@+id/publish_time"
+                    android:layout_below="@id/newsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dec 26, 2020, 8:05AM"
+                    android:fontFamily="@font/work_sans"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="5dp"
-                    android:lineSpacingExtra="3dp"
+                    />
+
+                <TextView
+                    android:letterSpacing="0.01"
+                    android:justificationMode="inter_word"
+                    android:layout_marginStart="5dp"
+                    android:lineSpacingExtra="6dp"
+                    android:paddingEnd="5dp"
                     android:textSize="18sp"
                     android:textColor="?attr/textColor"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@id/newsTitle"
+                    android:layout_below="@id/publish_time"
                     android:id="@+id/newDescp"
                     android:text="@string/description"
-                    android:fontFamily="@font/work_sans"
+                    android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-
             </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/backgroundColor"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:paddingStart="15dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_favorite_black_24dp"
+                />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_favorite_border_black_24dp"
+                />
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="92"
+                android:textColor="?attr/textColor"
+                android:textSize="16sp"
+                android:fontFamily="@font/work_sans"
+                android:layout_marginStart="7dp"
+                />
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_marginStart="18dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_share_black_24dp"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:paddingEnd="15dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:visibility="visible"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/save_border" />
+
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/save_article" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,22 +58,23 @@ public class OnViewPagerClick extends AppCompatActivity {
     private void setUpToolbarMenu(boolean mode) {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("News");
-
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         if (mode)
         {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor2), PorterDuff.Mode.SRC_ATOP);
             actionBar.setIcon(R.drawable.app_logo_dark);
         }
         else
         {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
             actionBar.setIcon(R.drawable.app_logo);
         }
 
-        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
