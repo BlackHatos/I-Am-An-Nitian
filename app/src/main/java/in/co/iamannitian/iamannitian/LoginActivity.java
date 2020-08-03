@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView go_to_sign_up;
     private Button click_to_login;
 
-    //progress dialog
+    //======> progress dialog
    private  ProgressDialog progressDialog;
 
     @Override
@@ -96,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 proceedToLogin(user_email, user_password);
-
               }
 
         });
@@ -119,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         // disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "https://iamannitian.co.in/app/login.php";
+        String url = "http://app.thenextsem.com/app/login.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -137,9 +136,15 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("userId",response_array[1]);
                             editor.putString("userName", response_array[2]);
                             editor.putString("userEmail",response_array[3]);
+                            editor.putString("userPhone","");
+                            editor.putString("userState", "");
+                            editor.putString("userCollege","");
+                            editor.putString("userDegree","");
+                            editor.putString("userBranch","");
+                            editor.putString("userStartYear","");
+                            editor.putString("userEndYear","");
                             editor.apply();
                             /*=========================== shared preferences saving user data finished ============================*/
-
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities

@@ -49,8 +49,10 @@
                     android:textColor="?attr/textColor"
                     android:id="@+id/collegeautoComplete"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
                     android:hint="College Name"
+                    android:textSize="14sp"
+                    android:drawableEnd="@drawable/ic_close_black_24dp"
                     android:completionThreshold="1"/>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>

@@ -7,19 +7,29 @@ import androidx.appcompat.widget.Toolbar;
 import me.at.nitsxr.CollegeAdapter;
 import me.at.nitsxr.CollegeItem;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.co.iamannitian.iamannitian.CompleteProfile.COLLEGE_NAME;
+
 public class CollegeSuggestions extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private SharedPreferences sharedPreferences;
     private List<CollegeItem> collegeItemList;
     private AutoCompleteTextView collegeAutoComplete;
     private CollegeAdapter collegeAdapter;
+    public static final String NAME_COLLEGE = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -27,7 +37,8 @@ public class CollegeSuggestions extends AppCompatActivity {
         boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         if (mode) {
             setTheme(R.style.DarkTheme);
-        } else {
+        } else
+            {
             setTheme(R.style.AppTheme);
         }
 
@@ -35,8 +46,38 @@ public class CollegeSuggestions extends AppCompatActivity {
         setContentView(R.layout.activity_college_suggestions);
         fillCollege();
         collegeAutoComplete = findViewById(R.id.collegeautoComplete);
+        sharedPreferences = getSharedPreferences("appData",MODE_PRIVATE);
         collegeAdapter = new CollegeAdapter(this,collegeItemList);
         collegeAutoComplete.setAdapter(collegeAdapter);
+
+        //=========> get the college name from CompleteProfile activity
+        Intent intent = getIntent();
+        String college_name = intent.getStringExtra(COLLEGE_NAME);
+        collegeAutoComplete.setText(college_name);
+        //========> move the cursor at the end of the autocomplete text view
+        collegeAutoComplete.setSelection(collegeAutoComplete.getText().toString().length());
+
+        //========> add onclick listener with the drawable end
+        collegeAutoComplete.setOnTouchListener(new View.OnTouchListener()
+                                               {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0; //index of the left drawable
+                final int DRAWABLE_RIGHT = 2; //index of the right drawable
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (collegeAutoComplete.getRight() -
+                            collegeAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        collegeAutoComplete.setText("");
+                        return true;
+                    }
+                }
+                    return false;
+                }
+        });
+
 
         setUpToolbarMenu(mode);
     }
@@ -47,12 +88,36 @@ public class CollegeSuggestions extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
        actionBar.setDisplayHomeAsUpEnabled(true);
+
+       //on press back button
+       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v)
+           {
+
+               //=========> creating shared preferences
+               SharedPreferences.Editor editor = sharedPreferences.edit();
+               editor.putString("userCollege",collegeAutoComplete.getText().toString().trim());
+               editor.apply();
+
+               Intent intent = new Intent(getApplicationContext(),CompleteProfile.class);
+               intent.putExtra(NAME_COLLEGE,collegeAutoComplete.getText().toString().trim());
+               startActivity(intent);
+               overridePendingTransition(0, 0);
+           }
+       });
+
         if (mode)
+        {
             toolbar.getNavigationIcon().setColorFilter(getResources()
                     .getColor(R.color.textColor2), PorterDuff.Mode.SRC_ATOP);
+        }
         else
+        {
             toolbar.getNavigationIcon().setColorFilter(getResources()
                     .getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
+        }
+
     }
 
     private void fillCollege()

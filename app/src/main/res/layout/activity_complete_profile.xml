@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    tools:context=".CompleteProfile">
+
+        <androidx.appcompat.widget.Toolbar
+            android:paddingStart="10dp"
+            android:layout_margin="0dp"
+            android:elevation="1dp"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColor"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            >
+            <RelativeLayout
+                android:paddingEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif"
+                    android:textSize="22sp"
+                    android:textColor="?attr/textColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Complete Profile"
+                    />
+
+                <Button
+                    android:onClick="goToMain"
+                    android:layout_centerVertical="true"
+                    android:text="Skip"
+                    android:background="@drawable/otp_button_shape"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/work_sans"
+                    android:layout_width="80dp"
+                    android:paddingStart="20dp"
+                    android:layout_height="35dp"
+                    android:textColor="@color/textColor1"
+                    android:textSize="15sp"
+                    android:layout_alignParentRight="true"
+                    />
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+       android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/fill1"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/work_sans_semibold"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal Details"
+            />
+
+        <EditText
+            android:id="@+id/user_phone"
+            android:layout_marginTop="10dp"
+            android:paddingStart="16dp"
+            android:background="@drawable/complete_profile_shape"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="Phone"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:textSize="16sp"
+            />
+
+        <AutoCompleteTextView
+            android:popupBackground="?attr/backgroundColor"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp"
+            android:paddingStart="16dp"
+            android:dropDownHeight="100dp"
+            android:popupElevation="1dp"
+            android:dropDownSelector="?attr/backgroundColor"
+            android:background="@drawable/complete_profile_shape"
+            android:dropDownAnchor="@id/state_view"
+            android:inputType="textAutoComplete|textAutoCorrect"
+            android:paddingEnd="10dp"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:id="@+id/state_auto_complete"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="State/UT"
+            android:completionThreshold="1"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:id="@+id/state_view"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@id/fill1"
+        android:id="@+id/fill2"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/work_sans_semibold"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Education"
+            />
+
+        <EditText
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:clickable="true"
+            android:focusable="true"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:paddingStart="16dp"
+            android:background="@drawable/complete_profile_shape"
+            android:dropDownAnchor="@id/state_auto_complete"
+            android:inputType="none"
+            android:paddingEnd="10dp"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:id="@+id/college_auto_complete"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="College/University"
+            />
+
+        <AutoCompleteTextView
+            android:popupBackground="?attr/backgroundColor"
+            android:textSize="16sp"
+            android:layout_marginTop="15dp"
+            android:paddingStart="16dp"
+            android:dropDownHeight="100dp"
+            android:popupElevation="1dp"
+            android:dropDownSelector="?attr/backgroundColor"
+            android:background="@drawable/complete_profile_shape"
+            android:dropDownAnchor="@id/degree_view"
+            android:inputType="textAutoComplete|textAutoCorrect"
+            android:paddingEnd="10dp"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:completionThreshold="1"
+            android:id="@+id/user_degree"
+            android:hint="Degree (e.g. B.Tech.)"
+            />
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="7dp"
+          android:id="@+id/degree_view"
+          />
+
+
+        <EditText
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:paddingStart="16dp"
+            android:background="@drawable/complete_profile_shape"
+            android:inputType="text"
+            android:paddingEnd="10dp"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:id="@+id/user_branch"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="Branch (e.g. Civil Engineering)"
+            />
+
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="12sp"
+            android:fontFamily="@font/work_sans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Degree Duration"
+            />
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:textSize="16sp"
+                 android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:background="@drawable/complete_profile_shape"
+                android:inputType="numberDecimal"
+                android:paddingEnd="10dp"
+                android:textColorHint="?attr/hintColor"
+                android:textColor="?attr/textColor"
+                android:id="@+id/start_year"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="From (e.g. 2017)"
+                android:layout_marginEnd="6dp"
+                />
+
+            <AutoCompleteTextView
+                android:textSize="16sp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:background="@drawable/complete_profile_shape"
+                android:dropDownAnchor="@id/end_year"
+                android:inputType="numberDecimal"
+                android:paddingEnd="10dp"
+                android:textColorHint="?attr/hintColor"
+                android:textColor="?attr/textColor"
+                android:id="@+id/end_year"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="To (e.g. 2021)"
+                />
+        </LinearLayout>
+
+        <Button
+            android:textSize="16sp"
+            android:fontFamily="@font/work_sans"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:text="Proceed"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/complete_button_shape"
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<SlideUtils> sliderImg;
     private List<SlideUtils> headline;
 
-    String request_url = "https://iamannitian.co.in/app/get_slider_image.php";
+    String request_url = "http://app.thenextsem.com/app/get_slider_image.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
-                {
+                 {
                    // new RequestYoutubeAPI().execute();
                     sendRequest();
                     if(snackbar != null)
@@ -341,7 +341,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /*=======>>>>>>> Navigation Item Click Listener <<<<<<<<<========*/
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
         closeDrawer();
         switch (menuItem.getItemId()) {
             case R.id.logout:
@@ -396,13 +395,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*=======>>>>>>> Updating the header in the navigation view <<<<<<<<<=========*/
-    public void headerUpdate() {
+    public void headerUpdate()
+    {
         TextView user_name, nit_name;
         String name = sharedPreferences.getString("userName", "");
+        String college = sharedPreferences.getString("userCollege", "");
         View headView = navigationView.getHeaderView(0);
         user_name = headView.findViewById(R.id.user_name);
         nit_name = headView.findViewById(R.id.nit_name);
         user_name.setText(name.trim());
+        nit_name.setText(college);
     }
 
     /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
@@ -434,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         JSONObject object = response.getJSONObject(i);
                         slideUtils.setSlideImageUrl
-                                ("https://iamannitian.co.in/images/" + object.getString("url"));
+                                ("http://app.thenextsem.com/images/" + object.getString("url"));
                         slideUtils.setDescp(object.getString("descp"));
                         slideUtils1.setDescp(object.getString("descp"));
 

@@ -86,4 +86,42 @@ part of this fastest growing community.
     <string name="about_us">About Us</string>
 
 
+    <!--========= Array Strings ==========-->
+    <string-array name="states">
+        <item>Uttar Pradesh</item>
+        <item>Jammu &amp; Kashmir</item>
+        <item>Madhya Pradesh</item>
+        <item>Himachal Pradesh</item>
+        <item>Laddakh</item>
+        <item>Delhi</item>
+        <item>Haryana</item>
+        <item>Panjab</item>
+        <item>Uttarakhand</item>
+        <item>Bihar</item>
+        <item>Maharastra</item>
+        <item>Gujarat</item>
+        <item>Rajsthan</item>
+        <item>Nagaland</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Tripura</item>
+        <item>Chhatis Garh</item>
+        <item>Kerla</item>
+        <item>Tamilnadu</item>
+        <item>Karnataka</item>
+        <item>Andhra Pradesh</item>
+        <item>Telangana</item>
+        <item>Daman Div</item>
+        <item>West Bengal</item>
+        <item>Puducherry</item>
+    </string-array>
+
+    <string-array name="degree">
+        <item>B.Tech</item>
+        <item>BSc</item>
+        <item>M.Tech</item>
+        <item>MSc</item>
+        <item>PhD</item>
+    </string-array>
+
 </resources>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -193,7 +194,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setTitle("News");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-
+        actionBar.setDisplayShowHomeEnabled(true);
         if (mode)
         {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
@@ -203,7 +204,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
             actionBar.setIcon(R.drawable.app_logo);
         }
 
-        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     /*=======>>>>>>> Setting up navigation drawer <<<<<<<<<=========*/
@@ -246,6 +246,9 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //=======> this line solves the problem of not opening drawer on clicking drawer icon
+        drawerLayout.openDrawer(Gravity.LEFT);
+
         switch (item.getItemId()) {
             case R.id.about:
                 startActivity(new Intent(getApplicationContext(), AboutUs.class));
@@ -279,13 +282,16 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /*=======>>>>>>> Updating the header in the navigation view <<<<<<<<<=========*/
-    public void headerUpdate() {
+    public void headerUpdate()
+    {
         TextView user_name, nit_name;
         String name = sharedPreferences.getString("userName", "");
+        String college = sharedPreferences.getString("userCollege", "");
         View headView = navigationView.getHeaderView(0);
         user_name = headView.findViewById(R.id.user_name);
         nit_name = headView.findViewById(R.id.nit_name);
         user_name.setText(name.trim());
+        nit_name.setText(college);
     }
 
     /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
@@ -342,16 +348,16 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setResourcesForTag() {
-        String a = "https://iamannitian.co.in/images/Agartala.jpg";
-        String b = "https://iamannitian.co.in/images/Bhopal.jpg";
-        String c = "https://iamannitian.co.in/images/Calicut.jpg";
-        String d = "https://iamannitian.co.in/images/Raipur.jpg";
-        String e = "https://iamannitian.co.in/images/Nagpur.jpg";
-        String f = "https://iamannitian.co.in/images/Jamshedpur.jpg";
-        String g = "https://iamannitian.co.in/images/toppers/rajat_soni.jpg";
-        String h = "https://iamannitian.co.in/images/toppers/ankit_singh.jpg";
-        String i = "https://iamannitian.co.in/images/toppers/ankur_agarwal.jpg";
-        String j = "https://iamannitian.co.in/images/toppers/abhishek_kumar.jpg";
+        String a = "http://app.thenextsem.com/images/Agartala.jpg";
+        String b = "http://app.thenextsem.com/images/Bhopal.jpg";
+        String c = "http://app.thenextsem.com/images/Calicut.jpg";
+        String d = "http://app.thenextsem.com/images/Raipur.jpg";
+        String e = "http://app.thenextsem.com/images/Nagpur.jpg";
+        String f = "http://app.thenextsem.com/images/Jamshedpur.jpg";
+        String g = "http://app.thenextsem.com/images/toppers/rajat_soni.jpg";
+        String h = "http://app.thenextsem.com/images/toppers/ankit_singh.jpg";
+        String i = "http://app.thenextsem.com/images/toppers/ankur_agarwal.jpg";
+        String j = "http://app.thenextsem.com/images/toppers/abhishek_kumar.jpg";
 
         mList.add(new TagGetterSetter(a, "IITs"));
         mList.add(new TagGetterSetter(b, "NITs"));
@@ -368,7 +374,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         mList2.add(new NewsGetterSetter(b, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(c, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(d, "Lorem Ipsum is a dummy text to show someone"));
-        mList2.add(new NewsGetterSetter(e, "JLorem Ipsum is a dummy text to show someone"));
+        mList2.add(new NewsGetterSetter(e, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(f, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(g, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(h, "Lorem Ipsum is a dummy text to show someone"));

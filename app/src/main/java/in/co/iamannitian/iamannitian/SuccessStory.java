@@ -102,16 +102,16 @@ public class SuccessStory extends AppCompatActivity {
     }
 
     public void setResources() {
-        String a = "https://iamannitian.co.in/images/Agartala.jpg";
-        String b = "https://iamannitian.co.in/images/Bhopal.jpg";
-        String c = "https://iamannitian.co.in/images/Calicut.jpg";
-        String d = "https://iamannitian.co.in/images/Raipur.jpg";
-        String e = "https://iamannitian.co.in/images/Nagpur.jpg";
-        String f = "https://iamannitian.co.in/images/Jamshedpur.jpg";
-        String g = "https://iamannitian.co.in/images/toppers/rajat_soni.jpg";
-        String h = "https://iamannitian.co.in/images/toppers/ankit_singh.jpg";
-        String i = "https://iamannitian.co.in/images/toppers/ankur_agarwal.jpg";
-        String j = "https://iamannitian.co.in/images/toppers/abhishek_kumar.jpg";
+        String a = "http://app.thenextsem.com/images/Agartala.jpg";
+        String b = "http://app.thenextsem.com/images/Bhopal.jpg";
+        String c = "http://app.thenextsem.com/images/Calicut.jpg";
+        String d = "http://app.thenextsem.com/images/Raipur.jpg";
+        String e = "http://app.thenextsem.com/images/Nagpur.jpg";
+        String f = "http://app.thenextsem.com/images/Jamshedpur.jpg";
+        String g = "http://app.thenextsem.com/images/toppers/rajat_soni.jpg";
+        String h = "http://app.thenextsem.com/images/toppers/ankit_singh.jpg";
+        String i = "http://app.thenextsem.com/images/toppers/ankur_agarwal.jpg";
+        String j = "http://app.thenextsem.com/images/toppers/abhishek_kumar.jpg";
 
         mList.add(new StoryGetterSetter(a, "Shubham Maurya","85","Compuer Science"));
         mList.add(new StoryGetterSetter(b, "Abhay Mishra","56","Civil Engineering"));

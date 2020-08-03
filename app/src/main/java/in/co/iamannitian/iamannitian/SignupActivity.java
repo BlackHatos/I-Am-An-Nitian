@@ -149,7 +149,7 @@ public class SignupActivity extends AppCompatActivity {
         // disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "https://iamannitian.co.in/app/send_otp.php";
+        String url = "http://app.thenextsem.com/app/send_otp.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -244,7 +244,7 @@ public class SignupActivity extends AppCompatActivity {
 
     void finalSignup(final String user_name, final String user_email, final  String user_password,final String otp)
     {
-        String url = "https://iamannitian.co.in/app/signup.php";
+        String url = "http://app.thenextsem.com/app/signup.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -254,15 +254,21 @@ public class SignupActivity extends AppCompatActivity {
 
                         if(response_array[0].equals("1"))
                         {
-
                             SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("userId",response_array[1]);
                             editor.putString("userName", response_array[2]);
                             editor.putString("userEmail",response_array[3]);
+                            editor.putString("userPhone","");
+                            editor.putString("userState", "");
+                            editor.putString("userCollege","");
+                            editor.putString("userDegree","");
+                            editor.putString("userBranch","");
+                            editor.putString("userStartYear","");
+                            editor.putString("userEndYear","");
                             editor.apply();
 
-                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                            Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
                             startActivity(intent);
                             finish();

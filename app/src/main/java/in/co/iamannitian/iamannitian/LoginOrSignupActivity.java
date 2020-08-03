@@ -1,4 +1,5 @@
 package in.co.iamannitian.iamannitian;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -104,7 +105,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
         registerReceiver(broadCastReceiver,
                 new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
-        
         login= findViewById(R.id.logsignbtn);
         fb_login = findViewById(R.id.fb_login);
 		fb = findViewById(R.id.fb);
@@ -149,7 +149,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 graphRequest.executeAsync();
 
                 //go to home page
-                Intent intent = new Intent(LoginOrSignupActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginOrSignupActivity.this, CompleteProfile.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -204,7 +204,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
                     editor.putString("userEmail", email);
                     editor.apply();
 
-                    Intent intent = new Intent(LoginOrSignupActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginOrSignupActivity.this, CompleteProfile.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();

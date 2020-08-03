@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_URL;
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_NEWS_TITLE;
 
