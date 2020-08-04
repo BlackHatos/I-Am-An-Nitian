@@ -4,22 +4,28 @@
     package="in.co.iamannitian.iamannitian">
 
     <application
+        android:name="me.at.nitsxr.App"
         android:allowBackup="true"
         android:icon="@drawable/imnitian"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CompleteProfile"
-            android:windowSoftInputMode="adjustPan"
-            >
+        <activity android:name=".Notification">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
+            android:name=".CompleteProfile"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
             android:name=".CollegeSuggestions"
-            android:windowSoftInputMode="adjustPan|stateHidden">
-
-        </activity>
+            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
         <activity
             android:name=".SuccessStory"
             android:parentActivityName=".MainActivity" />
@@ -44,20 +50,13 @@
             android:name=".SignupActivity"
             android:theme="@style/HideAppBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".LoginOrSignupActivity" />
         <activity
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".SplashScreen">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -84,9 +83,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-    </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 
+        <receiver android:name="me.at.nitsxr.NotificationReceiver"/>
+
+    </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
