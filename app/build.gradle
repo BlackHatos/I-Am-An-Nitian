@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -62,8 +63,15 @@ dependencies {
     //Login with google API
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
+    //apache http client API
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 
+   //firebase API
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    
+   //firebase cloud messaging
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+   
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }

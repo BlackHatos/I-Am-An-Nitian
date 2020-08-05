@@ -52,6 +52,6 @@
         android:text="Send on channel 2"
         android:fontFamily="@font/work_sans"
         android:textSize="15sp"
-        />
+       />
 
 </LinearLayout>

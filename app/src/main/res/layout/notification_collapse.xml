@@ -23,7 +23,6 @@
             android:id="@+id/notify_collap_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gate 2021 result declared check the result here"
             android:fontFamily="sans-serif"
             android:textSize="16sp"
             />
