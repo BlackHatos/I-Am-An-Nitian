@@ -6,13 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="70dp">
 
-    <ImageView
-        android:id="@+id/collapse_image_view"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/nittrichy"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/collapse_image_view"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/nittrichy"/>
+
+        <ImageView
+            android:padding="4dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|left"
+            android:src="@drawable/imnitian"
+            />
+    </FrameLayout>
 
         <TextView
             android:layout_gravity="center"

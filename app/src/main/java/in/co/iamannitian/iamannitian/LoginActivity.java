@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         // disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "http://app.thenextsem.com/app/login.php";
+        String url = "https://app.thenextsem.com/app/login.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -136,13 +136,13 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("userId",response_array[1]);
                             editor.putString("userName", response_array[2]);
                             editor.putString("userEmail",response_array[3]);
-                            editor.putString("userPhone","");
-                            editor.putString("userState", "");
-                            editor.putString("userCollege","");
-                            editor.putString("userDegree","");
-                            editor.putString("userBranch","");
-                            editor.putString("userStartYear","");
-                            editor.putString("userEndYear","");
+                            editor.putString("userPhone",response_array[4]);
+                            editor.putString("userState", response_array[5]);
+                            editor.putString("userCollege",response_array[6]);
+                            editor.putString("userDegree",response_array[7]);
+                            editor.putString("userBranch",response_array[8]);
+                            editor.putString("userStartYear",response_array[9]);
+                            editor.putString("userEndYear",response_array[10]);
                             editor.apply();
                             /*=========================== shared preferences saving user data finished ============================*/
 

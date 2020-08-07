@@ -42,7 +42,6 @@ public class SplashScreen extends AppCompatActivity
         }
 
         super.onCreate(savedInstanceState);
-
         //lets take advantage of the notch
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {

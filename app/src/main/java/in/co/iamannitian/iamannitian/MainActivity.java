@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<SlideUtils> sliderImg;
     private List<SlideUtils> headline;
 
-    String request_url = "http://app.thenextsem.com/app/get_slider_image.php";
+    String request_url = "https://app.thenextsem.com/app/get_slider_image.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         JSONObject object = response.getJSONObject(i);
                         slideUtils.setSlideImageUrl
-                                ("http://app.thenextsem.com/images/" + object.getString("url"));
+                                ("https://app.thenextsem.com/images/" + object.getString("url"));
                         slideUtils.setDescp(object.getString("descp"));
                         slideUtils1.setDescp(object.getString("descp"));
 

@@ -59,8 +59,8 @@
     <string name="cnt_desp">NIT SXR</string>
 
     <!--========= Drawer Headers Strings ==========-->
-    <string name="user_name">Shubham Maurya</string>
-    <string name="nit_name">NIT Srinagar</string>
+    <string name="user_name">User Name</string>
+    <string name="nit_name">College Name</string>
 
     <!--========= Facebook Login Strings ==========-->
     <string name="facebook_app_id">576919333023662</string>

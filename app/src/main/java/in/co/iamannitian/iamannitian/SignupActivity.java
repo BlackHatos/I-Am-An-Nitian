@@ -21,13 +21,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -38,6 +43,8 @@ public class SignupActivity extends AppCompatActivity {
     private Button click_to_sign_up;
     private TextView go_to_login;
     private BottomSheetDialog bottomSheetDialog;
+
+    private String token = "";
 
     private ProgressDialog progressDialog;
 
@@ -67,6 +74,21 @@ public class SignupActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         setContentView(R.layout.activity_signup);
+
+
+        //=====> getting token of users device from firebase
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task)
+            {
+                if (task.isSuccessful())
+                {
+                    token = task.getResult().getToken();
+                }
+            }
+        });
+
 
         username = findViewById(R.id.username);
         email    = findViewById(R.id.email);
@@ -121,7 +143,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
 
-                //if every thing is ok then proceed to sign up
+                //===> if every thing is ok then proceed to sign up
                 proceedToSignup(user_name, user_email , user_password);
 
             }
@@ -129,7 +151,7 @@ public class SignupActivity extends AppCompatActivity {
         });
 
 
-        //go to login activity
+        //===> go to login activity
         go_to_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,13 +165,13 @@ public class SignupActivity extends AppCompatActivity {
 
     private void proceedToSignup(final String user_name,final String user_email,final String user_password)
     {
-        // show progress bar first
+        //===> show progress bar first
         progressDialog.setMessage("Processing...");
         progressDialog.show();
-        // disable user interaction when progress dialog appears
+        //===> disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "http://app.thenextsem.com/app/send_otp.php";
+        String url = "https://app.thenextsem.com/php_mailer/send_otp.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -159,16 +181,16 @@ public class SignupActivity extends AppCompatActivity {
 
                         if(response_array[0].equals("1"))
                         {
-                            //dismiss the progress dialog when sign up successful
+                            //===> dismiss the progress dialog when sign up successful
                             progressDialog.dismiss();
                             showBottomSheet();
                         }
                         else if(response_array[0].equals("0"))
                         {
                             progressDialog.dismiss();
-                            //on dialog dismiss back to interaction mode
+                            //===> on dialog dismiss back to interaction mode
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(SignupActivity.this,"Failed to send OTP", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignupActivity.this,response_array[1], Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -177,7 +199,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error)
             {
                 progressDialog.dismiss();
-                //on dialog dismiss back to interaction mode
+                //===> on dialog dismiss back to interaction mode
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         }){
@@ -208,16 +230,17 @@ public class SignupActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
 
-        Button send_data  = bottomSheetView.findViewById(R.id.proceed);
+        final Button send_data  = bottomSheetView.findViewById(R.id.proceed);
         ImageView closeBottomSheet = bottomSheetView.findViewById(R.id.closeBottomSheet);
         final EditText enterOtp = bottomSheetView.findViewById(R.id.enterOtp);
 
-        //send data with otp to verify an insertion
+        //===> send data with otp to verify an insertion
         send_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //getting credentials on click the sign up button
+                send_data.setText("Processing...");
+                //===> getting credentials on click the sign up button
                 String user_name = username.getText().toString().trim();
                 String user_email = email.getText().toString().trim().replaceAll("\\s+","");
                 String user_password = password.getText().toString().trim().replaceAll("\\s+","");
@@ -230,7 +253,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                finalSignup(user_name, user_email, user_password,otp);
+                finalSignup(user_name, user_email, user_password,otp,token,send_data);
             }
         });
 
@@ -238,13 +261,15 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
+                send_data.setText("Continue");
             }
         });
     }
 
-    void finalSignup(final String user_name, final String user_email, final  String user_password,final String otp)
+    void finalSignup(final String user_name, final String user_email,
+                     final  String user_password, final String otp, final String token, final Button send_data)
     {
-        String url = "http://app.thenextsem.com/app/signup.php";
+        String url = "https://app.thenextsem.com/app/signup.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -275,6 +300,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                         else if(response_array[0].equals("0"))
                         {
+                            send_data.setText("Continue");
                             Toast.makeText(SignupActivity.this,response_array[1], Toast.LENGTH_LONG).show();
                         }
 
@@ -283,7 +309,9 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-              error.printStackTrace();
+                error.printStackTrace();
+                Toast.makeText(SignupActivity.this,"Failed to sign up", Toast.LENGTH_LONG).show();
+                send_data.setText("Continue");
             }
         }){
             @Override
@@ -292,6 +320,7 @@ public class SignupActivity extends AppCompatActivity {
                 map.put("nameKey", user_name);
                 map.put("emailKey", user_email);
                 map.put("passwordKey", user_password);
+                map.put("Token",token);
                 map.put("codeKey", "J6T32A-Pubs7/=H~".trim());
                 map.put("otpKey", otp);
                 return map;
@@ -301,6 +330,5 @@ public class SignupActivity extends AppCompatActivity {
         RequestQueue rq = Volley.newRequestQueue(SignupActivity.this);
         rq.add(sr);
     }
-
 
 }

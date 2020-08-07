@@ -59,18 +59,21 @@ dependencies {
     implementation files('libs/facebook-core.aar')
     implementation files('libs/facebook-common.aar')
 
-
     //Login with google API
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
     //apache http client API
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 
-   //firebase API
+   //firebase Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    
+    //firebase API
+    implementation 'com.google.firebase:firebase-core:17.2.3'
    //firebase cloud messaging
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+   
+   //ok http client
+   //implementation 'com.squareup.okhttp3:okhttp:4.8.0'
    
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

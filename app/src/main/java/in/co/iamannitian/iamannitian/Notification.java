@@ -1,22 +1,30 @@
 package in.co.iamannitian.iamannitian;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import me.at.nitsxr.NotificationReceiver;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RemoteViews;
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.NotificationTarget;
-
-
-import static me.at.nitsxr.App.CHANNEL_1_ID;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import java.util.HashMap;
+import java.util.Map;
 import static me.at.nitsxr.App.CHANNEL_2_ID;
 
 public class Notification extends AppCompatActivity
@@ -32,6 +40,19 @@ public class Notification extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task)
+            {
+                if (task.isSuccessful())
+                {
+                    String token=task.getResult().getToken();
+                   registerToken(token);
+                }
+            }
+        });
+
         notificationManager = NotificationManagerCompat.from(this);
 
         title = findViewById(R.id.title);
@@ -39,6 +60,38 @@ public class Notification extends AppCompatActivity
         channel = findViewById(R.id.send1);
         channel2 = findViewById(R.id.send2);
     }
+
+    private void registerToken(final String token)
+    {
+        final String url =  "http://app.thenextsem.com/register.php";
+
+        StringRequest sr = new StringRequest(1, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                         //do something with response
+                    }
+                }, new Response.ErrorListener() { //error
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> map =  new HashMap<>();
+                map.put("Token",token);
+                map.put("codeKey", "J6T32A-Pubs7/=H~".trim());
+                return map;
+            }
+        };
+
+        RequestQueue rq = Volley.newRequestQueue(Notification.this);
+        rq.add(sr);
+    }
+
 
     public void sendOnChannel1(View view)
     {
@@ -75,7 +128,6 @@ public class Notification extends AppCompatActivity
     {
         sendNotification(2);
     }
-
 
     public void sendNotification(int id)
     {
