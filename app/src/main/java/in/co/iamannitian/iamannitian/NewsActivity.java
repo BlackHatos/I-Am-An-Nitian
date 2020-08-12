@@ -63,7 +63,7 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     private BroadcastReceiver broadcastReceiver;
     private Snackbar snackbar;
 
-    //recycler views
+    //===>  views
     private RecyclerView recyclerView, newsRecyclerView;
     private TagAdapter tagAdapter;
     private NewsAdapter newsAdapter;
@@ -72,7 +72,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*=========>>> Setting Up dark Mode <<<==========*/
         boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         if (mode)
         {
@@ -115,8 +114,10 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        bottomNavigationView.setSelectedItemId(R.id.news_icon);
+        //===> broadcast receiver
+        setBroadCastReceiver();
 
+        bottomNavigationView.setSelectedItemId(R.id.news_icon);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -152,28 +153,11 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         headerUpdate();
         showBadge();
 
-        //setting up tag recycler view
+        //===> setting up tag recycler view
         initRecyclerView();
         setResourcesForTag();
         setUpToolbarMenu(mode);
 
-        //broadcast receiver to check Internet connectivity
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //======> check internet connection
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                    if (snackbar != null)
-                        snackbar.dismiss();
-                } else {
-                    showSnackBar();
-                }
-            }
-        };
-
-        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         refreshScreen.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -324,11 +308,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         snackbar.show();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
-    }
 
     public void initRecyclerView() {
         mList = new ArrayList<>();
@@ -380,5 +359,35 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         mList2.add(new NewsGetterSetter(h, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(i, "Lorem Ipsum is a dummy text to show someone"));
         mList2.add(new NewsGetterSetter(j, "Lorem Ipsum is a dummy text to show someone"));
+    }
+
+    //===> setting up broadcast receiver
+    private void setBroadCastReceiver()
+    {
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //===> check internet connection
+                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
+                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+                {
+                    if(snackbar != null)
+                        snackbar.dismiss();
+                }
+                else
+                    showSnackBar();
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    //===> unregister broad cast receiver
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 }

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import me.at.nitsxr.StoryAdapter;
 import me.at.nitsxr.StoryGetterSetter;
-
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ public class SuccessStory extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*=========>>> Setting Up dark Mode <<<==========*/
         boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         if (mode)
         {
@@ -68,8 +66,6 @@ public class SuccessStory extends AppCompatActivity {
         }
     }
 
-
-    /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -77,15 +73,14 @@ public class SuccessStory extends AppCompatActivity {
         return true;
     }
 
-    /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about:
-                startActivity(new Intent(SuccessStory.this, AboutUs.class));
+                startActivity(new Intent(getApplicationContext(), AboutUs.class));
                 break;
             case R.id.app_info:
-                startActivity(new Intent(SuccessStory.this, AppInfo.class));
+                startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

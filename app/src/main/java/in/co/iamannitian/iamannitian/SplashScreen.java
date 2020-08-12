@@ -1,6 +1,6 @@
 /*
-* @Project "I Am An Nitian"
-* @Date "16 April 2020"
+* @Project I Am An NITian
+* @Date 16 April 2020
 */
 package in.co.iamannitian.iamannitian;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -22,16 +21,14 @@ public class SplashScreen extends AppCompatActivity
 {
     public static final int SPLASH_TIME_OUT=4000;
     private SharedPreferences sharedPreferences;
-
-    //Animation
     private Animation bottom_animation;
     private TextView splash_msg;
-    ImageView logo;
+    private ImageView logo;
+    private Intent intent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        /*=========>>> Setting Up dark Mode <<<==========*/
+    protected void onCreate(Bundle savedInstanceState)
+    {
         if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
         {
             setTheme(R.style.DarkTheme);
@@ -42,17 +39,18 @@ public class SplashScreen extends AppCompatActivity
         }
 
         super.onCreate(savedInstanceState);
-        //lets take advantage of the notch
+        //======>lets take advantage of the notch
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
         else
         {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-
         setContentView(R.layout.activity_splash_screen);
 
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -67,18 +65,13 @@ public class SplashScreen extends AppCompatActivity
             public void run()
             {
                 if(!user_id.equals(""))
-                {
-                    Intent intent= new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                     intent= new Intent(getApplicationContext(), MainActivity.class);
                 else
-                {
-                    Intent intent= new Intent(SplashScreen.this, LoginOrSignupActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                     intent= new Intent(getApplicationContext(), LoginOrSignupActivity.class);
+                startActivity(intent);
+                finish();
             }
         }, SPLASH_TIME_OUT);
     }
+
 }

@@ -2,6 +2,11 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+      <!--  <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="android:windowTranslucentStatus" >true</item>
+        <item name="android:windowTranslucentNavigation" >true</item> -->
+
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
@@ -98,5 +103,6 @@
     <style name="TextLabel" parent="TextAppearance.AppCompat">
 
     </style>
+
 
    </resources>

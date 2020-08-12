@@ -39,8 +39,6 @@ public class CompleteProfile extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
-        /*=========>>> Setting Up dark Mode <<<==========*/
         boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         if (mode) {
             setTheme(R.style.DarkTheme);
@@ -62,7 +60,7 @@ public class CompleteProfile extends AppCompatActivity
 
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
 
-        //initializing progress dialog
+        //===> initializing progress dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
@@ -79,13 +77,13 @@ public class CompleteProfile extends AppCompatActivity
                 R.id.custom_drop_down_text_view, degree_array);
         user_degree.setAdapter(degree_adapter);
 
-        //=========> get the college name reverse back from CollegeSuggestion activity
+        //===> get the college name reverse back from CollegeSuggestion activity
          Intent intent = getIntent();
          String name_college = intent.getStringExtra(NAME_COLLEGE);
          college_auto_complete.setText(name_college);
 
         setPreferences();
-         //=========> on click the college edit text go to CollegeSuggestion activity
+         //===> on click the college edit text go to CollegeSuggestion activity
          college_auto_complete.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event)
@@ -108,7 +106,6 @@ public class CompleteProfile extends AppCompatActivity
                 return true;
             }
         });
-
 
          //===> insert data into the server
          proceed.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +189,7 @@ public class CompleteProfile extends AppCompatActivity
 
     public void setPreferences()
     {
-        //set the the values in the complete profile edit text
+        //====> set the the values in the complete profile edit text
         user_phone.setText(sharedPreferences.getString("userPhone",""));
         user_degree.setText(sharedPreferences.getString("userDegree",""));
         user_branch.setText(sharedPreferences.getString("userBranch",""));
@@ -213,7 +210,7 @@ public class CompleteProfile extends AppCompatActivity
         //===> disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "https://app.thenextsem.com/app/complete_profile.php";
+       final String url = "https://app.thenextsem.com/app/complete_profile.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
@@ -276,7 +273,7 @@ public class CompleteProfile extends AppCompatActivity
         rq.add(sr);
     }
 
-    public void goToMain(View view) //on clicking skip button
+    public void goToMain(View view) //===> on clicking skip button
     {
         setPreferences();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -285,7 +282,7 @@ public class CompleteProfile extends AppCompatActivity
         finish();
     }
 
-    //=====> on back press clear preferences
+    //===> on back press clear preferences
     @Override
     public void onBackPressed()
     {

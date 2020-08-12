@@ -57,6 +57,7 @@
 
     <!--========= Content Description Strings ==========-->
     <string name="cnt_desp">NIT SXR</string>
+    <string name="latest_news">Latest News</string>
 
     <!--========= Drawer Headers Strings ==========-->
     <string name="user_name">User Name</string>
@@ -70,6 +71,11 @@
     <string name="copy">all rights reserved</string>
     <string name="copy_x">2020 I Am An Nitian</string>
     <string name="version">Version 1.0</string>
+
+    <!--============== Video caption Strings =================-->
+    <string name="jalandhar_desp">A glimpse of campus | Dr. B. R. National Institute of Technology Jalandhar</string>
+    <string name="nitsri_desp">NIT Srinagar | One of the most beautiful college campus of India</string>
+    <string name="agartala_desp">National Institute Of Technology Agartala | A campus tour</string>
 
     <!--============== About Strings =================-->
     <string name="description">This line is not just a combination of some words but resembles the feeling of pride
@@ -85,6 +91,20 @@ part of this fastest growing community.
 
     <string name="about_us">About Us</string>
 
+
+    <!--============== complete profile strings =================-->
+    <string name="personal"> Personal Detail</string>
+    <string name="your_state">State/UT</string>
+    <string name="your_phone">Phone</string>
+    <string name="your_college">College/University</string>
+    <string name="degree">Degree (e.g. B.Tech)</string>
+    <string name="branch">Branch (e.g. Civil Engineering)</string>
+    <string name="education">Education</string>
+    <string name="degree_duration">Degree Duration</string>
+    <string name="from">From (e.g. 2017)</string>
+    <string name="to">To (e.g. 2021)</string>
+    <string name="proceed">Proceed</string>
+    <string name="skip">Skip</string>
 
     <!--========= Array Strings ==========-->
     <string-array name="states">

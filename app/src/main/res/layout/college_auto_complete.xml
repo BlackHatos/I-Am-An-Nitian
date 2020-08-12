@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:contentDescription="@string/cnt_desp"
             android:id="@+id/college_logo"
             android:layout_width="60dp"
             android:layout_height="40dp"
@@ -22,7 +23,6 @@
             android:textColor="?attr/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="National Institute Of Technology Srinagar"
             android:paddingStart="8dp"
             android:layout_gravity="center_vertical"
             android:id="@+id/college_name"

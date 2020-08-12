@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_URL;
 import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_NEWS_TITLE;
-
 public class OnViewPagerClick extends AppCompatActivity {
 
     private ImageView newsImage;
@@ -41,9 +40,11 @@ public class OnViewPagerClick extends AppCompatActivity {
         newsImage = findViewById(R.id.newImage);
         newsTitle = findViewById(R.id.newsTitle);
 
-        Intent intent = getIntent();
-        String imageUrl = intent.getStringExtra(EXTRA_URL);
-        String newsTitleX = intent.getStringExtra(EXTRA_NEWS_TITLE);
+           Intent intent = getIntent();
+
+
+             String  imageUrl = intent.getStringExtra(EXTRA_URL);
+             String  newsTitleX = intent.getStringExtra(EXTRA_NEWS_TITLE);
 
         Glide.with(this)
                 .load(imageUrl)

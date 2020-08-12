@@ -2,15 +2,22 @@ package in.co.iamannitian.iamannitian;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
+import java.util.List;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,15 +25,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
   public static final String EXTRA_URL = "imageUrl";
   public static final String EXTRA_NEWS_TITLE = "newsTitle";
-
-  private int image_resources[] =
-          {
-                  R.drawable.hacked,
-                  R.drawable.nittrichy,
-                  R.drawable.nitrkl,
-                  R.drawable.hostelx,
-                  R.drawable.nittrichy
-                  };
 
   private List<SlideUtils> sliderImg;
   private ImageLoader imageLoader;
@@ -42,7 +40,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
   @Override
   public int getCount() {
-    //return image_resources.length;
     return  sliderImg.size();
   }
 
@@ -61,12 +58,23 @@ public class ViewPagerAdapter extends PagerAdapter {
     SlideUtils utils = sliderImg.get(position);
 
     final ImageView imageView = itemView.findViewById(R.id.imageView);
-    imageLoader = HeaderVolleyRequest.getInstance(context).getImageLoader();
-    imageLoader.get(utils.getSlideImageUrl(), ImageLoader.getImageListener
-         (imageView,R.color.viewPagerDefaultColor,android.R.drawable.ic_dialog_alert));
+
+   /*
+    * ===> This piece of code explains how to load image using volley
+    *
+    * imageLoader = HeaderVolleyRequest.getInstance(context).getImageLoader();
+    * imageLoader.get(utils.getSlideImageUrl(), ImageLoader.getImageListener
+    * (imageView,R.color.viewPagerDefaultColor,android.R.drawable.ic_dialog_alert));
+    *
+    * */
+
+    Glide.with(context)
+            .asBitmap()
+            .load(utils.getSlideImageUrl())
+            .skipMemoryCache(true)
+            .into(imageView);
 
     final TextView textView = itemView.findViewById(R.id.image_count);
-    //imageView.setImageResource(image_resources[position]);
     textView.setText(sliderImg.get(position).descp);
 
     itemView.setOnClickListener(new View.OnClickListener(){
@@ -91,4 +99,6 @@ public class ViewPagerAdapter extends PagerAdapter {
   public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
     container.removeView((View) object);
   }
+
+
 }

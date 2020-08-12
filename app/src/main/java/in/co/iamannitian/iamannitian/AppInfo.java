@@ -15,7 +15,7 @@ public class AppInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //lets take advantage of the notch
+        //===> lets take advantage of the notch
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -29,7 +29,7 @@ public class AppInfo extends AppCompatActivity {
 
         app_version =  findViewById(R.id.app_version);
 
-        //=================getting version name
+        //====> getting version name
         try {
             PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(),0);
             String version = packageInfo.versionName;

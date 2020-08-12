@@ -245,5 +245,4 @@ public class NotificationActivity extends AppCompatActivity
         startActivity(i);
         finish();
     }
-
 }

@@ -8,7 +8,6 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
@@ -18,11 +17,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.icu.text.Edits;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -31,29 +28,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -61,7 +50,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -71,13 +59,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -104,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     final long DELAYS_MS = 500;
     final long PERIOD_MS = 3000;
 
-    //Setting up widgets for youtube videos
+    //===> Setting up widgets for youtube videos
     private ArrayList<GetYoutubeData> youtubeData;
     private ImageView video1;
     private ImageView video2;
@@ -113,18 +97,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView title2;
     private TextView title3;
 
-    String url1, title_x, url2, title_y, url3, title_z,id1, id2, id3;
+    private String url1, title_x, url2, title_y, url3, title_z,id1="", id2="", id3="";
 
     RequestQueue rq;
     private List<SlideUtils> sliderImg;
     private List<SlideUtils> headline;
 
-    String request_url = "https://app.thenextsem.com/app/get_slider_image.php";
+    final private String request_url = "https://app.thenextsem.com/app/get_slider_image.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        /*=========>>> Setting Up dark Mode <<<==========*/
         boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
         if (mode) {
             setTheme(R.style.DarkTheme);
@@ -133,33 +116,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         super.onCreate(savedInstanceState);
-        //registering facebook sdk
+        //===> Registering facebook sdk
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
-      //initializing youtube related widgets
-        video1 = findViewById(R.id.video1);
-        video2 = findViewById(R.id.video2);
-        video3 = findViewById(R.id.video3);
-        title1 = findViewById(R.id.title1);
-        title2 = findViewById(R.id.title2);
-        title3 = findViewById(R.id.title3);
-
-        rq = Volley.newRequestQueue(this);
-        sliderImg = new ArrayList<>();
-        headline = new ArrayList<>();
-
-        navigationView = findViewById(R.id.navigationView);
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-
-        //Slider
-        viewPager = findViewById(R.id.viewPager);
-        viewPager2 = findViewById(R.id.viewPager2);
-        tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager2, true);
-
-        refreshScreen = findViewById(R.id.refreshScreen);
+       //===> initializing youtube related widgets
+        initializeVariables();
 
         final Handler handler = new Handler();
         final Runnable update = new Runnable() {
@@ -179,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, DELAYS_MS, PERIOD_MS);
 
-        //Timer for the headlines
+        //===> Timer for the headlines
         final Runnable headline = new Runnable() {
             @Override
             public void run() {
@@ -197,13 +159,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 1000, 4000);
 
-
         switchCompat = (SwitchCompat) navigationView
                 .getMenu()
                 .findItem(R.id.dark_mode_switch)
                 .getActionView();
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+        {
             switchCompat.setChecked(true);
         }
 
@@ -231,7 +193,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //do nothing
                         break;
                     case R.id.notification:
-                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                        startActivity(new Intent(getApplicationContext()
+                                , NotificationActivity.class)/*.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)*/);
                         overridePendingTransition(0, 0);
                         break;
                     case R.id.chat:
@@ -257,30 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerUpdate();
         showBadge();
 
-
-        //broadcast receiver to check Internet connectivity
-           broadcastReceiver = new BroadcastReceiver()
-           {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //======> check internet connection
-                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
-                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
-                 {
-                   // new RequestYoutubeAPI().execute();
-                    sendRequest();
-                    if(snackbar != null)
-                        snackbar.dismiss();
-                }
-                else
-                {
-                    showSnackBar();
-                }
-            }
-        };
-
-        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        //===> broadcast receiver
+         setBroadCastReceiver();
 
         refreshScreen.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -288,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onRefresh()
             {
                 sendRequest();
-                //new RequestYoutubeAPI().execute();
+               // new RequestYoutubeAPI().execute();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -299,14 +240,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu(boolean mode) {
+    //====> setting up toolbar menu
+     private void setUpToolbarMenu(boolean mode) {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Home");
-
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-
         if (mode)
         {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
@@ -317,17 +256,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
             actionBar.setIcon(R.drawable.app_logo);
         }
-
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    /*=======>>>>>>> Setting up navigation drawer <<<<<<<<<=========*/
+    //=====> Setting up navigation drawer
     private void setUpDrawerMenu(boolean mode) {
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout = findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle drawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this, mode));
         drawerToggle.syncState();
@@ -338,20 +275,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    /*=======>>>>>>> Navigation Item Click Listener <<<<<<<<<========*/
+    //====> Navigation Item Click Listener
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         closeDrawer();
         switch (menuItem.getItemId()) {
             case R.id.logout:
                 logout();
+                break;
             case R.id.settings:
+                startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                overridePendingTransition(0, 0);
                 break;
         }
         return true;
     }
 
-    /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
+    //===> Setting up overflow menu (when toolbar used as action bar)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -359,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
+    //===> Overflow menu item Click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -373,28 +313,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    /*=======>>>>>>> Logout function <<<<<<<<<=========*/
+    //===> Logout function
     void logout()
     {
-        //logout from facebook sign in
+        //===> logout from facebook sign in
         Profile  profile = Profile.getCurrentProfile().getCurrentProfile();
-        if (profile != null)  //if user logged in
+        if (profile != null)  //===> if user logged in
         {
             LoginManager.getInstance().logOut();
         }
 
-        //logout from google sign in
+        //===> logout from google sign in
         GoogleSignIn.getClient( this,new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()).signOut();
 
         sharedPreferences.edit().clear().apply();
-        Intent intent = new Intent(MainActivity.this, LoginOrSignupActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
+        Intent intent = new Intent(getApplicationContext(), LoginOrSignupActivity.class);
+        //===> finish all previous activities
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    /*=======>>>>>>> Updating the header in the navigation view <<<<<<<<<=========*/
+    //====> Updating the header in the navigation view
     public void headerUpdate()
     {
         TextView user_name, nit_name;
@@ -407,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nit_name.setText(college);
     }
 
-    /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
+    //====>how notification Badge
     public void showBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
@@ -415,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         itemView.addView(notificationBadge);
     }
 
-    /*=======>>>>>>> restart app on clicking the switch <<<<<<<<<=========*/
+    //===> restart app on clicking the switch
     public void restartApp() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
@@ -465,17 +406,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public class RequestYoutubeAPI extends AsyncTask<Void, String, String>{
 
-        String channelId = "UCnONMgL4R7ptGLHIK0KaMCQ";
-        String apiKey = "AIzaSyCS2xPXQmwF38bORANCW8Out-tTbX5noWI";
-
-        String channel_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+channelId+"&key="+apiKey+"&order=date";
+        final String channelId = "UCnONMgL4R7ptGLHIK0KaMCQ";
+        final String apiKey = "AIzaSyA58tunD1wII2nAuxVHzpYinCmyLAB3_j4";
+        final String channel_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+channelId+"&key="+apiKey+"&order=date&max_results=3";
 
         @Override
         protected String doInBackground(Void... params)
         {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(channel_url);
-            try{
+            try
+            {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(channel_url);
                 HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity httpEntity = response.getEntity();
                 String json = EntityUtils.toString(httpEntity);
@@ -484,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             {
                 ex.printStackTrace();
             }
-
             return null;
         }
 
@@ -578,21 +518,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         Intent   intent = new Intent(this,YoutubePlayer.class);
        intent.putExtra("videoId",id1);
-       startActivity(intent);
+       if(!id1.equals(""))
+          startActivity(intent);
+       else
+           Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
     }
 
     public void secondVideo(View view)
     {
         Intent   intent = new Intent(this,YoutubePlayer.class);
         intent.putExtra("videoId",id2);
-        startActivity(intent);
+        if(!id2.equals(""))
+            startActivity(intent);
+        else
+            Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
     }
 
     public void  thirdVideo(View view)
     {
         Intent   intent = new Intent(this,YoutubePlayer.class);
         intent.putExtra("videoId",id3);
-        startActivity(intent);
+        if(!id3.equals(""))
+            startActivity(intent);
+        else
+          Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
     }
 
     public void showSnackBar()
@@ -611,12 +560,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         snackbar.show();
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
-    }
 
     public void goToNews(View view)
     {
@@ -627,4 +570,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         startActivity(new Intent(getApplicationContext(), SuccessStory.class));
     }
+
+    //===> initializing variables
+    private void initializeVariables()
+    {
+        video1 = findViewById(R.id.video1);
+        video2 = findViewById(R.id.video2);
+        video3 = findViewById(R.id.video3);
+        title1 = findViewById(R.id.title1);
+        title2 = findViewById(R.id.title2);
+        title3 = findViewById(R.id.title3);
+        rq = Volley.newRequestQueue(this);
+        sliderImg = new ArrayList<>();
+        headline = new ArrayList<>();
+        navigationView = findViewById(R.id.navigationView);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        viewPager = findViewById(R.id.viewPager);
+        viewPager2 = findViewById(R.id.viewPager2);
+        tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager2, true);
+        refreshScreen = findViewById(R.id.refreshScreen);
+    }
+
+    //===> setting up broadcast receiver
+    private void setBroadCastReceiver()
+    {
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //======> check internet connection
+                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
+                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+                {
+                    //new RequestYoutubeAPI().execute();
+                    sendRequest();
+                    if(snackbar != null)
+                        snackbar.dismiss();
+                }
+                else
+                    showSnackBar();
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    //===> unregister broad cast receiver
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
+
 }

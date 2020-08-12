@@ -11,9 +11,8 @@
     <RelativeLayout
         android:layout_marginStart="-45dp"
         android:layout_marginTop="-50dp"
-        android:stateListAnimator="@null"
         android:background="@drawable/top"
-        android:orientation="vertical"
+        android:id="@+id/msg"
         android:layout_width="300dp"
         android:layout_height="240dp">
         <TextView
@@ -43,80 +42,77 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:paddingTop="160dp"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="64dp"
+        android:layout_below="@id/msg"
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
-        android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <EditText
-        android:stateListAnimator="@null"
-        android:textColorHint="?attr/hintColor"
-        android:textColor="?attr/textColor"
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/myinput"
-        android:drawablePadding="8dp"
-        android:drawableStart="@drawable/ic_email"
-        android:fontFamily="@font/work_sans"
-        android:hint="@string/email_phone_hint"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
-        android:paddingHorizontal="15dp"
-        android:textSize="18sp"
-        />
+        <EditText
+            android:stateListAnimator="@null"
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:fontFamily="@font/work_sans"
+            android:inputType="textEmailAddress"
+            android:id="@+id/email"
+            android:hint="@string/email_phone_hint"
+            android:drawableStart="@drawable/ic_email"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingHorizontal="15dp"
+            android:background="@drawable/myinput"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:autofillHints="" />
 
-    <EditText
-        android:stateListAnimator="@null"
-        android:textColor="?attr/textColor"
-        android:fontFamily="@font/work_sans"
-        android:inputType="textPassword"
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/myinput"
-        android:drawableStart="@drawable/lock"
-        android:drawablePadding="8dp"
-        android:hint="@string/pass_hint"
-        android:textSize="18sp"
-        android:textColorHint="?attr/hintColor"
-        android:paddingHorizontal="15dp"
-        android:autofillHints="" />
+        <EditText
+            android:textColor="?attr/textColor"
+            android:fontFamily="@font/work_sans"
+            android:inputType="textPassword"
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/myinput"
+            android:drawableStart="@drawable/lock"
+            android:drawablePadding="8dp"
+            android:hint="@string/pass_hint"
+            android:textSize="18sp"
+            android:textColorHint="?attr/hintColor"
+            android:paddingHorizontal="15dp"
+            android:autofillHints="" />
 
-    <TextView
-        android:textColorHint="?attr/hintColor"
-        android:textColor="?attr/textColor"
-        android:onClick="forgotPassword"
-        android:fontFamily="@font/work_sans_semibold"
-        android:id="@+id/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/pass_forg"
-        android:textSize="16sp" />
+        <TextView
+            android:textColorHint="?attr/hintColor"
+            android:textColor="?attr/textColor"
+            android:onClick="forgotPassword"
+            android:fontFamily="@font/work_sans_semibold"
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/pass_forg"
+            android:textSize="16sp" />
 
-    <Button
-        android:textAllCaps="false"
-        android:fontFamily="@font/work_sans_semibold"
-        android:stateListAnimator="@null"
-        android:id="@+id/click_to_login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/mybutton"
-        android:text="@string/login"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        <Button
+            android:textAllCaps="false"
+            android:fontFamily="@font/work_sans_semibold"
+            android:stateListAnimator="@null"
+            android:id="@+id/click_to_login"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/mybutton"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,18 +124,18 @@
             android:textColor="?attr/textColor"
             android:textSize="15sp" />
 
-    <TextView
-        android:fontFamily="@font/work_sans_semibold"
-        android:id="@+id/go_to_sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="0dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/signup"
-        android:textColor="@color/colorPrimary"
-        android:textSize="15sp" />
+        <TextView
+            android:fontFamily="@font/work_sans_semibold"
+            android:id="@+id/go_to_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/signup"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
 
     </LinearLayout>
 

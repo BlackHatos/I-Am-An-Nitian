@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,7 +37,7 @@
                 <Button
                     android:onClick="goToMain"
                     android:layout_centerVertical="true"
-                    android:text="Skip"
+                    android:text="@string/skip"
                     android:background="@drawable/otp_button_shape"
                     android:textAllCaps="false"
                     android:fontFamily="@font/work_sans"
@@ -47,7 +46,7 @@
                     android:layout_height="35dp"
                     android:textColor="@color/textColor1"
                     android:textSize="15sp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     />
 
             </RelativeLayout>
@@ -82,22 +81,22 @@
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Personal Details"
+            android:text="@string/personal"
             />
 
         <EditText
+            android:inputType="numberDecimal"
             android:id="@+id/user_phone"
             android:layout_marginTop="10dp"
             android:paddingStart="16dp"
             android:background="@drawable/complete_profile_shape"
-            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="Phone"
+            android:hint="@string/your_phone"
             android:textColorHint="?attr/hintColor"
             android:textColor="?attr/textColor"
             android:textSize="16sp"
-            />
+            android:autofillHints="" />
 
         <AutoCompleteTextView
             android:popupBackground="?attr/backgroundColor"
@@ -116,7 +115,7 @@
             android:id="@+id/state_auto_complete"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="State/UT"
+            android:hint="@string/your_state"
             android:completionThreshold="1"
             />
         <View
@@ -130,7 +129,6 @@
         android:padding="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_below="@id/fill1"
         android:id="@+id/fill2"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -142,7 +140,7 @@
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Education"
+            android:text="@string/education"
             />
 
         <EditText
@@ -162,8 +160,8 @@
             android:id="@+id/college_auto_complete"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="College/University"
-            />
+            android:hint="@string/your_college"
+            android:autofillHints="" />
 
         <AutoCompleteTextView
             android:popupBackground="?attr/backgroundColor"
@@ -183,7 +181,7 @@
             android:layout_height="45dp"
             android:completionThreshold="1"
             android:id="@+id/user_degree"
-            android:hint="Degree (e.g. B.Tech.)"
+            android:hint="@string/degree"
             />
 
       <View
@@ -205,8 +203,8 @@
             android:id="@+id/user_branch"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:hint="Branch (e.g. Civil Engineering)"
-            />
+            android:hint="@string/branch"
+            android:autofillHints="" />
 
         <TextView
             android:layout_marginTop="15dp"
@@ -214,7 +212,7 @@
             android:fontFamily="@font/work_sans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Degree Duration"
+            android:text="@string/degree_duration"
             />
 
         <LinearLayout
@@ -236,9 +234,9 @@
                 android:id="@+id/start_year"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:hint="From (e.g. 2017)"
+                android:hint="@string/from"
                 android:layout_marginEnd="6dp"
-                />
+                android:autofillHints="" />
 
             <AutoCompleteTextView
                 android:textSize="16sp"
@@ -254,7 +252,7 @@
                 android:id="@+id/end_year"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:hint="To (e.g. 2021)"
+                android:hint="@string/to"
                 />
         </LinearLayout>
 
@@ -264,7 +262,7 @@
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:text="Proceed"
+            android:text="@string/proceed"
             android:id="@+id/proceed"
             android:textAllCaps="false"
             android:textColor="@color/white"

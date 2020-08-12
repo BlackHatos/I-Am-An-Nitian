@@ -18,28 +18,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity
+{
     private EditText email, password;
     private TextView go_to_sign_up;
     private Button click_to_login;
+    private  ProgressDialog progressDialog;
 
-    //======> progress dialog
-   private  ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        /*=========>>> Setting Up dark Mode <<<==========*/
         if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
         {
             setTheme(R.style.DarkTheme);
@@ -50,24 +43,19 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        //lets take advantage of the notch
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-        else
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
         {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+
         setContentView(R.layout.activity_login);
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         go_to_sign_up = findViewById(R.id.go_to_sign_up);
         click_to_login = findViewById(R.id.click_to_login);
-
-        //initializing progress dialog
         progressDialog =  new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
@@ -77,17 +65,17 @@ public class LoginActivity extends AppCompatActivity {
                 email.setError(null);
                 password.setError(null);
 
-                //getting credentials on click the login button
+                //==> getting credentials on click the login button
                 String user_email = email.getText().toString().trim().replaceAll("\\s+","");
                 String user_password = password.getText().toString().trim().replaceAll("\\s+","");
-                //checking user email
+                //===> checking user email
                 if (user_email.isEmpty())
                 {
                     email.requestFocus();
                     email.setError("required");
                     return;
                 }
-                //checking user password
+                //===> checking user password
                 if (user_password.isEmpty())
                 {
                     password.requestFocus();
@@ -103,8 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         go_to_sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(intent);
             }
         });
@@ -112,25 +99,22 @@ public class LoginActivity extends AppCompatActivity {
 
     private void proceedToLogin(final String user_email, final String user_password)
     {
-        // show progress bar first
+        //===> show progress bar first
         progressDialog.setMessage("Authenticating....");
         progressDialog.show();
-        // disable user interaction when progress dialog appears
+        //====> disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        String url = "https://app.thenextsem.com/app/login.php";
+        final String url = "https://app.thenextsem.com/app/login.php";
         StringRequest sr = new StringRequest(1, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                      String response_array[] = response.split(",");
-
                         if(response_array[0].equals("1"))
                         {
                             progressDialog.dismiss();
-
-                            /*=========================== shared preferences saving user data started ============================*/
+                            //=====> shared preferences saving user data started
                             SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("userId",response_array[1]);
@@ -144,19 +128,19 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("userStartYear",response_array[9]);
                             editor.putString("userEndYear",response_array[10]);
                             editor.apply();
-                            /*=========================== shared preferences saving user data finished ============================*/
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            //===> finish all previous activities
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
                         }
                         else if(response_array[0].equals("0"))
                         {
                             progressDialog.dismiss();
-                            //on dialog dismiss back to interaction mode
+                            //===> on dialog dismiss back to interaction mode
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(LoginActivity.this,
+                            Toast.makeText(getApplicationContext(),
                                     response_array[1], Toast.LENGTH_LONG).show();
                         }
 
@@ -166,9 +150,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error)
             {
                 progressDialog.dismiss();
-                //on dialog dismiss back to interaction mode
+                //===> on dialog dismiss back to interaction mode
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
             }
         }){
             @Override
@@ -188,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgotPassword(View view)
     {
-        startActivity(new Intent(LoginActivity.this, ForgetPassword.class));
+        startActivity(new Intent(getApplicationContext(), ForgetPassword.class));
     }
 
 }
