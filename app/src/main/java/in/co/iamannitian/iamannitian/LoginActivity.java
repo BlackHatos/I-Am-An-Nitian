@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity
     private TextView go_to_sign_up;
     private Button click_to_login;
     private  ProgressDialog progressDialog;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -51,6 +53,8 @@ public class LoginActivity extends AppCompatActivity
         }
 
         setContentView(R.layout.activity_login);
+
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -110,23 +114,23 @@ public class LoginActivity extends AppCompatActivity
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                      String response_array[] = response.split(",");
-                        if(response_array[0].equals("1"))
+                        if(response_array[0].equals("1") && response_array[1].equals("1"))
                         {
                             progressDialog.dismiss();
-                            //=====> shared preferences saving user data started
-                            SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("userId",response_array[1]);
-                            editor.putString("userName", response_array[2]);
-                            editor.putString("userEmail",response_array[3]);
-                            editor.putString("userPhone",response_array[4]);
-                            editor.putString("userState", response_array[5]);
-                            editor.putString("userCollege",response_array[6]);
-                            editor.putString("userDegree",response_array[7]);
-                            editor.putString("userBranch",response_array[8]);
-                            editor.putString("userStartYear",response_array[9]);
-                            editor.putString("userEndYear",response_array[10]);
+                            editor.putString("userId",response_array[2]);
+                            editor.putString("userName", response_array[3]);
+                            editor.putString("userEmail",response_array[4]);
+                            editor.putString("userPhone",response_array[5]);
+                            editor.putString("userState", response_array[6]);
+                            editor.putString("userCollege",response_array[7]);
+                            editor.putString("userDegree",response_array[8]);
+                            editor.putString("userBranch",response_array[9]);
+                            editor.putString("userStartYear",response_array[10]);
+                            editor.putString("userEndYear",response_array[11]);
+                            editor.putString("userPicUrl",response_array[12]);
                             editor.apply();
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -135,13 +139,29 @@ public class LoginActivity extends AppCompatActivity
                             startActivity(intent);
                             finish();
                         }
-                        else if(response_array[0].equals("0"))
+                        else if(response_array[0].equals("1") && response_array[1].equals("0"))
+                        {
+                            progressDialog.dismiss();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userId",response_array[2]);
+                            editor.putString("userName", response_array[3]);
+                            editor.putString("userEmail",response_array[4]);
+                            editor.putString("userPicUrl",response_array[5]);
+                            editor.apply();
+
+                            Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
+                            //===> finish all previous activities
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else if(response_array[0].equals("0") && response_array[1].equals("0"))
                         {
                             progressDialog.dismiss();
                             //===> on dialog dismiss back to interaction mode
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             Toast.makeText(getApplicationContext(),
-                                    response_array[1], Toast.LENGTH_LONG).show();
+                                    response_array[2], Toast.LENGTH_LONG).show();
                         }
 
                     }

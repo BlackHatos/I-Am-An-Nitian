@@ -57,7 +57,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences sharedPreferences;
     private BottomNavigationView bottomNavigationView;
     private View notificationBadge;
-    private SwitchCompat switchCompat;
     private SwipeRefreshLayout refreshScreen;
     private NetworkInfo activeNetworkInfo;
     private BroadcastReceiver broadcastReceiver;
@@ -91,29 +90,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
 
         refreshScreen = findViewById(R.id.refreshLayout);
-
-        switchCompat = (SwitchCompat) navigationView
-                .getMenu()
-                .findItem(R.id.dark_mode_switch)
-                .getActionView();
-
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            switchCompat.setChecked(true);
-        }
-
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    restartApp();
-                }
-            }
-        });
-
         //===> broadcast receiver
         setBroadCastReceiver();
 
@@ -286,12 +262,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         itemView.addView(notificationBadge);
     }
 
-    /*=======>>>>>>> restart app on clicking the switch <<<<<<<<<=========*/
-    public void restartApp() {
-        Intent i = new Intent(getApplicationContext(), NewsActivity.class);
-        startActivity(i);
-        finish();
-    }
 
     public void showSnackBar() {
         snackbar = Snackbar.make(findViewById(R.id.drawerLayout),

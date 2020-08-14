@@ -79,7 +79,6 @@ public class OnViewPagerClick extends AppCompatActivity {
 
     }
 
-    /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -87,7 +86,6 @@ public class OnViewPagerClick extends AppCompatActivity {
         return true;
     }
 
-    /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

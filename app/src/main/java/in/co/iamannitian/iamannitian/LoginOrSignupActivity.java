@@ -11,17 +11,28 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -30,9 +41,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import org.json.JSONObject;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -46,6 +66,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
     private GoogleSignInClient googleSignInClient;
     private NetworkInfo activeNetworkInfo;
     private BroadcastReceiver broadCastReceiver;
+	private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +89,8 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        getTokenFromFirebase();
+
         //lets take advantage of the notch
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {
@@ -83,6 +106,9 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
         //======> Setting  up broad cast receiver
         setBroadCastReceiver();
+
+        sharedPreferences = getApplicationContext().getSharedPreferences("appData",
+                MODE_PRIVATE);
 
         login= findViewById(R.id.logsignbtn);
         fb_login = findViewById(R.id.fb_login);
@@ -108,15 +134,13 @@ public class LoginOrSignupActivity extends AppCompatActivity
                         new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        try
-                        {
-                                sharedPreferences = getApplicationContext().getSharedPreferences("appData",
-                                        MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("userId", object.getString("id"));
-                                editor.putString("userName", object.getString("name"));
-                                 editor.putString("userEmail", object.getString("email"));
-                                editor.apply();
+                        try{
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String pic_url = "https://graph.facebook.com/"+id+"/"+"picture?type=large";
+
+                            sendRequest(name, email, pic_url, "social");
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -129,22 +153,18 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
 
-                //======> Go to main activity on successful login
-                Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
-                startActivity(intent);
-                finish();
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Unable to login", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
                 fb.setClickable(true);
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Unable to login", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
                 fb.setClickable(true);
             }
@@ -202,18 +222,10 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 String email = acct.getEmail();
                 String name = acct.getDisplayName();
                 String id = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
+                String personPhoto = acct.getPhotoUrl().toString();
 
-                sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("userId", id);
-                editor.putString("userName", name);
-                editor.putString("userEmail", email);
-                editor.apply();
+                sendRequest(name, email, personPhoto, "social");
 
-                Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
-                startActivity(intent);
-                finish();
             }
         }
     }
@@ -259,6 +271,122 @@ public class LoginOrSignupActivity extends AppCompatActivity
             }
         });
         snackbar.show();
+    }
+
+    private void sendRequest(final String name, final String email, final String pic_url, final String source)
+    {
+        final String url = "https://app.thenextsem.com/app/fb_google_signup.php";
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                String respo[] = response.split(",");
+
+                if(respo[0].equals("1") && respo[1].equals("1"))
+                {
+					sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+					SharedPreferences.Editor editor = sharedPreferences.edit();
+					editor.putString("userId", respo[2]);
+					editor.putString("userName", respo[3]);
+					editor.putString("userEmail", respo[4]);
+					editor.putString("userPicUrl", respo[5]);
+					editor.putString("userPhone", respo[6]);
+					editor.putString("userState", respo[7]);
+					editor.putString("userCollege", respo[8]);
+					editor.putString("userDegree", respo[9]);
+					editor.putString("userBranch", respo[10]);
+					editor.putString("userStartYear", respo[11]);
+					editor.putString("userEndYear", respo[12]);
+					editor.apply();
+					
+					startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                }
+                else if((respo[0].equals("1") && respo[1].equals("0")) ||
+                        (respo[0].equals("0") && respo[1].equals("1")))
+                {
+                    sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+					SharedPreferences.Editor editor = sharedPreferences.edit();
+					editor.putString("userId", respo[2]);
+					editor.putString("userName", respo[3]);
+					editor.putString("userEmail", respo[4]);
+					editor.putString("userPicUrl", respo[5]);
+					editor.apply();  
+					
+					startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+					finish();
+                }
+				else
+                {
+					 Toast.makeText(getApplicationContext(), "Unable to sign up", Toast.LENGTH_SHORT).show();
+                     logout();
+				}
+            }
+
+        }, new Response.ErrorListener() { //error
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        })
+        {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> map =  new HashMap<>();
+                map.put("emailKey", email);
+                map.put("nameKey", name);
+                map.put("urlKey", pic_url);
+                map.put("sourceKey", source);
+                map.put("Token", token);
+                map.put("codeKey", "J6T32A-Pubs7/=H~".trim());
+                return map;
+            }
+        };
+
+        RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
+        rq.add(request);
+    }
+
+	 //====> getting user access token from firebase
+    private void getTokenFromFirebase()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task)
+            {
+                if (task.isSuccessful())
+                {
+                    token = task.getResult().getToken();
+                }
+            }
+        });
+    }
+
+    private void logout()
+    {
+        //===> logout from facebook sign in
+        Profile profile = Profile.getCurrentProfile().getCurrentProfile();
+        if (profile != null)  //===> if user logged in
+        {
+            LoginManager.getInstance().logOut();
+        }
+
+        //===> logout from google sign in
+        GoogleSignIn.getClient( this,new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()).signOut();
+
+        sharedPreferences.edit().clear().apply();
+
+        startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish();
+        overridePendingTransition(0,0);
     }
 }
 

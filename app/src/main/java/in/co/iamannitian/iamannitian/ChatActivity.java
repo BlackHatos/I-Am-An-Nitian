@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -35,7 +34,6 @@ public class ChatActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private BottomNavigationView bottomNavigationView;
     private View notificationBadge;
-    private SwitchCompat switchCompat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,31 +55,6 @@ public class ChatActivity extends AppCompatActivity
         navigationView = findViewById(R.id.navigationView);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-        switchCompat = (SwitchCompat) navigationView
-                .getMenu()
-                .findItem(R.id.dark_mode_switch)
-                .getActionView();
-
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            switchCompat.setChecked(true);
-        }
-
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
-                }
-                else
-                {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    restartApp();
-                }
-            }
-        });
 
         bottomNavigationView.setSelectedItemId(R.id.chat);
 
@@ -236,12 +209,4 @@ public class ChatActivity extends AppCompatActivity
         itemView.addView(notificationBadge);
     }
 
-    /*=======>>>>>>> restart app on clicking the switch <<<<<<<<<=========*/
-    public void restartApp()
-    {
-        Intent i = new Intent(getApplicationContext(), ChatActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-}
+  }

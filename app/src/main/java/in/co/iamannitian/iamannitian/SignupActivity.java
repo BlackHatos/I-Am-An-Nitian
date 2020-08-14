@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -181,7 +182,7 @@ public class SignupActivity extends AppCompatActivity {
     private void showBottomSheet()
     {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bootm_sheet_layout,null);
-        bottomSheetDialog = new BottomSheetDialog(getApplicationContext(),R.style.BottomSheetDialogTheme);
+        bottomSheetDialog = new BottomSheetDialog(SignupActivity.this,R.style.BottomSheetDialogTheme);
         bottomSheetDialog.setCancelable(false);
         bottomSheetDialog.setCanceledOnTouchOutside(false);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -241,13 +242,6 @@ public class SignupActivity extends AppCompatActivity {
                             editor.putString("userId",response_array[1]);
                             editor.putString("userName", response_array[2]);
                             editor.putString("userEmail",response_array[3]);
-                            editor.putString("userPhone","");
-                            editor.putString("userState", "");
-                            editor.putString("userCollege","");
-                            editor.putString("userDegree","");
-                            editor.putString("userBranch","");
-                            editor.putString("userStartYear","");
-                            editor.putString("userEndYear","");
                             editor.apply();
 
                             Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);
@@ -268,7 +262,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error)
             {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(),"Failed to sign up", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Unable to sign up", Toast.LENGTH_LONG).show();
                 send_data.setText("Continue");
             }
         }){
@@ -279,6 +273,7 @@ public class SignupActivity extends AppCompatActivity {
                 map.put("emailKey", user_email);
                 map.put("passwordKey", user_password);
                 map.put("Token",token);
+                map.put("sourceKey", "app");
                 map.put("codeKey", "J6T32A-Pubs7/=H~".trim());
                 map.put("otpKey", otp);
                 return map;
@@ -304,5 +299,4 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-
 }

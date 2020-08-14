@@ -8,17 +8,9 @@
     android:background="?attr/backgroundColor"
     tools:context=".SettingActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:background="?attr/backgroundColor"
-        app:elevation="0dp"
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
         <androidx.appcompat.widget.Toolbar
             android:layout_margin="0dp"
-            android:elevation="0dp"
+            android:elevation="2dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetStart="0dp"
             app:contentInsetLeft="0dp"
@@ -32,16 +24,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-
     <RelativeLayout
-        android:padding="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="80dp">
 
         <ImageView
+            android:contentDescription="@string/cnt_desp"
+            android:paddingStart="15dp"
             android:layout_centerVertical="true"
             android:id="@+id/logo1"
             android:layout_gravity="center"
@@ -52,7 +42,7 @@
 
         <TextView
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/logo1"
+            android:layout_toEndOf="@id/logo1"
             android:id="@+id/text1"
             android:paddingStart="12dp"
             android:textColor="?attr/textColor"
@@ -67,12 +57,17 @@
         <androidx.appcompat.widget.SwitchCompat
             android:layout_centerVertical="true"
             android:layout_marginEnd="25dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center|right"
             android:layout_width="wrap_content"
             android:id="@+id/darkSwitch"
             android:layout_height="wrap_content"/>
 
+        <View
+            android:background="?attr/textColor"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
     </RelativeLayout>
 
 </LinearLayout>

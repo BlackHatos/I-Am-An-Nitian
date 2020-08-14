@@ -22,18 +22,7 @@
 
     </group>
 
-    <group android:id="@+id/switch_group"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/dark_mode_switch"
-            android:checkable="false"
-            android:checked="false"
-            android:orderInCategory="100"
-            android:icon="@drawable/ic_dark_mode"
-            android:title="Dark Mode"
-            app:actionLayout="@layout/drawer_switch"
-            />
-    </group>
+
 
     <group android:id="@+id/bottomItems"
         android:checkableBehavior="single">

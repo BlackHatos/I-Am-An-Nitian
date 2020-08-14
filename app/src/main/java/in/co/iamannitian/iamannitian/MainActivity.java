@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences sharedPreferences;
     private BottomNavigationView bottomNavigationView;
     private View notificationBadge;
-    private SwitchCompat switchCompat;
     private ViewPager viewPager, viewPager2;
     private ViewPagerAdapter adapter;
     private HeadLineViewPagerAdapter adapter2;
@@ -159,29 +157,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 1000, 4000);
 
-        switchCompat = (SwitchCompat) navigationView
-                .getMenu()
-                .findItem(R.id.dark_mode_switch)
-                .getActionView();
-
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            switchCompat.setChecked(true);
-        }
-
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    restartApp();
-                }
-            }
-        });
-
         bottomNavigationView.setSelectedItemId(R.id.home);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -193,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //do nothing
                         break;
                     case R.id.notification:
-                        startActivity(new Intent(getApplicationContext()
-                                , NotificationActivity.class)/*.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)*/);
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
                         overridePendingTransition(0, 0);
                         break;
                     case R.id.chat:
@@ -333,19 +307,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //===> finish all previous activities
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     //====> Updating the header in the navigation view
     public void headerUpdate()
     {
         TextView user_name, nit_name;
+        ImageView imageView;
         String name = sharedPreferences.getString("userName", "");
         String college = sharedPreferences.getString("userCollege", "");
+        String pic_url = sharedPreferences.getString("userPicUrl", "");
+
         View headView = navigationView.getHeaderView(0);
         user_name = headView.findViewById(R.id.user_name);
         nit_name = headView.findViewById(R.id.nit_name);
-        user_name.setText(name.trim());
-        nit_name.setText(college);
+        imageView = headView.findViewById(R.id.profile_pic);
+        user_name.setText(name);
+
+        if(college.isEmpty())
+           nit_name.setText("Your College");
+        else
+            nit_name.setText(college);
+
+        Glide.with(this)
+                .load(pic_url)
+                .fitCenter()
+                .centerInside()
+                .into(imageView);
+
     }
 
     //====>how notification Badge
@@ -354,13 +344,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.notification_badge, menuView, false);
         itemView.addView(notificationBadge);
-    }
-
-    //===> restart app on clicking the switch
-    public void restartApp() {
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
-        finish();
     }
 
     public void sendRequest()
