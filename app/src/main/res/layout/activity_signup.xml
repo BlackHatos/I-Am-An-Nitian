@@ -4,47 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
     tools:context=".SignupActivity">
 
-    <RelativeLayout
-        android:id="@+id/msgx"
-        android:layout_marginStart="-45dp"
-        android:layout_marginTop="-50dp"
-        android:background="@drawable/top"
-        android:layout_width="300dp"
-        android:layout_height="240dp">
-
-        <TextView
-            android:layout_marginStart="68dp"
-            android:layout_centerVertical="true"
-            android:fontFamily="@font/roboto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hello"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:id="@+id/top_text"
-            />
-
-        <TextView
-            android:layout_marginStart="68dp"
-            android:fontFamily="@font/roboto"
-            android:textStyle="bold"
-            android:textSize="35sp"
-            android:textColor="@color/white"
-            android:layout_below="@id/top_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_signup"
-            />
-
-    </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginTop="42dp"
-        android:layout_below="@id/msgx"
+        android:layout_centerInParent="true"
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:orientation="vertical"
@@ -52,10 +18,39 @@
         android:layout_height="wrap_content"
         >
 
-    <EditText
+        <RelativeLayout
+            android:id="@+id/msgx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:fontFamily="@font/roboto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:id="@+id/top_text"
+                />
+
+            <TextView
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
+                android:textSize="35sp"
+                android:textColor="@color/white"
+                android:layout_below="@id/top_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_signup"
+                />
+
+        </RelativeLayout>
+
+
+        <EditText
         android:stateListAnimator="@null"
-        android:textColor="?attr/textColor"
-        android:textColorHint="?attr/hintColor"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/hintColor"
         android:fontFamily="@font/work_sans"
         android:inputType="text"
         android:textSize="18sp"
@@ -67,13 +62,13 @@
         android:paddingHorizontal="10dp"
         android:background="@drawable/myinput"
         android:drawablePadding="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="70dp"
         android:autofillHints="" />
 
     <EditText
         android:stateListAnimator="@null"
-        android:textColor="?attr/textColor"
-        android:textColorHint="?attr/hintColor"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/hintColor"
         android:fontFamily="@font/work_sans"
         android:inputType="textEmailAddress"
         android:textSize="18sp"
@@ -90,8 +85,8 @@
 
     <EditText
         android:stateListAnimator="@null"
-        android:textColor="?attr/textColor"
-        android:textColorHint="?attr/hintColor"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/hintColor"
         android:fontFamily="@font/work_sans"
         android:inputType="textPassword"
         android:textSize="18sp"
@@ -110,7 +105,7 @@
         android:textAllCaps="false"
         android:stateListAnimator="@null"
         android:fontFamily="@font/work_sans_semibold"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor2"
         android:id="@+id/click_to_sign_up"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -121,7 +116,7 @@
         />
 
     <TextView
-        android:textColor="?attr/textColor"
+        android:textColor="#d2dae2"
         android:fontFamily="@font/work_sans_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,7 +134,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login"
         android:textSize="15sp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#d2dae2"
         android:clickable="true"
         android:focusable="true"
         />

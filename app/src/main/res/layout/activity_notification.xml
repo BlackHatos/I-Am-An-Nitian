@@ -1,57 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".Notification">
+    tools:context=".NotificationActivity">
 
-    <EditText
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Title"
-        android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:inputType="text"
-        android:id="@+id/title"
-        />
-
-    <EditText
-        android:id="@+id/message"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Message"
-        android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:inputType="text"
-        />
-
-    <Button
-        android:id="@+id/send1"
-        android:layout_marginBottom="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textSize="15sp"
-        android:fontFamily="@font/work_sans"
-        android:text="Send on channel 1"
-        android:onClick="sendOnChannel1"
-        />
-
-    <Button
-        android:onClick="sendOnChannel2"
-        android:id="@+id/send2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Send on channel 2"
-        android:fontFamily="@font/work_sans"
-        android:textSize="15sp"
-       />
 
 </LinearLayout>

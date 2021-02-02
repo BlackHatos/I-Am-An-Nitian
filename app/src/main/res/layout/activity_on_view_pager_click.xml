@@ -10,7 +10,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:background="?attr/backgroundColor"
-        app:elevation="0dp"
+        app:elevation="1dp"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_margin="0dp"
-            android:elevation="0dp"
+            android:elevation="1dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetStart="0dp"
             app:contentInsetLeft="0dp"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:background="@color/viewPagerDefaultColor"
+                android:background="@color/cardColor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
@@ -86,7 +86,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/mainCard"
-                    android:textColor="?attr/textColor"
+                    android:textColor="@color/cardColor"
                     android:text="NIT Jalandhar student placed
                      at Google Bagged 1.2 Crores"
                     android:textSize="23sp"
@@ -119,11 +119,11 @@
                     android:lineSpacingExtra="6dp"
                     android:paddingEnd="5dp"
                     android:textSize="18sp"
-                    android:textColor="?attr/textColor"
+                    android:textColor="@color/textColor2"
                     android:layout_marginTop="10dp"
                     android:layout_below="@id/publish_time"
                     android:id="@+id/newDescp"
-                    android:text="@string/description"
+                    android:text="testing"
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -172,7 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="92"
-                android:textColor="?attr/textColor"
+                android:textColor="@color/textColor2"
                 android:textSize="16sp"
                 android:fontFamily="@font/work_sans"
                 android:layout_marginStart="7dp"

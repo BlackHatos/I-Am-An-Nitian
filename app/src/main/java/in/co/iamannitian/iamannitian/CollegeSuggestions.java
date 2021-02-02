@@ -2,20 +2,16 @@ package in.co.iamannitian.iamannitian;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.Toolbar;
 import me.at.nitsxr.CollegeAdapter;
 import me.at.nitsxr.CollegeItem;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +22,12 @@ public class CollegeSuggestions extends AppCompatActivity {
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
     private List<CollegeItem> collegeItemList;
-    private AutoCompleteTextView collegeAutoComplete;
+    private AppCompatAutoCompleteTextView collegeAutoComplete;
     private CollegeAdapter collegeAdapter;
     public static final String NAME_COLLEGE = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        /*=========>>> Setting Up dark Mode <<<==========*/
-        boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        if (mode) {
-            setTheme(R.style.DarkTheme);
-        } else
-            {
-            setTheme(R.style.AppTheme);
-        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_college_suggestions);
@@ -79,11 +66,11 @@ public class CollegeSuggestions extends AppCompatActivity {
         });
 
 
-        setUpToolbarMenu(mode);
+        setUpToolbarMenu();
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu(boolean mode) {
+    private void setUpToolbarMenu() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -107,17 +94,8 @@ public class CollegeSuggestions extends AppCompatActivity {
            }
        });
 
-        if (mode)
-        {
-            toolbar.getNavigationIcon().setColorFilter(getResources()
-                    .getColor(R.color.textColor2), PorterDuff.Mode.SRC_ATOP);
-        }
-        else
-        {
             toolbar.getNavigationIcon().setColorFilter(getResources()
                     .getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
-        }
-
     }
 
     private void fillCollege()

@@ -33,9 +33,8 @@
     <string name="reset">Reset</string>
     <string name="resend">Resend OTP</string>
 
-
     <!--============== Bottom Sheet Strings =================-->
-    <string name="otp_sent">An OTP is sent to your email</string>
+    <string name="otp_sent">OTP has been sent to your email</string>
     <string name="continue_button">Continue</string>
 
     <!--========= Main Activity Strings ==========-->
@@ -77,32 +76,17 @@
     <string name="nitsri_desp">NIT Srinagar | One of the most beautiful college campus of India</string>
     <string name="agartala_desp">National Institute Of Technology Agartala | A campus tour</string>
 
-    <!--============== About Strings =================-->
-    <string name="description">This line is not just a combination of some words but resembles the feeling of pride
-in each one of us that we convey to this world that I AM AN NITian!
-Keeping this same feeling of pride and oneness, a Facebook page with same name and zeal 
-was founded about 2 years ago with an objective to bring all the NITians together and 
-provide them a platform on social media where active exchange of ideas/news/information could take place.
-Founded by an NITian himself at NIT Silchar, this page became one of the fastest growing and liked page on Facebook, 
-having active admins from almost all NITs across India. We know many of you support this initiative on social media, but we
-would like to extend our invitation to each one of you to be a
-part of this fastest growing community.
-</string>
-
-    <string name="about_us">About Us</string>
-
 
     <!--============== complete profile strings =================-->
-    <string name="personal"> Personal Detail</string>
-    <string name="your_state">State/UT</string>
+    <string name="personal"> Personal Details</string>
+    <string name="your_state">State</string>
     <string name="your_phone">Phone</string>
-    <string name="your_college">College/University</string>
-    <string name="degree">Degree (e.g. B.Tech)</string>
-    <string name="branch">Branch (e.g. Civil Engineering)</string>
+    <string name="your_college">University</string>
+    <string name="degree">Degree</string>
+    <string name="branch">Branch</string>
     <string name="education">Education</string>
-    <string name="degree_duration">Degree Duration</string>
-    <string name="from">From (e.g. 2017)</string>
-    <string name="to">To (e.g. 2021)</string>
+    <string name="from">Start Year</string>
+    <string name="to">End Year</string>
     <string name="proceed">Proceed</string>
     <string name="skip">Skip</string>
 
@@ -137,11 +121,10 @@ part of this fastest growing community.
     </string-array>
 
     <string-array name="degree">
-        <item>B.Tech</item>
-        <item>BSc</item>
-        <item>M.Tech</item>
-        <item>MSc</item>
-        <item>PhD</item>
+        <item>Bachelors</item>
+        <item>Masters</item>
+        <item>Doctoral</item>
+        <item></item>
     </string-array>
 
 </resources>

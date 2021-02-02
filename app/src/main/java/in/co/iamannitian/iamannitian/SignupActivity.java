@@ -31,8 +31,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class SignupActivity extends AppCompatActivity {
-
+public class SignupActivity extends AppCompatActivity
+{
     private EditText email, username, password;
     private Button click_to_sign_up;
     private TextView go_to_login;
@@ -43,22 +43,7 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
-
         super.onCreate(savedInstanceState);
-
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-        {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
         setContentView(R.layout.activity_signup);
 
         //=====> getting token of users device from firebase
@@ -242,6 +227,7 @@ public class SignupActivity extends AppCompatActivity {
                             editor.putString("userId",response_array[1]);
                             editor.putString("userName", response_array[2]);
                             editor.putString("userEmail",response_array[3]);
+                            editor.putString("activeNotification","1");
                             editor.apply();
 
                             Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);

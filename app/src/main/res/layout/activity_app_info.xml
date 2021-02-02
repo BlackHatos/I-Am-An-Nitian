@@ -7,7 +7,7 @@
     tools:context=".AppInfo"
     android:fitsSystemWindows="true"
     android:gravity="center"
-    android:background="@drawable/splash_background"
+    android:background="@color/colorPrimaryDark"
     >
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/app_name"
         android:textSize="30sp"
-        android:textColor="#f4eaeaea"
+        android:textColor="@color/textColor1"
         android:fontFamily="sans-serif"
         android:textStyle="bold"
         android:text="@string/app_name"/>
@@ -30,7 +30,7 @@
         android:textSize="18sp"
         android:paddingBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:textColor="#f4eaeaea"
+        android:textColor="@color/textColor1"
         android:text="@string/version"/>
 
     <ImageView
@@ -59,7 +59,7 @@
             android:id="@+id/company_name"
             android:textSize="17sp"
             android:text="@string/copy_x"
-            android:textColor="#f4eaeaea"/>
+            android:textColor="@color/textColor1"/>
 
     </LinearLayout>
 

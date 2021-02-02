@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -15,36 +14,43 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
-import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_URL;
-import static in.co.iamannitian.iamannitian.ViewPagerAdapter.EXTRA_NEWS_TITLE;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_COUNT;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_DATE;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_DESCP;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_ID;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_STATUS;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_NEWS_TITLE;
+import static me.at.nitsxr.ViewPagerAdapter.EXTRA_URL;
+
 public class OnViewPagerClick extends AppCompatActivity {
 
     private ImageView newsImage;
-    private TextView newsTitle;
+    private TextView newsTitle, newDescp, publish_time, reactionCount;
     private Toolbar toolbar;
+    private ImageView userReaction;
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-          /*=========>>> Setting Up dark Mode <<<==========*/
-          boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-          if (mode) {
-              setTheme(R.style.DarkTheme);
-          } else {
-              setTheme(R.style.AppTheme);
-          }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_view_pager_click);
 
         newsImage = findViewById(R.id.newImage);
         newsTitle = findViewById(R.id.newsTitle);
+        newDescp = findViewById(R.id.newDescp);
+        publish_time = findViewById(R.id.publish_time);
+        userReaction = findViewById(R.id.userRection);
+        reactionCount = findViewById(R.id.reactionCount);
 
            Intent intent = getIntent();
 
-
              String  imageUrl = intent.getStringExtra(EXTRA_URL);
-             String  newsTitleX = intent.getStringExtra(EXTRA_NEWS_TITLE);
+             String  newsTitlex = intent.getStringExtra(EXTRA_NEWS_TITLE);
+             String  newsDescpx = intent.getStringExtra(EXTRA_NEWS_DESCP);
+             String  publishTime = intent.getStringExtra(EXTRA_NEWS_DATE);
+             String newsID =  intent.getStringExtra(EXTRA_NEWS_ID);
+             String newsStatus =  intent.getStringExtra(EXTRA_NEWS_STATUS);
+             String newsCount =  intent.getStringExtra(EXTRA_NEWS_COUNT);
 
         Glide.with(this)
                 .load(imageUrl)
@@ -52,32 +58,35 @@ public class OnViewPagerClick extends AppCompatActivity {
                 .centerInside()
                 .into(newsImage);
 
-        newsTitle.setText(newsTitleX);
-        setUpToolbarMenu(mode);
+        if(newsStatus.equals("1"))
+        {
+            userReaction.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+        else
+        {
+            userReaction.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
+
+        newsTitle.setText(newsTitlex);
+        newDescp.setText(newsDescpx);
+        publish_time.setText(publishTime);
+        reactionCount.setText(newsCount);
+
+        setUpToolbarMenu();
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu(boolean mode) {
+    private void setUpToolbarMenu() {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("News");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        if (mode)
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
-            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor2), PorterDuff.Mode.SRC_ATOP);
-            actionBar.setIcon(R.drawable.app_logo_dark);
-        }
-        else
-        {
             toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
             toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
             actionBar.setIcon(R.drawable.app_logo);
-        }
-
-    }
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,10 +97,8 @@ public class OnViewPagerClick extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(getApplicationContext(), AboutUs.class));
-                break;
+        switch (item.getItemId())
+        {
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;

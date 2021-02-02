@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -23,8 +22,8 @@ import static me.at.nitsxr.App.CHANNEL_2_ID;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService{
 
-    private NotificationTarget notificationTarget1, notificationTarget2;
-    private Bitmap imageBitmap;
+   // private NotificationTarget notificationTarget1, notificationTarget2;
+    private Bitmap bitmap;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -34,6 +33,21 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private void showNotification(String message)
     {
         String msg[] = message.split(",");
+
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load("https://app.thenextsem.com/images/Calicut.jpg")
+                .into(new CustomTarget<Bitmap>(){
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        bitmap = resource;
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
 
        // RemoteViews collapseView = new RemoteViews(getPackageName(), R.layout.notification_collapse);
         //RemoteViews expandView = new RemoteViews(getPackageName(), R.layout.notification_expand);
@@ -51,44 +65,26 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,i,PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        Glide.with(this)
-                .asBitmap()
-                .load(msg[0].trim())
-                .into(new CustomTarget<Bitmap>(){
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        imageBitmap = resource;
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
-
         Bitmap  art  = BitmapFactory.decodeResource(getResources(), R.drawable.nittrichy);
 
         Notification builder = new NotificationCompat.Builder(this,CHANNEL_2_ID)
                 .setSmallIcon(R.drawable.imnitian)
                 .setContentTitle("I Am An NITian")
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(R.drawable.settings, "Settings", pendingIntent)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(1))
                 .setContentText(msg[1])
                 .setColor(Color.BLUE)
-                //.setCustomContentView(collapseView)
                 .setContentIntent(pendingIntent)
-                //.setCustomBigContentView(expandView)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(art)
+                .setLargeIcon(bitmap)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
+                .setSubText("Tap to open")
                 .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
-              //  .setStyle(new NotificationCompat.BigPictureStyle()
-                //        .bigPicture(art)
-                  //      .bigLargeIcon(null)
-               // )
+                .setOnlyAlertOnce(true).setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(bitmap).bigLargeIcon(null))
                 .build();
+
+        //.setCustomContentView(collapseView)
+        //.setCustomBigContentView(expandView)
 
        /* notificationTarget1 = new NotificationTarget(this,
                 R.id.collapse_image_view,collapseView,builder, 0);

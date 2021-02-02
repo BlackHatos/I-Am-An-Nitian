@@ -4,56 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
     tools:context=".LoginActivity">
 
-    <RelativeLayout
-        android:layout_marginStart="-45dp"
-        android:layout_marginTop="-50dp"
-        android:background="@drawable/top"
-        android:id="@+id/msg"
-        android:layout_width="300dp"
-        android:layout_height="240dp">
-        <TextView
-            android:layout_marginStart="68dp"
-            android:layout_centerVertical="true"
-            android:fontFamily="@font/roboto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:id="@+id/top_text"
-            />
-
-        <TextView
-            android:layout_marginStart="68dp"
-            android:fontFamily="@font/roboto"
-            android:textStyle="bold"
-            android:textSize="35sp"
-            android:textColor="@color/white"
-            android:layout_below="@id/top_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_login"
-            />
-
-    </RelativeLayout>
-
     <LinearLayout
-        android:layout_marginTop="64dp"
-        android:layout_below="@id/msg"
+        android:layout_centerInParent="true"
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <RelativeLayout
+            android:id="@+id/msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/top_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="@string/welcome"
+                android:textColor="#d2dae2"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/top_text"
+                android:fontFamily="@font/roboto"
+                android:text="@string/welcome_login"
+                android:textColor="#d2dae2"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
         <EditText
             android:stateListAnimator="@null"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:fontFamily="@font/work_sans"
             android:inputType="textEmailAddress"
             android:id="@+id/email"
@@ -64,12 +60,12 @@
             android:paddingHorizontal="15dp"
             android:background="@drawable/myinput"
             android:drawablePadding="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="80dp"
             android:textSize="18sp"
             android:autofillHints="" />
 
         <EditText
-            android:textColor="?attr/textColor"
+            android:textColor="@color/colorAccent"
             android:fontFamily="@font/work_sans"
             android:inputType="textPassword"
             android:id="@+id/password"
@@ -81,13 +77,12 @@
             android:drawablePadding="8dp"
             android:hint="@string/pass_hint"
             android:textSize="18sp"
-            android:textColorHint="?attr/hintColor"
+            android:textColorHint="@color/hintColor"
             android:paddingHorizontal="15dp"
             android:autofillHints="" />
 
         <TextView
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColor="#d2dae2"
             android:onClick="forgotPassword"
             android:fontFamily="@font/work_sans_semibold"
             android:id="@+id/forgot_password"
@@ -111,7 +106,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/mybutton"
             android:text="@string/login"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor2"
             android:textSize="16sp" />
 
         <TextView
@@ -121,7 +116,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/work_sans_semibold"
             android:text="@string/not_have_account"
-            android:textColor="?attr/textColor"
+            android:textColor="#d2dae2"
             android:textSize="15sp" />
 
         <TextView
@@ -134,7 +129,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="@string/signup"
-            android:textColor="@color/colorPrimary"
+            android:textColor="#d2dae2"
             android:textSize="15sp" />
 
     </LinearLayout>

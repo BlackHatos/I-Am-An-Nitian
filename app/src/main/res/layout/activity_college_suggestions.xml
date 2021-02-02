@@ -6,62 +6,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     tools:context=".CollegeSuggestions">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:background="?attr/backgroundColor"
-        app:elevation="5dp"
-        android:elevation="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="0dp"
+        app:elevation="0dp"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <androidx.appcompat.widget.Toolbar
-            android:elevation="10dp"
             android:layout_margin="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetLeft="0dp"
             app:contentInsetStartWithNavigation="0dp"
             android:id="@+id/toolbar"
+            android:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             >
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:dropDownHeight="wrap_content"
                     android:popupBackground="@null"
                     android:popupElevation="0dp"
-                    android:dropDownSelector="?attr/backgroundColor"
+                    android:dropDownSelector="@color/colorPrimaryDark"
                     android:background="@drawable/auto_complete_edittext_college"
-                    android:dropDownAnchor="@id/appBarLayout"
+                    android:dropDownAnchor="@id/tempView"
                     android:dropDownWidth="match_parent"
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:paddingEnd="10dp"
-                    android:textColorHint="?attr/hintColor"
-                    android:textColor="?attr/textColor"
+                    android:textColorHint="#CAD2DAE2"
+                    android:textColor="@color/textColor1"
                     android:id="@+id/collegeautoComplete"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:hint="College Name"
-                    android:textSize="14sp"
+                    android:layout_height="?actionBarSize"
+                    android:hint="University Name"
+                    android:textSize="16sp"
+                    android:drawablePadding="2dp"
                     android:drawableEnd="@drawable/ic_close_black_24dp"
-                    android:completionThreshold="1"/>
+                    android:completionThreshold="1"
+                    />
+
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/navigationHorizontalLineColor"
-            />
     </com.google.android.material.appbar.AppBarLayout>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/elevationShadow"
+        app:layout_anchorGravity="bottom"
+        app:layout_anchor="@id/appBarLayout"
+        android:id="@+id/view"
+        />
+
+    <View
+        app:layout_anchorGravity="bottom"
+        app:layout_anchor="@id/view"
+        android:id="@+id/tempView"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#00ffffff"
+        />
+
 </LinearLayout>
+

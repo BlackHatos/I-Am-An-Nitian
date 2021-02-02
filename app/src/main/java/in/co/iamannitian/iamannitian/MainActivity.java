@@ -7,8 +7,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
+import me.at.nitsxr.HeadLineViewPagerAdapter;
+import me.at.nitsxr.HeaderVolleyRequest;
+import me.at.nitsxr.HumbergerDrawable;
+import me.at.nitsxr.SlideUtils;
+import me.at.nitsxr.ViewPagerAdapter;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -99,20 +107,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     RequestQueue rq;
     private List<SlideUtils> sliderImg;
-    private List<SlideUtils> headline;
 
-    final private String request_url = "https://app.thenextsem.com/app/get_slider_image.php";
-
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        if (mode) {
-            setTheme(R.style.DarkTheme);
-        } else {
-            setTheme(R.style.AppTheme);
-        }
-
         super.onCreate(savedInstanceState);
         //===> Registering facebook sdk
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -171,14 +170,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
                         overridePendingTransition(0, 0);
                         break;
-                    case R.id.chat:
-                        startActivity(new Intent(getApplicationContext(), ChatActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
-                    case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
                     case R.id.news_icon:
                         startActivity(new Intent(getApplicationContext(), NewsActivity.class));
                         overridePendingTransition(0, 0);
@@ -189,21 +180,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        setUpToolbarMenu(mode);
-        setUpDrawerMenu(mode);
+        setUpToolbarMenu();
+        setUpDrawerMenu();
         headerUpdate();
         showBadge();
+        new RequestYoutubeAPI().execute();
 
         //===> broadcast receiver
          setBroadCastReceiver();
-
-        refreshScreen.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
+        refreshScreen.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
             public void onRefresh()
             {
                 sendRequest();
-               // new RequestYoutubeAPI().execute();
+                new RequestYoutubeAPI().execute();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -215,32 +208,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //====> setting up toolbar menu
-     private void setUpToolbarMenu(boolean mode) {
+     private void setUpToolbarMenu()
+     {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Home");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (mode)
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
-            actionBar.setIcon(R.drawable.app_logo_dark);
-        }
-        else
-            {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
-            actionBar.setIcon(R.drawable.app_logo);
-        }
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        actionBar.setIcon(R.drawable.app_logo);
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
     //=====> Setting up navigation drawer
-    private void setUpDrawerMenu(boolean mode) {
+    private void setUpDrawerMenu() {
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout = findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle drawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this, mode));
+        drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this));
         drawerToggle.syncState();
     }
 
@@ -277,9 +263,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(MainActivity.this, AboutUs.class));
-                break;
             case R.id.app_info:
                 startActivity(new Intent(MainActivity.this, AppInfo.class));
                 break;
@@ -323,56 +306,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user_name = headView.findViewById(R.id.user_name);
         nit_name = headView.findViewById(R.id.nit_name);
         imageView = headView.findViewById(R.id.profile_pic);
-        user_name.setText(name);
 
         if(college.isEmpty())
-           nit_name.setText("Your College");
+           nit_name.setText("National Institute Of Technology Srinagar");
         else
             nit_name.setText(college);
 
+        if(name.isEmpty())
+            user_name.setText("Shubham Maurya");
+        else
+            user_name.setText(name);
+
         Glide.with(this)
                 .load(pic_url)
+                .placeholder(R.drawable.ic_profilepic)
                 .fitCenter()
                 .centerInside()
                 .into(imageView);
-
     }
 
     //====>how notification Badge
     public void showBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
-        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(4);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.notification_badge, menuView, false);
         itemView.addView(notificationBadge);
     }
 
     public void sendRequest()
     {
+        final String url = "https://app.thenextsem.com/app/get_news.php";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                request_url, null, new Response.Listener<JSONArray>() {
+                url, null, new Response.Listener<JSONArray>() {
             @SuppressLint("LongLogTag")
             @Override
             public void onResponse(JSONArray response) {
 
-                for (int i = 0; i < response.length(); i++) {
+                for (int i = 0; i < 5; i++) {
                     SlideUtils slideUtils = new SlideUtils();
-                    SlideUtils slideUtils1 = new SlideUtils();
                     try {
                         JSONObject object = response.getJSONObject(i);
-                        slideUtils.setSlideImageUrl
-                                ("https://app.thenextsem.com/images/" + object.getString("url"));
-                        slideUtils.setDescp(object.getString("descp"));
-                        slideUtils1.setDescp(object.getString("descp"));
+                        slideUtils.setImageUrl
+                                ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
+                        slideUtils.setNewsDescp(object.getString("descp"));
+                        slideUtils.setNewsTitle(object.getString("title"));
+                        slideUtils.setNewsId(object.getString("id"));
+                        slideUtils.setNewsDate(object.getString("date"));
+                        slideUtils.setImageUrl2(object.getString("image2"));
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
                     sliderImg.add(slideUtils);
-                    headline.add(slideUtils1);
                 }
 
                 adapter = new ViewPagerAdapter(sliderImg, MainActivity.this);
-                adapter2 = new HeadLineViewPagerAdapter(headline,MainActivity.this);
+                adapter2 = new HeadLineViewPagerAdapter(sliderImg,MainActivity.this);
                 viewPager.setAdapter(adapter);
                 viewPager2.setAdapter(adapter2);
             }
@@ -383,7 +372,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 error.printStackTrace();
             }
         });
-
         HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
     }
 
@@ -420,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
             if(response!=null)
+            {
                 try{
                     JSONObject jsonObject = new JSONObject(response);
                     youtubeJsonRequest(jsonObject);
@@ -427,10 +416,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 {
                     ex.printStackTrace();
                 }
+            }
+
         }
     }
 
     public void youtubeJsonRequest(JSONObject response) throws JSONException {
+
+        Log.d("Response===>",response.toString());
+
 
         JSONArray itemArray = (JSONArray) response.get("items");
         youtubeData = new ArrayList<>();
@@ -565,7 +559,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         title3 = findViewById(R.id.title3);
         rq = Volley.newRequestQueue(this);
         sliderImg = new ArrayList<>();
-        headline = new ArrayList<>();
         navigationView = findViewById(R.id.navigationView);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -575,6 +568,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.setupWithViewPager(viewPager2, true);
         refreshScreen = findViewById(R.id.refreshScreen);
     }
+
 
     //===> setting up broadcast receiver
     private void setBroadCastReceiver()

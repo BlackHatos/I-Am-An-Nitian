@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     tools:context=".SettingActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_margin="0dp"
-            android:elevation="2dp"
+            android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetStart="0dp"
             app:contentInsetLeft="0dp"
@@ -19,55 +19,50 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             />
 
     <RelativeLayout
+        android:paddingStart="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="50dp">
 
         <ImageView
             android:contentDescription="@string/cnt_desp"
-            android:paddingStart="15dp"
             android:layout_centerVertical="true"
-            android:id="@+id/logo1"
+            android:id="@+id/logo2"
             android:layout_gravity="center"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_dark_mode"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_notifications_active"
             />
 
         <TextView
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/logo1"
-            android:id="@+id/text1"
+            android:layout_toEndOf="@id/logo2"
+            android:id="@+id/text2"
             android:paddingStart="12dp"
-            android:textColor="?attr/textColor"
+            android:textColor="@color/textColor1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dark Mode"
+            android:text="Notification"
             android:fontFamily="@font/roboto"
             android:textSize="16sp"
             android:layout_gravity="center"
             />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:theme="@style/SwitchStyle"
             android:layout_centerVertical="true"
             android:layout_marginEnd="25dp"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center|right"
             android:layout_width="wrap_content"
-            android:id="@+id/darkSwitch"
+            android:id="@+id/turnNotification"
             android:layout_height="wrap_content"/>
-
-        <View
-            android:background="?attr/textColor"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"/>
     </RelativeLayout>
 
 </LinearLayout>

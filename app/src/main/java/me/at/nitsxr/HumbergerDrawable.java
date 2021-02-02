@@ -1,17 +1,17 @@
-package in.co.iamannitian.iamannitian;
+package me.at.nitsxr;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
 
-class HumbergerDrawable  extends DrawerArrowDrawable
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
+import in.co.iamannitian.iamannitian.R;
+
+public class HumbergerDrawable extends DrawerArrowDrawable
 {
-    public HumbergerDrawable(Context context, boolean mode) {
+    public HumbergerDrawable(Context context)
+    {
         super(context);
-        if(mode)
-        setColor(context.getResources().getColor(R.color.textColor2));
-        else
-            setColor(context.getResources().getColor(R.color.textColor1));
+        setColor(context.getResources().getColor(R.color.textColor1));
     }
 
     @Override

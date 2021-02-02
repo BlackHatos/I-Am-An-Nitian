@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:maxLines="2"
         android:id="@+id/headlines"
         android:textAlignment="center"
         android:fontFamily="@font/work_sans_semibold"

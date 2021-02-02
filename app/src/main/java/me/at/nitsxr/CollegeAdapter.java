@@ -48,9 +48,11 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
         return convertView;
     }
 
-    private Filter collegeFilter = new Filter() {
+    private Filter collegeFilter = new Filter()
+    {
         @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
+        protected FilterResults performFiltering(CharSequence constraint)
+        {
            FilterResults results = new FilterResults();
            List<CollegeItem> suggestions = new ArrayList<>();
            if(constraint==null || constraint.length() == 0)

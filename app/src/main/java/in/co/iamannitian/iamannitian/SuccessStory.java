@@ -26,44 +26,25 @@ public class SuccessStory extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        if (mode)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_success_story);
 
-        setUpToolbarMenu(mode);
+        setUpToolbarMenu();
         initRecyclerView();
         setResources();
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu(boolean mode) {
+    private void setUpToolbarMenu() {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Success Story");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        if (mode)
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
-            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor2), PorterDuff.Mode.SRC_ATOP);
-            actionBar.setIcon(R.drawable.app_logo_dark);
-        }
-        else
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
             toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
             actionBar.setIcon(R.drawable.app_logo);
-        }
     }
 
     @Override
@@ -76,9 +57,6 @@ public class SuccessStory extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(getApplicationContext(), AboutUs.class));
-                break;
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;

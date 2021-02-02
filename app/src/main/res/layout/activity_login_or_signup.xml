@@ -7,30 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/main_background"
+    android:background="@color/colorPrimaryDark"
     tools:context=".LoginOrSignupActivity">
 
-    <RelativeLayout
-        android:layout_marginStart="-45dp"
-        android:layout_marginTop="-40dp"
-        android:background="@drawable/top"
-        android:layout_width="320dp"
-        android:layout_height="250dp">
-
-        <TextView
-            android:layout_marginStart="63dp"
-            android:layout_centerVertical="true"
-            android:fontFamily="@font/roboto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/join"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            />
-    </RelativeLayout>
-
     <LinearLayout
-        android:paddingTop="80dp"
         android:layout_centerInParent="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
@@ -39,33 +19,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:fontFamily="@font/roboto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/join"
+                android:textColor="#d2dae2"
+                android:textSize="28sp"
+                />
+        </RelativeLayout>
+
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
             android:elevation="0dp"
-            app:lottie_loop="true"
             app:lottie_autoPlay="true"
-            app:lottie_rawRes="@raw/man_flying_with_books"
-            />
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/man_flying_with_books" />
 
         <Button
             android:textAllCaps="false"
             android:textSize="16sp"
             android:fontFamily="@font/work_sans_semibold"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:elevation="0dp"
             android:id="@+id/logsignbtn"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/mybutton"
             android:text="@string/login_or_signup"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor2"
             />
 
        <FrameLayout
         android:id="@+id/FrameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="50dp" 
+        android:layout_height="50dp"
 		android:layout_marginTop="10dp"
 		>
         <com.facebook.login.widget.LoginButton
@@ -104,7 +99,7 @@
                 android:layout_height="48dp"
                 android:background="@drawable/mybutton3"
                 android:text="@string/google"
-                android:textColor="@color/textColor1"
+                android:textColor="@color/textColor2"
                 android:textSize="16sp"
                 android:drawableEnd="@drawable/googleicon_small"/>
             <com.google.android.gms.common.SignInButton

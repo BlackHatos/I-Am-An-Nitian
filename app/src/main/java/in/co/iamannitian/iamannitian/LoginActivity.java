@@ -35,23 +35,8 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
 
         super.onCreate(savedInstanceState);
-
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-        {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-
         setContentView(R.layout.activity_login);
 
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);

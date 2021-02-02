@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
     tools:context=".CompleteProfile">
 
         <androidx.appcompat.widget.Toolbar
+            android:layout_alignParentTop="true"
             android:paddingStart="10dp"
             android:layout_margin="0dp"
-            android:elevation="1dp"
+            android:elevation="0dp"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             >
@@ -28,7 +29,7 @@
                     android:layout_centerVertical="true"
                     android:fontFamily="sans-serif"
                     android:textSize="22sp"
-                    android:textColor="?attr/textColor"
+                    android:textColor="@color/textColor1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Complete Profile"
@@ -40,11 +41,11 @@
                     android:text="@string/skip"
                     android:background="@drawable/otp_button_shape"
                     android:textAllCaps="false"
-                    android:fontFamily="@font/work_sans"
+                    android:fontFamily="@font/work_sans_semibold"
                     android:layout_width="80dp"
                     android:paddingStart="20dp"
                     android:layout_height="35dp"
-                    android:textColor="@color/textColor1"
+                    android:textColor="@color/textColor2"
                     android:textSize="15sp"
                     android:layout_alignParentEnd="true"
                     />
@@ -52,14 +53,18 @@
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
-    <androidx.core.widget.NestedScrollView
+    <View
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="1dp"
+        android:background="@color/elevationShadow"
+        app:layout_anchorGravity="bottom"
+        app:layout_anchor="@id/toolbar"
+        android:id="@+id/view"
+        />
 
     <LinearLayout
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/view"
         android:orientation="vertical"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -89,29 +94,30 @@
             android:id="@+id/user_phone"
             android:layout_marginTop="10dp"
             android:paddingStart="16dp"
+            android:paddingEnd="10dp"
             android:background="@drawable/complete_profile_shape"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="@string/your_phone"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:autofillHints="" />
 
         <AutoCompleteTextView
-            android:popupBackground="?attr/backgroundColor"
+            android:popupBackground="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:paddingStart="16dp"
             android:dropDownHeight="100dp"
             android:popupElevation="1dp"
-            android:dropDownSelector="?attr/backgroundColor"
+            android:dropDownSelector="@color/colorPrimaryDark"
             android:background="@drawable/complete_profile_shape"
             android:dropDownAnchor="@id/state_view"
             android:inputType="textAutoComplete|textAutoCorrect"
             android:paddingEnd="10dp"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:id="@+id/state_auto_complete"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -155,8 +161,8 @@
             android:dropDownAnchor="@id/state_auto_complete"
             android:inputType="none"
             android:paddingEnd="10dp"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:id="@+id/college_auto_complete"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -164,19 +170,19 @@
             android:autofillHints="" />
 
         <AutoCompleteTextView
-            android:popupBackground="?attr/backgroundColor"
+            android:popupBackground="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:layout_marginTop="15dp"
             android:paddingStart="16dp"
             android:dropDownHeight="100dp"
             android:popupElevation="1dp"
-            android:dropDownSelector="?attr/backgroundColor"
+            android:dropDownSelector="@color/colorPrimaryDark"
             android:background="@drawable/complete_profile_shape"
             android:dropDownAnchor="@id/degree_view"
             android:inputType="textAutoComplete|textAutoCorrect"
             android:paddingEnd="10dp"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:completionThreshold="1"
@@ -198,26 +204,17 @@
             android:background="@drawable/complete_profile_shape"
             android:inputType="text"
             android:paddingEnd="10dp"
-            android:textColorHint="?attr/hintColor"
-            android:textColor="?attr/textColor"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
             android:id="@+id/user_branch"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="@string/branch"
             android:autofillHints="" />
 
-        <TextView
-            android:layout_marginTop="15dp"
-            android:textSize="12sp"
-            android:fontFamily="@font/work_sans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/degree_duration"
-            />
-
-        <LinearLayout
+          <LinearLayout
             android:gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -229,8 +226,8 @@
                 android:background="@drawable/complete_profile_shape"
                 android:inputType="numberDecimal"
                 android:paddingEnd="10dp"
-                android:textColorHint="?attr/hintColor"
-                android:textColor="?attr/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textColor="@color/colorAccent"
                 android:id="@+id/start_year"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -247,8 +244,8 @@
                 android:dropDownAnchor="@id/end_year"
                 android:inputType="numberDecimal"
                 android:paddingEnd="10dp"
-                android:textColorHint="?attr/hintColor"
-                android:textColor="?attr/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textColor="@color/colorAccent"
                 android:id="@+id/end_year"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -258,18 +255,18 @@
 
         <Button
             android:textSize="16sp"
-            android:fontFamily="@font/work_sans"
+            android:fontFamily="@font/work_sans_semibold"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:text="@string/proceed"
             android:id="@+id/proceed"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor2"
             android:background="@drawable/complete_button_shape"
             />
 
     </LinearLayout>
     </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
 </RelativeLayout>

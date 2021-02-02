@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="#00ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,14 +15,13 @@
         android:id="@+id/custom_drop_down_text_view"
         android:textSize="16sp"
         android:fontFamily="@font/work_sans"
-        android:textColor="?attr/textColor"
-        android:text="Jammu &amp; Kashmir"
+        android:textColor="@color/textColor1"
         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/navigationHorizontalLineColor"
+        android:background="@color/elevationShadow"
         />
 
 </LinearLayout>

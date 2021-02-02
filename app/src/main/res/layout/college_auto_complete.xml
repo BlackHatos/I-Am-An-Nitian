@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="#00ffffff"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             tools:src="@drawable/nitlogo"/>
 
         <TextView
-            android:textColor="?attr/textColor"
+            android:textColor="@color/textColor1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
@@ -36,7 +36,7 @@
         android:layout_marginEnd="8dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/navigationHorizontalLineColor"
+        android:background="@color/elevationShadow"
         />
 
 </LinearLayout>

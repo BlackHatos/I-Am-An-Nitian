@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
+    android:background="@color/colorPrimaryDark"
     tools:context=".SplashScreen">
     <LinearLayout
         android:id="@+id/logo_layout"
@@ -33,11 +33,11 @@
             android:id="@+id/splash_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="75dp"
+            android:layout_marginBottom="78dp"
             android:fontFamily="@font/aladin"
             android:text="@string/splash_msg"
             android:textAlignment="center"
-            android:textColor="#BDBDBD"
+            android:textColor="@color/textColor1"
             android:textSize="28sp"
             android:textStyle="bold" />
     </RelativeLayout>

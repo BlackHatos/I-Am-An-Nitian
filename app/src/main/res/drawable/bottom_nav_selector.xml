@@ -4,13 +4,13 @@
 
     <item
         android:state_selected="true"
-        android:color="?attr/bottomNavIconColorSelected"
+        android:color="@color/colorAccent"
 
         />
 
     <item
         android:state_selected="false"
-        android:color="?attr/bottomNavIconColor"
+        android:color="@color/textColor1"
         />
 
 </selector>

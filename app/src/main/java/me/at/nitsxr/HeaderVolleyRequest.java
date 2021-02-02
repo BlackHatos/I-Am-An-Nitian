@@ -1,8 +1,9 @@
-package in.co.iamannitian.iamannitian;
+package me.at.nitsxr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
+
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -19,7 +20,7 @@ public class HeaderVolleyRequest
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
 
-    private  HeaderVolleyRequest(Context context)
+    private HeaderVolleyRequest(Context context)
     {
         this.context = context;
         this.requestQueue = getRequestQueue();
@@ -40,7 +41,7 @@ public class HeaderVolleyRequest
 
     }
 
-    public static  synchronized  HeaderVolleyRequest getInstance(Context context)
+    public static  synchronized HeaderVolleyRequest getInstance(Context context)
     {
         if(headerVolleyRequest == null)
             headerVolleyRequest = new HeaderVolleyRequest(context);

@@ -2,6 +2,7 @@
 * @Project I Am An NITian
 * @Date 16 April 2020
 */
+
 package in.co.iamannitian.iamannitian;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity
 {
-    public static final int SPLASH_TIME_OUT=4000;
+    public static final int SPLASH_TIME_OUT=3000;
     private SharedPreferences sharedPreferences;
     private Animation bottom_animation;
     private TextView splash_msg;
@@ -29,27 +30,11 @@ public class SplashScreen extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
-
-        super.onCreate(savedInstanceState);
+          super.onCreate(savedInstanceState);
         //======>lets take advantage of the notch
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-        else
-        {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         setContentView(R.layout.activity_splash_screen);
 
@@ -73,5 +58,4 @@ public class SplashScreen extends AppCompatActivity
             }
         }, SPLASH_TIME_OUT);
     }
-
 }

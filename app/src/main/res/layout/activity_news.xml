@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewsActivity">
@@ -15,16 +15,17 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:background="?attr/backgroundColor"
-            app:elevation="0dp"
+            android:background="@color/colorPrimaryDark"
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
+            app:elevation="0dp"
+            android:elevation="0dp"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
             <androidx.appcompat.widget.Toolbar
-                android:layout_margin="0dp"
                 android:elevation="0dp"
+                android:layout_margin="0dp"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:contentInsetStart="0dp"
                 app:contentInsetLeft="0dp"
@@ -33,16 +34,24 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/backgroundColor"
+                android:background="@color/colorPrimaryDark"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark"
                 />
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/elevationShadow"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/refreshLayout"
+            android:id="@+id/refreshScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -61,37 +70,10 @@
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tag_recycler_view"
-                        android:orientation="horizontal"
-                        />
-
-                    <LinearLayout
+                        android:id="@+id/news_recycler_view"
                         android:orientation="vertical"
-                        android:layout_below="@id/tag_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/latest_news"
-                            android:textSize="25sp"
-                            android:paddingStart="15dp"
-                            android:fontFamily="sans-serif"
-                            android:textStyle="bold"
-                            />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/news_recycler_view"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="10dp"
-                            />
-                    </LinearLayout>
+                        android:layout_marginBottom="10dp"
+                        />
 
                 </RelativeLayout>
 
@@ -99,8 +81,16 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/elevationShadow"
+            app:layout_anchorGravity="top"
+            app:layout_anchor="@id/bottom_navigation_view"
+            />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             app:itemTextColor="@drawable/bottom_nav_selector"
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:labelVisibilityMode="labeled"
@@ -120,11 +110,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:layout_marginEnd="10dp"
-        android:background="?attr/backgroundColor"
+        android:background="@color/colorPrimaryDark"
         app:menu="@menu/main_menu"
-        app:itemTextColor="?attr/textColor"
-        app:itemIconTint="?attr/textColor"
-        android:theme="@style/NavigationViewHorizontalLineColor"
+        app:itemTextColor="@color/textColor1"
+        app:itemIconTint="@color/textColor1"
+        android:theme="@style/NavigationDrawerStyle"
         app:headerLayout="@layout/drawer_header"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -70,16 +70,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
-
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -90,17 +80,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         getTokenFromFirebase();
-
-        //lets take advantage of the notch
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-        else
-        {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
 
         setContentView(R.layout.activity_login_or_signup);
 
@@ -152,7 +131,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 parameters.putString("fields","id,name,email,gender");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
-
             }
 
             @Override
@@ -169,7 +147,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 fb.setClickable(true);
             }
         });
-
     }
 
 
@@ -304,8 +281,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
 					
 					startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 }
-                else if((respo[0].equals("1") && respo[1].equals("0")) ||
-                        (respo[0].equals("0") && respo[1].equals("1")))
+                else if((respo[0].equals("1") && respo[1].equals("0")))
                 {
                     sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
 					SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -318,6 +294,21 @@ public class LoginOrSignupActivity extends AppCompatActivity
 					startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
 					finish();
+                }
+                else if( (respo[0].equals("0") && respo[1].equals("1")))
+                {
+                    sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("userId", respo[2]);
+                    editor.putString("userName", respo[3]);
+                    editor.putString("userEmail", respo[4]);
+                    editor.putString("userPicUrl", respo[5]);
+                    editor.putString("activeNotification","1");
+                    editor.apply();
+
+                    startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
                 }
 				else
                 {

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,100 +14,74 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private SwitchCompat switchCompat;
-    private ImageView dayNight;
+    private SwitchCompat  notificationSwitch;
+    private ImageView notificationLogo;
     private Toolbar toolbar;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        boolean mode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        if (mode)
-        {
-            setTheme(R.style.DarkTheme);
-        }
-        else
-        {
-            setTheme(R.style.AppTheme);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        switchCompat = findViewById(R.id.darkSwitch);
-        dayNight = findViewById(R.id.logo1);
+        notificationSwitch = findViewById(R.id.turnNotification);
+        notificationLogo = findViewById(R.id.logo2);
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        String isCheck = sharedPreferences.getString("activeNotification","");
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            dayNight.setImageResource(R.drawable.ic_copy_night);
-            switchCompat.setChecked(true);
-        }
+        if(isCheck.equals("1"))
+            notificationSwitch.setChecked(true);
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                 {
-                    dayNight.setImageResource(R.drawable.ic_copy_night);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("activeNotification","1");
+                    editor.apply();
+                    notificationLogo.setImageResource(R.drawable.ic_notifications_active);
                 }
                 else
-                    {
-                        dayNight.setImageResource(R.drawable.ic_dark_mode);
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        restartApp();
+                {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("activeNotification","0");
+                    editor.apply();
+                    notificationLogo.setImageResource(R.drawable.ic_notifications_off);
                 }
             }
         });
 
-        setUpToolbarMenu(mode);
+        setUpToolbarMenu();
     }
 
-    private void restartApp()
-    {
-        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
-        finish();
-        overridePendingTransition(0,0);
-    }
-
-    private void setUpToolbarMenu(boolean mode) {
+    private void setUpToolbarMenu() {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Settings");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        if (mode)
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
-            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor2),
-                    PorterDuff.Mode.SRC_ATOP);
-        }
-        else
-        {
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
-            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
-                    PorterDuff.Mode.SRC_ATOP);
-        }
-
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        inflater.inflate(R.menu.other_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(getApplicationContext(), AboutUs.class));
-                break;
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;

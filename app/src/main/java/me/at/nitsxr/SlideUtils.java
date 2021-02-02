@@ -1,6 +1,6 @@
 package me.at.nitsxr;
 
-public class NewsGetterSetter
+public class SlideUtils
 {
     private String imageUrl;
     private String imageUrl2;
@@ -8,12 +8,7 @@ public class NewsGetterSetter
     private String newsDescp;
     private String newsDate;
     private String newsId;
-    private String status;
 
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
     public void setNewsId(String newsId)
     {
         this.newsId = newsId;
@@ -49,34 +44,28 @@ public class NewsGetterSetter
         return imageUrl;
     }
 
-   public String getNewsTitle()
-   {
-       return newsTitle;
-   }
+    public String getNewsTitle()
+    {
+        return newsTitle;
+    }
 
-   public String getNewsDescp()
-   {
-       return newsDescp;
-   }
+    public String getNewsDescp()
+    {
+        return newsDescp;
+    }
 
-   public String getNewsDate()
-   {
-       return newsDate;
-   }
+    public String getNewsDate()
+    {
+        return newsDate;
+    }
 
-   public String getNewsId()
-   {
-       return newsId;
-   }
+    public String getNewsId()
+    {
+        return newsId;
+    }
 
     public String getImageUrl2()
     {
         return imageUrl2;
     }
-
-    public String getStatus()
-    {
-        return status;
-    }
-
 }
