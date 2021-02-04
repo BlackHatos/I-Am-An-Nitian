@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     tools:context=".OnViewPagerClick">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:background="?attr/backgroundColor"
-        app:elevation="1dp"
+        android:background="@color/colorPrimaryDark"
+        app:elevation="0dp"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_margin="0dp"
-            android:elevation="1dp"
+            android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetStart="0dp"
             app:contentInsetLeft="0dp"
@@ -27,21 +27,25 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_below="@id/appBarLayout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/refreshScreen"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:layout_below="@id/appBarLayout"
+        android:background="@color/elevationShadow"
+        app:layout_anchorGravity="bottom"
+        android:id="@+id/top_line"
+        app:layout_anchor="@id/appBarLayout"
+        />
 
         <androidx.core.widget.NestedScrollView
+            android:layout_below="@id/top_line"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fitsSystemWindows="true"
             android:clipToPadding="true"
@@ -56,12 +60,12 @@
                 android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 app:cardPreventCornerOverlap="false"
-                app:cardCornerRadius="10dp"
                 android:id="@+id/mainCard"
                 app:cardElevation="0dp"
+                app:cardCornerRadius="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -70,12 +74,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
+
                 <ImageView
-                    android:background="@color/textColor2"
+                    android:background="@color/textColor1"
                     android:id="@+id/newImage"
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
-                    android:layout_height="195dp"
+                    android:layout_height="200dp"
                     />
 
             </RelativeLayout>
@@ -84,9 +89,9 @@
                 <TextView
                     android:textStyle="bold"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
                     android:layout_below="@+id/mainCard"
-                    android:textColor="@color/cardColor"
+                    android:textColor="@color/textColor1"
                     android:text="NIT Jalandhar student placed
                      at Google Bagged 1.2 Crores"
                     android:textSize="23sp"
@@ -114,13 +119,13 @@
 
                 <TextView
                     android:letterSpacing="0.01"
-                    android:justificationMode="inter_word"
+                    android:justificationMode="none"
                     android:layout_marginStart="5dp"
                     android:lineSpacingExtra="6dp"
                     android:paddingEnd="5dp"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor2"
-                    android:layout_marginTop="10dp"
+                    android:textColor="@color/textColor1"
+                    android:layout_marginTop="12dp"
                     android:layout_below="@id/publish_time"
                     android:id="@+id/newDescp"
                     android:text="testing"
@@ -131,19 +136,18 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/backgroundColor"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
 
         <LinearLayout
             android:paddingStart="15dp"
@@ -153,38 +157,23 @@
 
             <ImageView
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_favorite_black_24dp"
-                />
-
-            <ImageView
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="26dp"
+                android:layout_height="21dp"
+                android:id="@+id/reaction_heart"
                 android:src="@drawable/ic_favorite_border_black_24dp"
                 />
 
             <TextView
-                android:layout_gravity="center"
+                android:id="@+id/reaction_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="92"
-                android:textColor="@color/textColor2"
-                android:textSize="16sp"
-                android:fontFamily="@font/work_sans"
-                android:layout_marginStart="7dp"
-                />
-
-            <ImageView
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginStart="18dp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_share_black_24dp"
-                />
+                android:layout_marginStart="7dp"
+                android:fontFamily="@font/work_sans"
+                android:text="25"
+                android:textColor="@color/textColor1"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
         <RelativeLayout
@@ -193,22 +182,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:visibility="visible"
-                android:layout_centerVertical="true"
+            <LinearLayout
                 android:layout_alignParentRight="true"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/save_border" />
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:layout_marginEnd="25dp"
+                    android:layout_gravity="center"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:src="@drawable/ic_share_black_24dp"
+                    />
 
-            <ImageView
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:visibility="gone"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/save_article" />
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="26dp"
+                    android:layout_height="21dp"
+                    android:src="@drawable/save_border" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

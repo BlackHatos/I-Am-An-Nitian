@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/colorPrimaryDark"
     tools:context=".SuccessStory">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:background="?attr/backgroundColor"
+        android:background="@color/colorPrimaryDark"
         app:elevation="0dp"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -27,12 +27,21 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundColor"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:layout_below="@id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/elevationShadow"
+        app:layout_anchorGravity="bottom"
+        app:layout_anchor="@id/appBarLayout"
+        />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_below="@id/appBarLayout"
@@ -49,7 +58,6 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:paddingTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -57,8 +65,68 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/story_recycler_view"
+                    android:id="@+id/topper_recycler_view"
                     android:orientation="horizontal"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="12dp"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/quote"
+                    android:layout_below="@id/topper_recycler_view"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="52dp"
+                            android:background="#ff0000"/>
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="52dp"
+                            android:background="#00ff00"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:justificationMode="inter_word"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/work_sans_semibold"
+                            android:text="Success is walking from \nfailure to failure with \nno loss of enthusiasm."
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+                        <TextView
+                            android:textColor="@color/white"
+                            android:layout_gravity="end"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-Wintson Churchil"
+                            android:fontFamily="@font/work_sans_semibold"
+                            android:textSize="15sp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="30dp"
+                    android:layout_below="@id/quote"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/story_recycler_view"
+                    android:orientation="vertical"
                     android:layout_marginBottom="10dp"
                     />
 

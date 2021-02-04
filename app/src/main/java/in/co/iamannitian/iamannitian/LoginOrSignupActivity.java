@@ -69,21 +69,15 @@ public class LoginOrSignupActivity extends AppCompatActivity
 	private String token = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
         getTokenFromFirebase();
-
         setContentView(R.layout.activity_login_or_signup);
-
-        //======> Setting  up broad cast receiver
         setBroadCastReceiver();
 
         sharedPreferences = getApplicationContext().getSharedPreferences("appData",
@@ -103,9 +97,9 @@ public class LoginOrSignupActivity extends AppCompatActivity
         });
 
         fb_login.setReadPermissions(Arrays.asList("public_profile","email"));
-
         callbackManager = CallbackManager.Factory.create();
-        fb_login.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        fb_login.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
             @Override
             public void onSuccess(LoginResult loginResult)
             {
@@ -118,10 +112,9 @@ public class LoginOrSignupActivity extends AppCompatActivity
                             String name = object.getString("name");
                             String email = object.getString("email");
                             String pic_url = "https://graph.facebook.com/"+id+"/"+"picture?type=large";
-
                             sendRequest(name, email, pic_url, "social");
-
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                             e.printStackTrace();
                         }
                     }
@@ -134,15 +127,16 @@ public class LoginOrSignupActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancel() {
-                Toast.makeText(getApplicationContext(), "Unable to login", Toast.LENGTH_SHORT).show();
+            public void onCancel()
+            {
+                Toast.makeText(getApplicationContext(), "failed to login", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
                 fb.setClickable(true);
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "Unable to login", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "failed to login", Toast.LENGTH_SHORT).show();
                 fb.setText("Continue with facebook");
                 fb.setClickable(true);
             }
@@ -157,7 +151,9 @@ public class LoginOrSignupActivity extends AppCompatActivity
         {
             fb.setText("Logging you in....");
             fb.setClickable(false);
-            if (v == fb) {
+            googleSignInButton.setClickable(false);
+            if (v == fb)
+            {
                 fb_login.performClick();
             }
         }
@@ -239,7 +235,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.myRelativeLayout),
                 Html.fromHtml("<font color=#ffffff>No Internet connection. Turn on WiFi or mobile data</font>"),
                 Snackbar.LENGTH_INDEFINITE);
-        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
 
         snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
@@ -253,15 +249,12 @@ public class LoginOrSignupActivity extends AppCompatActivity
     private void sendRequest(final String name, final String email, final String pic_url, final String source)
     {
         final String url = "https://app.thenextsem.com/app/fb_google_signup.php";
-
         StringRequest request = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
-
-
+            public void onResponse(String response)
+            {
                 String respo[] = response.split(",");
-
                 if(respo[0].equals("1") && respo[1].equals("1"))
                 {
 					sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -278,8 +271,10 @@ public class LoginOrSignupActivity extends AppCompatActivity
 					editor.putString("userStartYear", respo[11]);
 					editor.putString("userEndYear", respo[12]);
 					editor.apply();
-					
-					startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+					Intent intent  = new Intent(getApplicationContext(),MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
                 }
                 else if((respo[0].equals("1") && respo[1].equals("0")))
                 {
@@ -291,8 +286,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
 					editor.putString("userPicUrl", respo[5]);
 					editor.apply();  
 					
-					startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+					startActivity(new Intent(getApplicationContext(), CompleteProfile.class));
 					finish();
                 }
                 else if( (respo[0].equals("0") && respo[1].equals("1")))
@@ -306,8 +300,9 @@ public class LoginOrSignupActivity extends AppCompatActivity
                     editor.putString("activeNotification","1");
                     editor.apply();
 
-                    startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     finish();
                 }
 				else
@@ -376,7 +371,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
 
         startActivity(new Intent(getApplicationContext(), CompleteProfile.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-        finish();
         overridePendingTransition(0,0);
     }
 }

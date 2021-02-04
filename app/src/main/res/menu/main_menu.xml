@@ -20,6 +20,14 @@
         android:icon="@drawable/assignment"
         />
 
+
+        <item
+            android:id="@+id/saved"
+            android:orderInCategory="100"
+            android:title="Saved Items"
+            android:checkable="true"
+            android:icon="@drawable/ic_bookmark_black_24dp"/>
+
     </group>
 
 
@@ -40,6 +48,7 @@
             android:title="Settings"
             android:checkable="true"
             android:icon="@drawable/settings"/>
+
 
         <item
             android:id="@+id/logout"

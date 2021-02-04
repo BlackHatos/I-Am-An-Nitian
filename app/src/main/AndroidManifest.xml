@@ -14,6 +14,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <activity
             android:name=".SettingActivity"
             android:parentActivityName=".MainActivity" />
@@ -33,17 +35,18 @@
 
         <activity android:name=".AppInfo"
             />
-        <activity
-            android:name=".YoutubePlayer"
-            android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".OnViewPagerClick"
-            android:parentActivityName=".NewsActivity" />
+            android:parentActivityName=".NewsActivity">
+        </activity>
+
         <activity
             android:name=".NewsActivity"
+            android:parentActivityName=".MainActivity"
             android:launchMode="singleInstance">
-
         </activity>
+
         <activity
             android:name=".NotificationActivity"
             android:launchMode="singleInstance" />
@@ -59,23 +62,20 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
 
-        </activity>
-        <activity android:name=".LoginOrSignupActivity">
-        </activity>
+        <activity android:name=".LoginOrSignupActivity"/>
+
         <activity
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".SplashScreen"
-            android:launchMode="singleInstance"
-            >
-
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

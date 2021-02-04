@@ -35,15 +35,16 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
        StoryGetterSetter getterSetter = mList.get(position);
-       String topper_name = getterSetter.getName();
-       String topper_rank = getterSetter.getRank();
-       String topper_college = getterSetter.getBranch();
+       String name = getterSetter.getName();
+       String rank = getterSetter.getRank();
+       String branch = getterSetter.getBranch();
        String imageUrl = getterSetter.getImageUrl();
+       String college = getterSetter.getCollege();
+       String exam = getterSetter.getExam();
+       String id = getterSetter.getId();
+       String story = getterSetter.getStory();
 
-       holder.name.setText(topper_name);
-       holder.rank.setText("AIR-"+topper_rank);
-       holder.branch.setText(topper_college);
-
+       holder.storyTitle.setText(name+" | "+exam+" | "+rank+" | "+college);
         Glide.with(mContext)
                 .asBitmap()
                 .load(imageUrl)
@@ -58,17 +59,13 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     public class StoryViewHolder extends RecyclerView.ViewHolder
       {
           public ImageView storyImage;
-          public TextView name;
-          public TextView rank;
-          public TextView branch;
+          public TextView storyTitle;
 
           StoryViewHolder(View itemView)
           {
               super(itemView);
               storyImage = itemView.findViewById(R.id.storyImage);
-              name = itemView.findViewById(R.id.name);
-              rank = itemView.findViewById(R.id.rank);
-              branch = itemView.findViewById(R.id.branch);
+              storyTitle = itemView.findViewById(R.id.storyTitle);
           }
       }
 }

@@ -3,7 +3,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,7 +13,9 @@ import androidx.viewpager.widget.ViewPager;
 import me.at.nitsxr.HeadLineViewPagerAdapter;
 import me.at.nitsxr.HeaderVolleyRequest;
 import me.at.nitsxr.HumbergerDrawable;
-import me.at.nitsxr.SlideUtils;
+import me.at.nitsxr.NewsGetterSetter;
+import me.at.nitsxr.TopicAdapter;
+import me.at.nitsxr.TopicGetterSetter;
 import me.at.nitsxr.ViewPagerAdapter;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -22,23 +23,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -57,18 +55,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -89,24 +84,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BroadcastReceiver broadcastReceiver;
     private Snackbar snackbar;
 
+    private TopicAdapter topicAdapter;
+    private ArrayList<TopicGetterSetter> mList3;
+    private RecyclerView topicRecyclerView;
+
     int currentPage = 0;
     int currentHeadline = 0;
     final long DELAYS_MS = 500;
     final long PERIOD_MS = 3000;
 
-    //===> Setting up widgets for youtube videos
-    private ArrayList<GetYoutubeData> youtubeData;
-    private ImageView video1;
-    private ImageView video2;
-    private ImageView video3;
-    private TextView title1;
-    private TextView title2;
-    private TextView title3;
-
-    private String url1, title_x, url2, title_y, url3, title_z,id1="", id2="", id3="";
-
     RequestQueue rq;
-    private List<SlideUtils> sliderImg;
+    private List<NewsGetterSetter> sliderImg;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -184,10 +172,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpDrawerMenu();
         headerUpdate();
         showBadge();
-        new RequestYoutubeAPI().execute();
+        setBroadCastReceiver();
+        initTopicVars();
+        setTopic();
 
-        //===> broadcast receiver
-         setBroadCastReceiver();
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         refreshScreen.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener()
@@ -195,8 +183,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onRefresh()
             {
+                //clear the list first before calling the function again
+                sliderImg.clear();
                 sendRequest();
-                new RequestYoutubeAPI().execute();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -222,8 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //=====> Setting up navigation drawer
     private void setUpDrawerMenu() {
         navigationView.setNavigationItemSelectedListener(this);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        ActionBarDrawerToggle drawerToggle =
+        drawerLayout = findViewById(R.id.drawerLayout);ActionBarDrawerToggle drawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this));
@@ -342,8 +330,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(JSONArray response) {
 
-                for (int i = 0; i < 5; i++) {
-                    SlideUtils slideUtils = new SlideUtils();
+                for (int i = 0; i < 5; i++)
+                {
+                    NewsGetterSetter slideUtils = new NewsGetterSetter();
                     try {
                         JSONObject object = response.getJSONObject(i);
                         slideUtils.setImageUrl
@@ -353,6 +342,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         slideUtils.setNewsId(object.getString("id"));
                         slideUtils.setNewsDate(object.getString("date"));
                         slideUtils.setImageUrl2(object.getString("image2"));
+                        slideUtils.setStatus(object.getString("status"));
+                        slideUtils.setCount(object.getString("count"));
 
                     } catch (JSONException ex) {
                         ex.printStackTrace();
@@ -371,162 +362,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError
+            {
+                SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                Map<String, String> map =  new HashMap<>();
+                map.put("idKey", sharedPreferences.getString("userId",""));
+                return map;
+            }
+        };
         HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
-    }
-
-    public class RequestYoutubeAPI extends AsyncTask<Void, String, String>{
-
-        final String channelId = "UCnONMgL4R7ptGLHIK0KaMCQ";
-        final String apiKey = "AIzaSyA58tunD1wII2nAuxVHzpYinCmyLAB3_j4";
-        final String channel_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId="+channelId+"&key="+apiKey+"&order=date&max_results=3";
-
-        @Override
-        protected String doInBackground(Void... params)
-        {
-            try
-            {
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(channel_url);
-                HttpResponse response = httpClient.execute(httpGet);
-                HttpEntity httpEntity = response.getEntity();
-                String json = EntityUtils.toString(httpEntity);
-                return json;
-            }catch(IOException ex)
-            {
-                ex.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            super.onPostExecute(response);
-            if(response!=null)
-            {
-                try{
-                    JSONObject jsonObject = new JSONObject(response);
-                    youtubeJsonRequest(jsonObject);
-                }catch(JSONException ex)
-                {
-                    ex.printStackTrace();
-                }
-            }
-
-        }
-    }
-
-    public void youtubeJsonRequest(JSONObject response) throws JSONException {
-
-        Log.d("Response===>",response.toString());
-
-
-        JSONArray itemArray = (JSONArray) response.get("items");
-        youtubeData = new ArrayList<>();
-        for (int i = 0; i < itemArray.length(); i++) {
-
-            GetYoutubeData getYoutubeData = new GetYoutubeData();
-
-            JSONObject obj = itemArray.optJSONObject(i);
-
-            JSONObject idObj = obj.getJSONObject("id"); //contains video id
-            JSONObject snippetObj = obj.getJSONObject("snippet"); //contains title
-            JSONObject defaultThumbNails =
-                    snippetObj.getJSONObject("thumbnails")
-                            .getJSONObject("high"); //contains thumbnail url
-            String videoId = idObj.getString("videoId");
-            String title = snippetObj.getString("title");
-            String thumbNailUrl = defaultThumbNails.getString("url");
-
-            getYoutubeData.setVideoId(videoId);
-            getYoutubeData.setVideoTitle(title);
-            getYoutubeData.setVideoThumbnail(thumbNailUrl);
-
-            youtubeData.add(getYoutubeData);
-        }
-
-        setYoutubeData();
-    }
-
-    private void setYoutubeData()
-    {
-         url1 = youtubeData.get(0).getVideoThumbnail();
-         title_x = youtubeData.get(0).getVideoTitle();
-         id1 = youtubeData.get(0).getVideoId();
-
-         url2 = youtubeData.get(1).getVideoThumbnail();
-         title_y = youtubeData.get(1).getVideoTitle();
-         id2 = youtubeData.get(1).getVideoId();
-
-         url3 = youtubeData.get(2).getVideoThumbnail();
-         title_z = youtubeData.get(2).getVideoTitle();
-         id3 = youtubeData.get(2).getVideoId();
-
-        Glide.with(this)
-                .load(url1)
-                .fitCenter()
-                .centerInside()
-                .into(video1);
-
-        Glide.with(this)
-                .load(url2)
-                .fitCenter()
-                .centerInside()
-                .into(video2);
-
-        Glide.with(this)
-                .load(url3)
-                .fitCenter()
-                .centerInside()
-                .into(video3);
-
-        title1.setText(title_x);
-        title2.setText(title_y);
-        title3.setText(title_z);
-    }
-
-    //on click videos
-    public void firstVideo(View view)
-    {
-        Intent   intent = new Intent(this,YoutubePlayer.class);
-       intent.putExtra("videoId",id1);
-       if(!id1.equals(""))
-          startActivity(intent);
-       else
-           Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
-    }
-
-    public void secondVideo(View view)
-    {
-        Intent   intent = new Intent(this,YoutubePlayer.class);
-        intent.putExtra("videoId",id2);
-        if(!id2.equals(""))
-            startActivity(intent);
-        else
-            Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
-    }
-
-    public void  thirdVideo(View view)
-    {
-        Intent   intent = new Intent(this,YoutubePlayer.class);
-        intent.putExtra("videoId",id3);
-        if(!id3.equals(""))
-            startActivity(intent);
-        else
-          Toast.makeText(getApplicationContext(),"The video can't be played",Toast.LENGTH_SHORT).show();
     }
 
     public void showSnackBar()
     {
          snackbar = Snackbar.make(findViewById(R.id.drawerLayout),
-                Html.fromHtml("<font color=#ffffff>No Internet connection. Turn on WiFi or mobile data</font>"),
+                Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
                 Snackbar.LENGTH_INDEFINITE);
-        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
 
             snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
@@ -551,12 +405,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //===> initializing variables
     private void initializeVariables()
     {
-        video1 = findViewById(R.id.video1);
-        video2 = findViewById(R.id.video2);
-        video3 = findViewById(R.id.video3);
-        title1 = findViewById(R.id.title1);
-        title2 = findViewById(R.id.title2);
-        title3 = findViewById(R.id.title3);
         rq = Volley.newRequestQueue(this);
         sliderImg = new ArrayList<>();
         navigationView = findViewById(R.id.navigationView);
@@ -582,7 +430,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
-                    //new RequestYoutubeAPI().execute();
                     sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
@@ -600,6 +447,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
+    }
+
+
+    private void initTopicVars()
+    {
+        mList3 = new ArrayList<>();
+        topicRecyclerView = findViewById(R.id.topicRecyclerView);
+        topicRecyclerView.setHasFixedSize(true);
+        topicRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    private void setTopic()
+    {
+        final String url = "https://app.thenextsem.com/app/get_toppers.php";
+
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
+                url, null, new Response.Listener<JSONArray>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+                    TopicGetterSetter topicGetterSetter = new TopicGetterSetter();
+                    try {
+                        JSONObject object = response.getJSONObject(i);
+                        topicGetterSetter.setImageUrl(object.getString("image_link"));
+                        topicGetterSetter.setTag(object.getString("name"));
+
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                    mList3.add(topicGetterSetter);
+                }
+
+                topicAdapter = new TopicAdapter(MainActivity.this, mList3);
+                topicRecyclerView.setAdapter(topicAdapter);
+            }
+
+        }, new Response.ErrorListener() { //error
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
     }
 
 }

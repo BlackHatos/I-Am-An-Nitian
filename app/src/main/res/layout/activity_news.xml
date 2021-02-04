@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerLayout"
     android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -66,12 +65,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <LinearLayout
+                        android:layout_marginTop="13dp"
+                        android:layout_marginStart="10dp"
+                        android:id="@+id/welcome"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Welcome,"
+                            android:textSize="20sp"
+                            android:textColor="@color/textColor1"
+                            android:fontFamily="@font/work_sans_semibold"
+                            />
+
+                        <TextView
+                            android:textColor="@color/textColor1"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Here are your today's updates"
+                            />
+                    </LinearLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="10dp"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/news_recycler_view"
                         android:orientation="vertical"
+                        android:layout_below="@id/welcome"
                         android:layout_marginBottom="10dp"
                         />
 
@@ -95,7 +123,8 @@
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:labelVisibilityMode="labeled"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            app:itemIconSize="21dp"
             android:id="@+id/bottom_navigation_view"
             app:menu="@menu/bottom_navigation_menu"
             android:layout_gravity="bottom"
@@ -104,18 +133,5 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layout_marginEnd="10dp"
-        android:background="@color/colorPrimaryDark"
-        app:menu="@menu/main_menu"
-        app:itemTextColor="@color/textColor1"
-        app:itemIconTint="@color/textColor1"
-        android:theme="@style/NavigationDrawerStyle"
-        app:headerLayout="@layout/drawer_header"/>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</RelativeLayout>
 

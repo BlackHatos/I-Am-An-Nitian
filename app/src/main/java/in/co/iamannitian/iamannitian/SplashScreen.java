@@ -45,16 +45,18 @@ public class SplashScreen extends AppCompatActivity
         logo = findViewById(R.id.logo);
         splash_msg.setAnimation(bottom_animation);
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable()
+        {
             @Override
             public void run()
             {
                 if(!user_id.equals(""))
                      intent= new Intent(getApplicationContext(), MainActivity.class);
                 else
-                     intent= new Intent(getApplicationContext(), LoginOrSignupActivity.class);
-                startActivity(intent);
-                finish();
+                    intent= new Intent(getApplicationContext(), LoginOrSignupActivity.class);
+
+                    startActivity(intent);
+                    finish();
             }
         }, SPLASH_TIME_OUT);
     }

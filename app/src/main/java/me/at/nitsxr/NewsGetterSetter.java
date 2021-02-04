@@ -1,6 +1,8 @@
 package me.at.nitsxr;
 
-public class NewsGetterSetter
+import java.io.Serializable;
+
+public class NewsGetterSetter implements Serializable
 {
     private String imageUrl;
     private String imageUrl2;
@@ -9,11 +11,21 @@ public class NewsGetterSetter
     private String newsDate;
     private String newsId;
     private String status;
+    private String count;
 
-    public void setStatus(String status)
+    public NewsGetterSetter getObject()
     {
+        return this;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
+
     public void setNewsId(String newsId)
     {
         this.newsId = newsId;
@@ -44,7 +56,6 @@ public class NewsGetterSetter
         this.newsDate = newsDate;
     }
 
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -74,9 +85,11 @@ public class NewsGetterSetter
         return imageUrl2;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return status;
     }
 
+    public String getCount() {
+        return count;
+    }
 }

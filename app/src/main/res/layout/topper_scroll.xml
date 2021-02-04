@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        android:layout_centerHorizontal="true"
+        android:layout_width="138dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        android:layout_height="200dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/topperImage"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/amir"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginStart="-75dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ribbon"/>
+
+                <TextView
+                    android:id="@+id/exam"
+                    android:textColor="#434343"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gate-2021"
+                    />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:padding="3dp"
+                android:background="@drawable/card_shape"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/card2"
+                android:layout_width="match_parent"
+                android:layout_height="68dp">
+
+                <TextView
+                    android:textAlignment="center"
+                    android:justificationMode="inter_word"
+                    android:id="@+id/name"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="14sp"
+                    android:textColor="#434343"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shubham Maurya"
+                    />
+
+                <TextView
+                    android:textAlignment="center"
+                    android:justificationMode="inter_word"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/rank"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="13sp"
+                    android:textColor="#434343"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AIR-1"
+                    />
+
+                <TextView
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:justificationMode="inter_word"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/branch"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="12sp"
+                    android:textColor="#434343"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Computer Science"
+                    />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

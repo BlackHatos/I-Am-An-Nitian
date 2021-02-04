@@ -10,10 +10,11 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         app:cardBackgroundColor="@color/cardColor"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -34,8 +35,8 @@
         android:id="@+id/newsTitle"
         android:textColor="@color/textColor1"
         android:layout_marginStart="5dp"
-        android:justificationMode="inter_word"
-        android:layout_marginTop="5dp"
+        android:justificationMode="none"
+        android:layout_marginTop="15dp"
         android:textSize="18sp"
         android:maxLines="2"
         android:layout_below="@id/cardView"
@@ -47,7 +48,7 @@
 
     <LinearLayout
       android:gravity="center"
-      android:layout_marginTop="7dp"
+      android:layout_marginTop="9dp"
       android:layout_marginStart="10dp"
       android:layout_marginEnd="10dp"
       android:layout_below="@id/newsTitle"
@@ -60,24 +61,14 @@
           android:layout_height="wrap_content">
 
       <ImageView
+          android:id="@+id/reactionHeart"
           android:layout_gravity="center"
-          android:visibility="gone"
-          android:layout_width="25dp"
-          android:layout_height="25dp"
-          android:src="@drawable/ic_favorite_black_24dp"
-          />
-
-      <ImageView
-          android:id="@+id/userRection"
-          android:layout_gravity="center"
-          android:visibility="visible"
           android:clickable="true"
           android:focusable="false"
-          android:layout_width="25dp"
-          android:layout_height="25dp"
+          android:layout_width="21dp"
+          android:layout_height="26dp"
           android:src="@drawable/ic_favorite_border_black_24dp"
           />
-
 
           <TextView
               android:id="@+id/reactionCount"
@@ -86,18 +77,11 @@
               android:layout_height="wrap_content"
               android:text="92"
               android:textColor="@color/textColor1"
-              android:textSize="16sp"
+              android:textSize="15sp"
               android:fontFamily="@font/work_sans"
               android:layout_marginStart="7dp"
               />
 
-      <ImageView
-          android:layout_gravity="center"
-          android:layout_marginStart="18dp"
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:src="@drawable/ic_share_black_24dp"
-          />
       </LinearLayout>
 
       <RelativeLayout
@@ -105,21 +89,39 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content">
 
-      <ImageView
-          android:visibility="visible"
-          android:layout_centerVertical="true"
-          android:layout_alignParentRight="true"
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:src="@drawable/save_border" />
-
-          <ImageView
-              android:layout_centerVertical="true"
+          <LinearLayout
               android:layout_alignParentRight="true"
-              android:visibility="gone"
-              android:layout_width="25dp"
-              android:layout_height="25dp"
-              android:src="@drawable/save_article" />
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+              <ImageView
+                  android:layout_marginEnd="25dp"
+                  android:layout_gravity="center"
+                  android:layout_width="21dp"
+                  android:layout_height="21dp"
+                  android:clickable="true"
+                  android:id="@+id/shareButton"
+                  android:src="@drawable/ic_share_black_24dp"
+                  />
+
+              <ImageView
+                  android:id="@+id/save_news"
+                  android:visibility="visible"
+                 android:layout_gravity="center"
+                  android:layout_width="26dp"
+                  android:layout_height="21dp"
+                  android:src="@drawable/save_border" />
+
+              <ImageView
+                  android:layout_gravity="center"
+                  android:visibility="gone"
+                  android:layout_width="26dp"
+                  android:layout_height="21dp"
+                  android:src="@drawable/save_article" />
+
+
+          </LinearLayout>
 
       </RelativeLayout>
 

@@ -5,7 +5,8 @@
     <color name="colorAccent">#f3a683</color>
     <color name="white">#FFFFFF</color>
     <color name="cardColor">#596275</color>
-    <color name="textColor1">#d2dae2</color>
+    <!--<color name="textColor1">#d2dae2</color>-->
+    <color name="textColor1">#ffffff</color>
     <color name="textColor2">#373636</color>
     <color name="hintColor">#B1A3A2A2</color>
     <color name="elevationShadow">#49596275</color>

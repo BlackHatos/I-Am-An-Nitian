@@ -16,7 +16,7 @@
                  android:layout_width="match_parent"
                  android:layout_height="200dp"
                  android:scaleType="centerCrop"
-                 android:tint="#46000000"
+                 android:tint="#23000000"
                  />
 
              <TextView

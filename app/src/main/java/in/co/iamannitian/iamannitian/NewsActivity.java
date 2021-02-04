@@ -26,7 +26,6 @@ import me.at.nitsxr.HeaderVolleyRequest;
 import me.at.nitsxr.HumbergerDrawable;
 import me.at.nitsxr.NewsAdapter;
 import me.at.nitsxr.NewsGetterSetter;
-import me.at.nitsxr.SlideUtils;
 import me.at.nitsxr.ViewPagerAdapter;
 
 import android.content.BroadcastReceiver;
@@ -40,8 +39,10 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -51,6 +52,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -80,15 +82,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class NewsActivity extends AppCompatActivity
 {
     private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
     private SharedPreferences sharedPreferences;
     private BottomNavigationView bottomNavigationView;
     private View notificationBadge;
@@ -97,11 +98,9 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     private BroadcastReceiver broadcastReceiver;
     private Snackbar snackbar;
     //===>  views
-    private RecyclerView recyclerView, newsRecyclerView;
+    private RecyclerView  newsRecyclerView;
     private NewsAdapter newsAdapter;
     private ArrayList<NewsGetterSetter> mList;
-    private Map<String, String> reactionMap;
-    private Map<String, String> countMap;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -111,14 +110,13 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_news);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        navigationView = findViewById(R.id.navigationView);
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
 
         refreshScreen = findViewById(R.id.refreshScreen);
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         //===> broadcast receiver
-        setBroadCastReceiver();
+        //setBroadCastReceiver();
 
         bottomNavigationView.setSelectedItemId(R.id.news_icon);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -144,13 +142,11 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         });
 
         setUpToolbarMenu();
-        setUpDrawerMenu();
         initRecyclerView();
-        headerUpdate();
         showBadge();
-
-        //===> broadcast receiver
+        sendRequest();
         setBroadCastReceiver();
+
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         refreshScreen.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener()
@@ -158,8 +154,9 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onRefresh()
                     {
+                        // clear the current list before calling it again
+                        mList.clear();
                         sendRequest();
-                        // new RequestYoutubeAPI().execute();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -176,47 +173,14 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setTitle("News");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         actionBar.setIcon(R.drawable.app_logo);
-        actionBar.setDisplayShowHomeEnabled(true);
-    }
-
-    /*=======>>>>>>> Setting up navigation drawer <<<<<<<<<=========*/
-    private void setUpDrawerMenu() {
-        navigationView.setNavigationItemSelectedListener(this);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        ActionBarDrawerToggle drawerToggle =
-                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this));
-        drawerToggle.syncState();
-    }
-
-    private void closeDrawer() {
-        drawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    /*=======>>>>>>> Navigation Item Click Listener <<<<<<<<<========*/
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-        closeDrawer();
-        switch (menuItem.getItemId()) {
-            case R.id.logout:
-                logout();
-            case R.id.settings:
-                break;
-        }
-        return true;
     }
 
     /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //=======> this line solves the problem of not opening drawer on clicking drawer icon
-        //drawerLayout.openDrawer(Gravity.LEFT);
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
@@ -255,19 +219,6 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-    /*=======>>>>>>> Updating the header in the navigation view <<<<<<<<<=========*/
-    public void headerUpdate()
-    {
-        TextView user_name, nit_name;
-        String name = sharedPreferences.getString("userName", "");
-        String college = sharedPreferences.getString("userCollege", "");
-        View headView = navigationView.getHeaderView(0);
-        user_name = headView.findViewById(R.id.user_name);
-        nit_name = headView.findViewById(R.id.nit_name);
-        user_name.setText(name.trim());
-        nit_name.setText(college);
-    }
-
     /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
     public void showBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
@@ -279,9 +230,9 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
 
     public void showSnackBar() {
         snackbar = Snackbar.make(findViewById(R.id.drawerLayout),
-                Html.fromHtml("<font color=#ffffff>No Internet connection. Turn on WiFi or mobile data</font>"),
+                Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
                 Snackbar.LENGTH_INDEFINITE);
-        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
 
         snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
@@ -293,20 +244,12 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
     }
 //------------------------
 
-    private void initRecyclerView() {
+    private void initRecyclerView()
+    {
         mList = new ArrayList<>();
-        recyclerView.setHasFixedSize(true); //recycler view don't change its width and height
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        //initialize map
-        reactionMap = new HashMap<>();
-        countMap = new HashMap<>();
-
         newsRecyclerView = findViewById(R.id.news_recycler_view);
         newsRecyclerView.setHasFixedSize(true);
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-       // newsAdapter = new NewsAdapter(NewsActivity.this, mList, reactionMap, countMap,"1");
-        newsRecyclerView.setAdapter(newsAdapter);
     }
 
 
@@ -340,77 +283,66 @@ public class NewsActivity extends AppCompatActivity implements NavigationView.On
         unregisterReceiver(broadcastReceiver);
     }
 
-    public void sendRequest() {
+    public void sendRequest()
+    {
         final String url = "https://app.thenextsem.com/app/get_news.php";
 
-       /*     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null,
-                new Response.Listener<JSONObject>() {
+        StringRequest sr = new StringRequest(1, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(response);
 
-                   try {
-                            JSONArray newsArray = response.getJSONArray("news");
-                            JSONArray reactionArray = response.getJSONArray("reaction");
-                            JSONArray newsCount = response.getJSONArray("newsCount");
-
-                            Log.d("respos==>",newsCount.toString());
-
-                            for (int i = 0; i < newsArray.length(); i++)
+                            for(int i=0; i<jsonArray.length(); i++)
                             {
-                                NewsGetterSetter getterSetter = new NewsGetterSetter();
-                                JSONObject object = newsArray.getJSONObject(i);
-                                getterSetter.setImageUrl
-                                        ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
-                                getterSetter.setNewsDescp(object.getString("descp"));
-                                getterSetter.setNewsTitle(object.getString("title"));
-                                getterSetter.setNewsDate(object.getString("date"));
-                                getterSetter.setNewsId(object.getString("id"));
-                                getterSetter.setImageUrl2(object.getString("image2"));
+                                NewsGetterSetter newsGetterSetter = new NewsGetterSetter();
+                                try {
+                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    newsGetterSetter.setImageUrl
+                                            ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
+                                    newsGetterSetter.setNewsDescp(object.getString("descp"));
+                                    newsGetterSetter.setNewsTitle(object.getString("title"));
+                                    newsGetterSetter.setNewsId(object.getString("id"));
+                                    newsGetterSetter.setNewsDate(object.getString("date"));
+                                    newsGetterSetter.setImageUrl2(object.getString("image2"));
+                                    newsGetterSetter.setStatus(object.getString("status"));
+                                    newsGetterSetter.setCount(object.getString("count"));
 
-                                mList2.add(getterSetter);
+                                } catch (JSONException ex) {
+                                    ex.printStackTrace();
+                                }
+                                mList.add(newsGetterSetter);
                             }
 
-                           //setting up reaction map
+                            newsAdapter = new NewsAdapter(NewsActivity.this, mList);
+                            newsRecyclerView.setAdapter(newsAdapter);
 
-                            for(int i=0; i<reactionArray.length(); i++)
-                            {
-                                JSONObject object = reactionArray.getJSONObject(i);
-                                reactionMap.put(object.getString("news_id"),object.getString("status"));
-                            }
-
-                          for(int i=0; i<newsCount.length(); i++)
-                          {
-                              JSONObject object = newsCount.getJSONObject(i);
-                              countMap.put(object.getString("news_id"), object.getString("count"));
-                          }
-
-                        } catch (JSONException ex) {
-                            ex.printStackTrace();
-                        }*/
-
-                      /*  newsAdapter = new NewsAdapter(NewsActivity.this, mList2, reactionMap,countMap,
-                                sharedPreferences.getString("userId",""));
-                        newsRecyclerView.setAdapter(newsAdapter);
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() { //error
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(VolleyError error)
+            {
                 error.printStackTrace();
             }
-        })
-        {
+        }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError
             {
                 Map<String, String> map =  new HashMap<>();
-                map.put("userId","45");
+                SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                String id = sharedPreferences.getString("userId", "");
+                map.put("idKey", id);
                 return map;
             }
         };
 
         RequestQueue rq = Volley.newRequestQueue(NewsActivity.this);
-        rq.add(jsonObjectRequest);
-    }*/
+        rq.add(sr);
     }
 }
+
