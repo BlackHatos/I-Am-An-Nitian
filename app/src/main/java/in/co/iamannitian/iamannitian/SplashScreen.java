@@ -24,7 +24,6 @@ public class SplashScreen extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private Animation bottom_animation;
     private TextView splash_msg;
-    private ImageView logo;
     private Intent intent;
 
     @Override
@@ -42,7 +41,6 @@ public class SplashScreen extends AppCompatActivity
         final String user_id = sharedPreferences.getString("userId", "");
         bottom_animation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         splash_msg = findViewById(R.id.splash_msg);
-        logo = findViewById(R.id.logo);
         splash_msg.setAnimation(bottom_animation);
 
         new Handler().postDelayed(new Runnable()

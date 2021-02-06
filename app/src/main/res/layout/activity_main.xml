@@ -37,7 +37,9 @@
                 android:background="@color/colorPrimaryDark"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                />
+                >
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -67,7 +69,9 @@
               android:layout_height="wrap_content">
 
               <androidx.recyclerview.widget.RecyclerView
+                  android:layout_marginBottom="12dp"
                   android:layout_marginTop="12dp"
+                  android:paddingEnd="2dp"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:id="@+id/topicRecyclerView"
@@ -76,7 +80,7 @@
 
               <androidx.cardview.widget.CardView
                   android:layout_below="@id/topicRecyclerView"
-                  android:layout_marginTop="25dp"
+                  android:layout_marginTop="10dp"
                   android:foreground="?attr/selectableItemBackground"
                   android:layout_centerHorizontal="true"
                   app:cardPreventCornerOverlap="false"

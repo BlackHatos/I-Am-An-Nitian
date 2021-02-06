@@ -3,6 +3,7 @@ package in.co.iamannitian.iamannitian;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import me.at.nitsxr.NewsDataBase;
 import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.UserReaction;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 
 public class OnViewPagerClick extends AppCompatActivity
@@ -21,7 +24,7 @@ public class OnViewPagerClick extends AppCompatActivity
     private ImageView newsImage;
     private TextView newsTitle, newDescp, publish_time, reaction_count;
     private Toolbar toolbar;
-    private  ImageView reaction_heart;
+    private  ImageView reaction_heart, saveNews, shareNews;
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class OnViewPagerClick extends AppCompatActivity
         publish_time = findViewById(R.id.publish_time);
         reaction_count = findViewById(R.id.reaction_count);
         reaction_heart = findViewById(R.id.reaction_heart);
+        saveNews = findViewById(R.id.saveNews);
+        shareNews = findViewById(R.id.shareNews);
 
             Intent intent = getIntent();
             final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
@@ -87,6 +92,44 @@ public class OnViewPagerClick extends AppCompatActivity
         });
 
         setUpToolbarMenu();
+
+
+        shareNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent  = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle()+"\n"+"" +
+                        "Download the app : https://iamannitian.co.in");
+                intent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(intent, "Share via");
+                startActivity(shareIntent);
+            }
+        });
+
+          final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
+
+          if(newsDataBase.isPresent(getterSetter.getNewsId()))
+              saveNews.setImageResource(R.drawable.save_article);
+
+         saveNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(newsDataBase.isPresent(getterSetter.getNewsId()))
+                {
+                    newsDataBase.deleteRecord(getterSetter.getNewsId());
+                    saveNews.setImageResource(R.drawable.save_border);
+                    Toast.makeText(getApplicationContext(), "Unsaved", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    saveNews.setImageResource(R.drawable.save_article);
+                    newsDataBase.addOne(getterSetter);
+                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
@@ -96,10 +139,10 @@ public class OnViewPagerClick extends AppCompatActivity
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-            toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
-            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
-            actionBar.setIcon(R.drawable.app_logo);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.getNavigationIcon().setColorFilter(getResources()
+                .getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
      }
 
     @Override

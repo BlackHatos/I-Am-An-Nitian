@@ -3,6 +3,7 @@ package in.co.iamannitian.iamannitian;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +23,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -32,6 +36,7 @@ public class LoginActivity extends AppCompatActivity
     private Button click_to_login;
     private  ProgressDialog progressDialog;
     private SharedPreferences sharedPreferences;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,8 @@ public class LoginActivity extends AppCompatActivity
         click_to_login = findViewById(R.id.click_to_login);
         progressDialog =  new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
+
+        setUpToolbarMenu();
 
         click_to_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +182,17 @@ public class LoginActivity extends AppCompatActivity
     public void forgotPassword(View view)
     {
         startActivity(new Intent(getApplicationContext(), ForgetPassword.class));
+    }
+
+    private void setUpToolbarMenu() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Back");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
     }
 
 }

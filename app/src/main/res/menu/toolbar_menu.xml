@@ -11,12 +11,10 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/search"
         android:orderInCategory="100"
-        android:title="Search"
+        android:id="@+id/profile_image"
+        android:title="Profile"
         app:showAsAction="always"
+        app:actionLayout="@layout/profile_layout"
          />
-
-
 </menu>

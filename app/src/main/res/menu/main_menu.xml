@@ -6,13 +6,6 @@
         android:checkableBehavior="single">
 
     <item
-        android:id="@+id/send_notify"
-        android:orderInCategory="100"
-        android:title="Home"
-        android:checkable="true"
-        android:icon="@drawable/home"/>
-
-    <item
         android:id="@+id/book_upload"
         android:orderInCategory="100"
         android:title="Preferences"
@@ -26,7 +19,7 @@
             android:orderInCategory="100"
             android:title="Saved Items"
             android:checkable="true"
-            android:icon="@drawable/ic_bookmark_black_24dp"/>
+            android:icon="@drawable/save_border"/>
 
     </group>
 
@@ -36,6 +29,13 @@
         android:checkableBehavior="single">
 
         <item
+            android:id="@+id/settings"
+            android:orderInCategory="100"
+            android:title="Settings"
+            android:checkable="true"
+            android:icon="@drawable/settings"/>
+
+        <item
             android:id="@+id/share"
             android:orderInCategory="100"
             android:title="Share App"
@@ -43,11 +43,11 @@
             android:icon="@drawable/ic_share_app"/>
 
         <item
-            android:id="@+id/settings"
+            android:id="@+id/rate_us"
             android:orderInCategory="100"
-            android:title="Settings"
+            android:title="Rate Us"
             android:checkable="true"
-            android:icon="@drawable/settings"/>
+            android:icon="@drawable/ic_star_border_black_24dp"/>
 
 
         <item

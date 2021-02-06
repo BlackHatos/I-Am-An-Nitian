@@ -10,8 +10,8 @@
     <string name="join">Join The \nBiggest\nStudent Community</string>
 
     <!--============== Login Strings =================-->
-    <string name="welcome">Welcome Back</string>
-    <string name="welcome_login">Log In!</string>
+    <string name="welcome">Welcome,</string>
+    <string name="welcome_login">Sign in to continue!</string>
     <string name="login">Log in</string>
     <string name="signup">Sign up</string>
     <string name="email_phone_hint">Email or Phone</string>
@@ -21,7 +21,7 @@
 
     <!--============== Signup Strings =================-->
     <string name="hello">Hello,</string>
-    <string name="welcome_signup">Sign Up!</string>
+    <string name="welcome_signup">Sign up to get started!</string>
     <string name="name_hint">User Name</string>
     <string name="email_hint">Email</string>
     <string name="signup_space">Sign Up</string>

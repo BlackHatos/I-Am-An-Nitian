@@ -24,7 +24,18 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/elevationShadow"
+        app:layout_anchorGravity="bottom"
+        android:layout_below="@id/toolbar"
+        android:id="@+id/view"
+        app:layout_anchor="@id/toolbar"
+        />
+
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:paddingStart="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"

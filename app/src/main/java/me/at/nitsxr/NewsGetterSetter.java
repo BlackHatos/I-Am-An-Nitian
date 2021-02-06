@@ -12,6 +12,15 @@ public class NewsGetterSetter implements Serializable
     private String newsId;
     private String status;
     private String count;
+    private  String localId;
+
+    public void setLocalId(String localId) {
+        this.localId = localId;
+    }
+
+    public String getLocalId() {
+        return localId;
+    }
 
     public NewsGetterSetter getObject()
     {

@@ -3,16 +3,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.at.nitsxr.HeadLineViewPagerAdapter;
 import me.at.nitsxr.HeaderVolleyRequest;
 import me.at.nitsxr.HumbergerDrawable;
+import me.at.nitsxr.NewsDataBase;
 import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.TopicAdapter;
 import me.at.nitsxr.TopicGetterSetter;
@@ -28,6 +32,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -227,13 +233,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         closeDrawer();
-        switch (menuItem.getItemId()) {
+        switch (menuItem.getItemId())
+        {
             case R.id.logout:
                 logout();
                 break;
             case R.id.settings:
                 startActivity(new Intent(getApplicationContext(), SettingActivity.class));
-                overridePendingTransition(0, 0);
+                break;
+            case R.id.saved:
+                startActivity(new Intent(getApplicationContext(), SavedItem.class));
                 break;
         }
         return true;
@@ -244,6 +253,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.profile_image);
+        CircleImageView circleImageView = menuItem.
+                getActionView().findViewById(R.id.profileImage);
+
+        String pic_url = sharedPreferences.getString("userPicUrl", "");
+
+        Glide.with(this)
+                .load(pic_url)
+                .placeholder(R.drawable.ic_profilepic)
+                .fitCenter()
+                .centerInside()
+                .into(circleImageView);
+
+
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //setup search in toolbar
+      /*  MenuItem item = menu.findItem(R.id.search);
+         SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });*/
         return true;
     }
 
@@ -461,18 +509,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setTopic()
     {
         final String url = "https://app.thenextsem.com/app/get_toppers.php";
-
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 url, null, new Response.Listener<JSONArray>() {
             @SuppressLint("LongLogTag")
             @Override
             public void onResponse(JSONArray response) {
-
                 for (int i = 0; i < response.length(); i++) {
                     TopicGetterSetter topicGetterSetter = new TopicGetterSetter();
                     try {
                         JSONObject object = response.getJSONObject(i);
-                        topicGetterSetter.setImageUrl(object.getString("image_link"));
                         topicGetterSetter.setTag(object.getString("name"));
 
                     } catch (JSONException ex) {
@@ -480,7 +525,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     mList3.add(topicGetterSetter);
                 }
-
                 topicAdapter = new TopicAdapter(MainActivity.this, mList3);
                 topicRecyclerView.setAdapter(topicAdapter);
             }
@@ -493,5 +537,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
     }
-
 }

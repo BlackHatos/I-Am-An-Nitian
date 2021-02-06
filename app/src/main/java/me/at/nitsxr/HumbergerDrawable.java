@@ -18,8 +18,8 @@ public class HumbergerDrawable extends DrawerArrowDrawable
     public void draw(Canvas canvas)
     {
         super.draw(canvas);
-        setBarLength(50.0f);
-        setBarThickness(6.0f);
+        setBarLength(46.0f);
+        setBarThickness(5.0f);
         setGapSize(11.0f);
     }
 }

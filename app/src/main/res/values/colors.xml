@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#303952</color>
-    <color name="colorPrimaryDark">#303952</color>
-    <color name="colorAccent">#f3a683</color>
+    <!--<color name="colorPrimaryDark">#303952</color>-->
+    <color name="colorPrimaryDark">#232323</color>
+   <!-- <color name="colorAccent">#f3a683</color> -->
+    <color name="colorAccent">#E3A432</color>
     <color name="white">#FFFFFF</color>
-    <color name="cardColor">#596275</color>
+    <!--<color name="cardColor">#596275</color>-->
+    <color name="cardColor">#434343</color>
     <!--<color name="textColor1">#d2dae2</color>-->
     <color name="textColor1">#ffffff</color>
     <color name="textColor2">#373636</color>

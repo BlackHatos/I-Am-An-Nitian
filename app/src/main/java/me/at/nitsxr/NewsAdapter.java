@@ -2,20 +2,14 @@ package me.at.nitsxr;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
-import java.io.Serializable;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -46,9 +40,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public void onBindViewHolder(@NonNull final NewsViewHolder holder, final int position)
     {
            final NewsGetterSetter getterSetter = mList.get(position);
+           final NewsDataBase newsDataBase = new NewsDataBase(mContext);
+
            String news_title = getterSetter.getNewsTitle();
            String image_url = getterSetter.getImageUrl();
-           final String newsId = getterSetter.getNewsId();
 
            holder.reactionCount.setText(getterSetter.getCount());
 
@@ -57,11 +52,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
            else
                holder.reactionHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
+           //change save button color
+           final boolean isPresent = newsDataBase.isPresent(getterSetter.getNewsId());
+           if(isPresent)
+               holder.saveNews.setImageResource(R.drawable.save_article);
+
      holder.newsTitle.setText(news_title);
-           Glide.with(mContext)
+
+     Glide.with(mContext)
                 .asBitmap()
                 .load(image_url)
                 .into(holder.newsImageView);
+
 
     holder.reactionHeart.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -88,6 +90,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             getterSetter.setStatus(updated_status+"");
             getterSetter.setCount(updated_count+"");
 
+            notifyDataSetChanged();
+
             UserReaction userReaction = new UserReaction(getterSetter,
                     mContext.getSharedPreferences("appData", MODE_PRIVATE)
                             .getString("userId",""), updated_status);
@@ -111,8 +115,33 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(mContext,
-                        "This feature is not yet available", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() +"\n"+
+                            "Download the app : https://iamannitian.co.in");
+                    intent.setType("text/plain");
+                    Intent shareIntent = Intent.createChooser(intent, "Share Via");
+                    mContext.startActivity(shareIntent);
+            }
+        });
+
+        holder.saveNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if(isPresent)
+                {
+                    newsDataBase.deleteRecord(getterSetter.getNewsId());
+                    holder.saveNews.setImageResource(R.drawable.save_border);
+                    Toast.makeText(mContext, "Unsaved", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    holder.saveNews.setImageResource(R.drawable.save_article);
+                    newsDataBase.addOne(getterSetter);
+                    Toast.makeText(mContext, "Saved", Toast.LENGTH_SHORT).show();
+                }
+                notifyDataSetChanged();
             }
         });
     }
@@ -127,7 +156,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         public TextView newsTitle;
         public TextView reactionCount;
         public ImageView newsImageView;
-        public ImageView reactionHeart, shareButton;
+        public ImageView reactionHeart, shareButton, saveNews;
         public CardView cardView;
 
         public NewsViewHolder(View itemView)
@@ -139,6 +168,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             newsImageView = itemView.findViewById(R.id.newsImageView);
             cardView = itemView.findViewById(R.id.cardView);
             shareButton = itemView.findViewById(R.id.shareButton);
+            saveNews = itemView.findViewById(R.id.save_news);
         }
     }
 }

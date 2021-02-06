@@ -4,16 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import in.co.iamannitian.iamannitian.MainActivity;
 import in.co.iamannitian.iamannitian.R;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder> {
@@ -34,17 +28,11 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TopicAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TopicAdapter.MyViewHolder holder, int position)
+    {
         TopicGetterSetter getterSetter = mList.get(position);
-        String imageUrl = getterSetter.getImageUrl();
         String tag = getterSetter.getTag();
-
-        holder.tag.setText(tag);
-
-        Glide.with(mContext)
-                .asBitmap()
-                .load(imageUrl)
-                .into(holder.topicImage);
+        holder.topic.setText(tag);
     }
 
     @Override
@@ -54,14 +42,12 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
-        public ImageView topicImage;
-        public TextView tag;
+        public TextView topic;
 
         MyViewHolder(View itemView)
         {
             super(itemView);
-            topicImage = itemView.findViewById(R.id.topicImage);
-            tag = itemView.findViewById(R.id.tag);
+            topic = itemView.findViewById(R.id.topic);
         }
     }
 }

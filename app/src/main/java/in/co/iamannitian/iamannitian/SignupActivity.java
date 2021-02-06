@@ -3,11 +3,9 @@ package in.co.iamannitian.iamannitian;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +26,10 @@ import com.google.firebase.iid.InstanceIdResult;
 import java.util.HashMap;
 import java.util.Map;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 public class SignupActivity extends AppCompatActivity
 {
@@ -39,6 +39,7 @@ public class SignupActivity extends AppCompatActivity
     private BottomSheetDialog bottomSheetDialog;
     private String token = "";
     private ProgressDialog progressDialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,8 @@ public class SignupActivity extends AppCompatActivity
         go_to_login = findViewById(R.id.go_to_login);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
+
+        setUpToolbarMenu();
 
         click_to_sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,5 +287,16 @@ public class SignupActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void setUpToolbarMenu() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Back");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
     }
 }

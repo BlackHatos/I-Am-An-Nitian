@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/cardView"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                app:cardElevation="0dp"
+                app:cardCornerRadius="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/newsImage"
+                    android:scaleType="centerCrop"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/amir"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:paddingStart="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_marginTop="6dp"
+                    android:id="@+id/newsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textColor="@color/textColor1"
+                    android:text="This is news heading for demonstration"
+                    />
+
+                <RelativeLayout
+                    android:layout_marginBottom="6dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/newsDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="26 December"
+                        android:textColor="@color/textColor1"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/newsHeart"
+                        android:layout_width="26dp"
+                        android:layout_height="21dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/newsCount"
+                        android:src="@drawable/ic_favorite_border_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/newsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_toLeftOf="@id/unSaveNews"
+                        android:fontFamily="@font/work_sans"
+                        android:text="52"
+                        android:textColor="@color/textColor1"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="26dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/save_article"
+                        android:id="@+id/unSaveNews"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
