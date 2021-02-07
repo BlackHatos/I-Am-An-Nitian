@@ -1,42 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    android:gravity="center"
     android:background="@color/colorAccent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:paddingStart="12dp"
         android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_pic"
             android:layout_gravity="center_vertical"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="5dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:elevation="0dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_profilepic"
+            android:src="@drawable/yellow_profile"
             android:contentDescription="@string/cnt_desp" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:paddingTop="14dp"
-        android:paddingEnd="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:paddingStart="5dp"
-        >
-
         <TextView
+            android:layout_marginStart="6dp"
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,6 +34,7 @@
             />
 
         <TextView
+            android:layout_marginStart="6dp"
             android:layout_marginTop="1dp"
             android:id="@+id/nit_name"
             android:textColor="@color/textColor2"
@@ -56,6 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

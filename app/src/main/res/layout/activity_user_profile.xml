@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".UserProfile">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        app:elevation="0dp"
+        android:elevation="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <androidx.appcompat.widget.Toolbar
+            android:elevation="0dp"
+            android:layout_margin="0dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleMarginStart="6dp"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/elevationShadow"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            />
+
+        <androidx.core.widget.NestedScrollView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fitsSystemWindows="true"
+            android:clipToPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:layout_marginTop="18dp"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/profile_image_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="100dp"
+                            android:id="@+id/profile_image"
+                            android:layout_height="100dp"
+                            app:civ_border_width="4dp"
+                            android:src="@drawable/dark_profile"
+                            app:civ_border_color="@color/textColor1"
+                            />
+
+                        <View
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginRight="6dp"
+                            android:layout_width="20dp"
+                            android:layout_gravity="bottom|right"
+                            android:layout_height="20dp"
+                            android:background="@drawable/yellow_dot"
+                            />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:textColor="@color/textColor1"
+                        android:id="@+id/user_name"
+                        android:textSize="20sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/profile_image_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shubham Maurya"
+                        android:fontFamily="@font/work_sans_semibold"
+                        />
+
+                    <TextView
+                        android:layout_marginTop="4dp"
+                        android:textAlignment="center"
+                        android:textColor="#BDBCBC"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:id="@+id/user_email"
+                        android:fontFamily="@font/work_sans"
+                        android:text="mauryask1589@gmail.com"
+                        />
+
+                    <Button
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="15dp"
+                        android:background="@drawable/edit_profile_button"
+                        android:textColor="@color/colorAccent"
+                        android:text="Edit Profile"
+                        android:textAllCaps="false"
+                        android:layout_height="35dp"
+                        android:id="@+id/edit_profile_button"
+                        android:layout_below="@id/user_email"
+                        />
+                </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_marginStart="22dp"
+                       android:layout_below="@id/layout1"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/inner1"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp">
+
+                            <ImageView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/home"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/home2"
+                                android:layout_marginEnd="10dp"
+                                />
+
+                            <TextView
+                                android:layout_toRightOf="@id/home"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/home_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:text="Home"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+
+                        <TextView
+                            android:textColor="#BDBCBC"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Uttar Pradesh"
+                            android:textSize="15sp"
+                            android:id="@+id/state_name"
+                            android:paddingStart="5dp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_below="@id/inner1"
+                            />
+
+                        <!-- =========================  -->
+
+                        <RelativeLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/state_name"
+                            android:id="@+id/inner2"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp">
+
+                            <ImageView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/college_logo"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_school_black_24dp"
+                                android:layout_marginEnd="10dp"
+                                />
+
+                            <TextView
+                                android:layout_toRightOf="@id/college_logo"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/college_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:text="College"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:textColor="#BDBCBC"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="National Institute Of Technology \nSrinagar"
+                            android:textSize="15sp"
+                            android:id="@+id/college_name"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="7dp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_below="@id/inner2"
+                            />
+
+
+                        <!-- =========================  -->
+
+                        <RelativeLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/college_name"
+                            android:id="@+id/inner5"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp">
+
+                            <ImageView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/degree_logo"
+                                android:layout_width="22dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_branding_watermark_black_24dp"
+                                android:layout_marginEnd="10dp"
+                                />
+
+                            <TextView
+                                android:layout_toRightOf="@id/degree_logo"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/degree_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:text="Degree"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:textColor="#BDBCBC"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bachelors"
+                            android:textSize="16sp"
+                            android:id="@+id/degree_name"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="7dp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_below="@id/inner5"
+                            />
+
+
+
+                        <!-- =========================  -->
+
+                        <RelativeLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/degree_name"
+                            android:id="@+id/inner3"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp">
+
+                            <ImageView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/branch_logo"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/settings2"
+                                android:layout_marginEnd="10dp"
+                                />
+
+                            <TextView
+                                android:layout_toRightOf="@id/branch_logo"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/branch_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:text="Branch"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:textColor="#BDBCBC"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Information Technology"
+                            android:textSize="16sp"
+                            android:id="@+id/branch_name"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="7dp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_below="@id/inner3"
+                            />
+
+                        <!-- =========================  -->
+
+                        <RelativeLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/branch_name"
+                            android:id="@+id/inner4"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp">
+
+                            <ImageView
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerHorizontal="true"
+                                android:id="@+id/phone_logo"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/phonex"
+                                android:layout_marginEnd="10dp"
+                                />
+
+                            <TextView
+                                android:layout_toRightOf="@id/phone_logo"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/phone_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:text="Phone"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:textColor="#BDBCBC"
+                            android:layout_marginTop="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="8130512823"
+                            android:textSize="16sp"
+                            android:id="@+id/phone_number"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="7dp"
+                            android:fontFamily="@font/work_sans"
+                            android:layout_below="@id/inner4"
+                            />
+
+                    </RelativeLayout>
+
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

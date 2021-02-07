@@ -171,4 +171,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             saveNews = itemView.findViewById(R.id.save_news);
         }
     }
+
+    public void filterList(List<NewsGetterSetter> filteredList)
+    {
+        mList = filteredList;
+        notifyDataSetChanged();
+    }
 }

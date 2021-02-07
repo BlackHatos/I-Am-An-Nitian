@@ -72,4 +72,8 @@
         <item name="colorAccent">@color/textColor1</item>
     </style>
 
+    <style name="SearchViewStyle" parent="AppTheme">
+           <item name="colorAccent">@color/textColor1</item>
+    </style>
+
    </resources>

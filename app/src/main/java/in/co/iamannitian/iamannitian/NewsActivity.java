@@ -2,56 +2,44 @@ package in.co.iamannitian.iamannitian;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import me.at.nitsxr.HeadLineViewPagerAdapter;
-import me.at.nitsxr.HeaderVolleyRequest;
-import me.at.nitsxr.HumbergerDrawable;
 import me.at.nitsxr.NewsAdapter;
 import me.at.nitsxr.NewsGetterSetter;
-import me.at.nitsxr.ViewPagerAdapter;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.CompoundButton;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
@@ -62,27 +50,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +82,6 @@ public class NewsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -116,7 +89,7 @@ public class NewsActivity extends AppCompatActivity
         refreshScreen = findViewById(R.id.refreshScreen);
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         //===> broadcast receiver
-        //setBroadCastReceiver();
+        setBroadCastReceiver();
 
         bottomNavigationView.setSelectedItemId(R.id.news_icon);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -179,10 +152,60 @@ public class NewsActivity extends AppCompatActivity
     }
 
     /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/
+    @SuppressLint("WrongConstant")
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        inflater.inflate(R.menu.search_menu, menu);
+
+        //setting up the search view in toolbar
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        //changing the size and style of the text in search view
+        EditText searchEdit  = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEdit.setTextSize(17.0f);
+
+        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(),R.font.work_sans);
+        searchEdit.setTypeface(typeface);
+
+        // remove horizontal underline in search view
+         View v = searchView.findViewById(androidx.appcompat.R.id.search_plate);
+         v.setBackgroundColor(Color.TRANSPARENT);
+
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s)
+            {
+                if(s.equals(""))
+                    newsAdapter.filterList(mList);
+                return false;
+            }
+
+        });
+
+         // restore the news data after closing the search view
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                newsAdapter.filterList(mList);
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -227,13 +250,11 @@ public class NewsActivity extends AppCompatActivity
         itemView.addView(notificationBadge);
     }
 
-
     public void showSnackBar() {
-        snackbar = Snackbar.make(findViewById(R.id.drawerLayout),
+        snackbar = Snackbar.make(findViewById(R.id.relativeLayout),
                 Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
-
         snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,6 +286,8 @@ public class NewsActivity extends AppCompatActivity
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
+                    mList.clear();
+                    sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
                 }
@@ -343,6 +366,26 @@ public class NewsActivity extends AppCompatActivity
 
         RequestQueue rq = Volley.newRequestQueue(NewsActivity.this);
         rq.add(sr);
+    }
+
+    // filtering the news based on the keyword entered in search bar
+    private void filter(String text)
+    {
+        List<NewsGetterSetter> filteredList = new ArrayList<>();
+
+        if(mList.size() != 0)
+        {
+            for (NewsGetterSetter item : mList) //here mlist is filtered list
+            {
+                if (item.getNewsTitle().toLowerCase().contains(text.toLowerCase())) {
+                    {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            newsAdapter.filterList(filteredList);
+        }
     }
 }
 

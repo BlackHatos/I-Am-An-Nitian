@@ -45,7 +45,7 @@ public class SavedItem extends AppCompatActivity
     private void setUpToolbarMenu()
     {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Saved Items");
+        toolbar.setTitle("Bookmarks");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

@@ -16,4 +16,5 @@
     <color name="navigationHorizontalLineColor">@color/elevationShadow</color>
     <color name="navigation_background">@color/colorPrimary</color>
     <color name="ripple_colorx">#29A3A2A2</color>
+    <color name="profileColorPrimaryDark">@color/colorAccent</color>
   </resources>

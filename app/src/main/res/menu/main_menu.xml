@@ -17,7 +17,7 @@
         <item
             android:id="@+id/saved"
             android:orderInCategory="100"
-            android:title="Saved Items"
+            android:title="Bookmarks"
             android:checkable="true"
             android:icon="@drawable/save_border"/>
 

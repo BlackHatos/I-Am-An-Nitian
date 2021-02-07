@@ -3,10 +3,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.at.nitsxr.HeadLineViewPagerAdapter;
 import me.at.nitsxr.HeaderVolleyRequest;
-import me.at.nitsxr.HumbergerDrawable;
-import me.at.nitsxr.NewsDataBase;
+import me.at.nitsxr.HamburgerDrawable;
 import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.TopicAdapter;
 import me.at.nitsxr.TopicGetterSetter;
@@ -32,7 +30,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -215,12 +212,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //=====> Setting up navigation drawer
-    private void setUpDrawerMenu() {
+    private void setUpDrawerMenu()
+    {
         navigationView.setNavigationItemSelectedListener(this);
-        drawerLayout = findViewById(R.id.drawerLayout);ActionBarDrawerToggle drawerToggle =
+        drawerLayout = findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle drawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerArrowDrawable(new HumbergerDrawable(this));
+        drawerToggle.setDrawerArrowDrawable(new HamburgerDrawable(this));
         drawerToggle.syncState();
     }
 
@@ -262,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(pic_url)
-                .placeholder(R.drawable.ic_profilepic)
+                .placeholder(R.drawable.dark_profile)
                 .fitCenter()
                 .centerInside()
                 .into(circleImageView);
@@ -271,27 +270,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+               startActivity(new Intent(MainActivity.this, UserProfile.class));
             }
         });
 
         //setup search in toolbar
-      /*  MenuItem item = menu.findItem(R.id.search);
-         SearchView searchView = (SearchView) item.getActionView();
-        searchView.setQueryHint("Search");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });*/
+      /*  */
         return true;
     }
 
@@ -355,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(pic_url)
-                .placeholder(R.drawable.ic_profilepic)
+                .placeholder(R.drawable.yellow_profile)
                 .fitCenter()
                 .centerInside()
                 .into(imageView);
@@ -429,13 +413,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
-
-            snackbar.setAction("Dismiss", new View.OnClickListener() {
+        //snackbar.setAnchorView(R.id.bottom_navigation_view);
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 snackbar.dismiss();
             }
         });
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
         snackbar.show();
     }
 
@@ -478,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
+                    sliderImg.clear();
                     sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
