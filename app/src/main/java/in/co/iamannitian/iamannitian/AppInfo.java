@@ -20,16 +20,14 @@ public class AppInfo extends AppCompatActivity {
         {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-
         setContentView(R.layout.activity_app_info);
-
         app_version =  findViewById(R.id.app_version);
 
         //====> getting version name
         try {
             PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(),0);
             String version = packageInfo.versionName;
-            app_version.setText("Version "+version);
+            app_version.setText("version "+version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

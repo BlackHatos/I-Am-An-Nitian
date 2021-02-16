@@ -5,45 +5,59 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.at.nitsxr.HeaderVolleyRequest;
 import me.at.nitsxr.StoryAdapter;
 import me.at.nitsxr.StoryGetterSetter;
 import me.at.nitsxr.TopperAdapter;
 import me.at.nitsxr.TopperGetterSetter;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-public class SuccessStory extends AppCompatActivity {
-
+public class SuccessStory extends AppCompatActivity
+{
     private Toolbar toolbar;
     private RecyclerView recyclerView, recyclerView2;
     private StoryAdapter storyAdapter;
     private TopperAdapter topperAdapter;
     private ArrayList<TopperGetterSetter> mList;
     private ArrayList<StoryGetterSetter> mList2;
+    private SwipeRefreshLayout refreshScreen;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_success_story);
+        refreshScreen = findViewById(R.id.refreshScreen);
+        refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
+        refreshScreen.setOnRefreshListener(
+                () -> {
+                    mList.clear();
+                    mList2.clear();
+                    getStory();
+                    getToppers();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshScreen.setRefreshing(false);
+                        }
+                    }, 3000);
+                });
 
         setUpToolbarMenu();
         initRecyclerView();
@@ -61,13 +75,12 @@ public class SuccessStory extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
-        actionBar.setIcon(R.drawable.app_logo);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        inflater.inflate(R.menu.other_menu, menu);
         return true;
     }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -18,14 +19,13 @@ import in.co.iamannitian.iamannitian.R;
 public class HeadLineViewPagerAdapter extends PagerAdapter {
 
     private List<NewsGetterSetter> sliderImg;
-
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public HeadLineViewPagerAdapter(List<NewsGetterSetter> sliderImg, Context context)
+    public HeadLineViewPagerAdapter(List<NewsGetterSetter> mList, Context context)
     {
         this.context = context;
-        this.sliderImg = sliderImg;
+        sliderImg = mList;
     }
 
     @Override
@@ -58,6 +58,7 @@ public class HeadLineViewPagerAdapter extends PagerAdapter {
                 Intent intent =  new Intent(context, OnViewPagerClick.class);
                 Bundle b = new Bundle();
                 b.putSerializable("sampleObject", utils);
+                intent.putExtra("temp","1");
                 intent.putExtras(b);
                 context.startActivity(intent);
             }

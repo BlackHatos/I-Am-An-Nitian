@@ -9,13 +9,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity
@@ -43,19 +41,14 @@ public class SplashScreen extends AppCompatActivity
         splash_msg = findViewById(R.id.splash_msg);
         splash_msg.setAnimation(bottom_animation);
 
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if(!user_id.equals(""))
-                     intent= new Intent(getApplicationContext(), MainActivity.class);
-                else
-                    intent= new Intent(getApplicationContext(), LoginOrSignupActivity.class);
-
-                    startActivity(intent);
-                    finish();
-            }
+        new Handler().postDelayed(() -> {
+            if(!user_id.equals(""))
+                 intent= new Intent(getApplicationContext(), MainActivity.class);
+            else
+                intent= new Intent(getApplicationContext(), LoginOrSignUpActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
         }, SPLASH_TIME_OUT);
     }
 }

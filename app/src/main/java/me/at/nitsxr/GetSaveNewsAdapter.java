@@ -83,6 +83,7 @@ public class GetSaveNewsAdapter extends RecyclerView.Adapter<GetSaveNewsAdapter.
             {
                 Intent intent =  new Intent(mContext, OnViewPagerClick.class);
                 Bundle b = new Bundle();
+                intent.putExtra("temp", "1");
                 b.putSerializable("sampleObject", getterSetter);
                 intent.putExtras(b);
                 mContext.startActivity(intent);

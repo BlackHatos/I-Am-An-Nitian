@@ -57,10 +57,8 @@ public class CompleteProfile extends AppCompatActivity
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
-
         String state_array[] = getResources().getStringArray(R.array.states);
         String degree_array[] = getResources().getStringArray(R.array.degree);
-
 
         ArrayAdapter<String> state_adapter = new ArrayAdapter<>(this, R.layout.custom_drop_down_list,
                 R.id.custom_drop_down_text_view, state_array);
@@ -77,105 +75,96 @@ public class CompleteProfile extends AppCompatActivity
 
         setPreferences();
          //===> on click the college edit text go to CollegeSuggestion activity
-         college_auto_complete.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                //=========> creating shared preferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("userPhone",user_phone.getText().toString().trim());
-                editor.putString("userState", state_auto_complete.getText().toString().trim());
-                editor.putString("userCollege",college_auto_complete.getText().toString().trim());
-                editor.putString("userDegree",user_degree.getText().toString().trim());
-                editor.putString("userBranch",user_branch.getText().toString().trim());
-                editor.putString("userStartYear",start_year.getText().toString().trim());
-                editor.putString("userEndYear",end_year.getText().toString().trim());
-                editor.apply();
+         college_auto_complete.setOnTouchListener((v, event) -> {
+             //=========> creating shared preferences
+             SharedPreferences.Editor editor = sharedPreferences.edit();
+             editor.putString("userPhone",user_phone.getText().toString().trim());
+             editor.putString("userState", state_auto_complete.getText().toString().trim());
+             editor.putString("userCollege",college_auto_complete.getText().toString().trim());
+             editor.putString("userDegree",user_degree.getText().toString().trim());
+             editor.putString("userBranch",user_branch.getText().toString().trim());
+             editor.putString("userStartYear",start_year.getText().toString().trim());
+             editor.putString("userEndYear",end_year.getText().toString().trim());
+             editor.apply();
 
-                Intent intent = new Intent(getApplicationContext(), CollegeSuggestions.class);
-                intent.putExtra(COLLEGE_NAME,college_auto_complete.getText().toString().trim());
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return true;
-            }
-        });
+             Intent intent1 = new Intent(getApplicationContext(), CollegeSuggestions.class);
+             intent1.putExtra(COLLEGE_NAME,college_auto_complete.getText().toString().trim());
+             startActivity(intent1);
+             overridePendingTransition(0, 0);
+             return true;
+         });
 
          //===> insert data into the server
-         proceed.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 //setting errors
-                 state_auto_complete.setError(null);
-                 user_phone.setError(null);
-                 college_auto_complete.setError(null);
-                 user_degree.setError(null);
-                 user_branch.setError(null);
-                 start_year.setError(null);
-                 end_year.setError(null);
+         proceed.setOnClickListener(v -> {
+             //setting errors
+             state_auto_complete.setError(null);
+             user_phone.setError(null);
+             college_auto_complete.setError(null);
+             user_degree.setError(null);
+             user_branch.setError(null);
+             start_year.setError(null);
+             end_year.setError(null);
 
-                 //getting credentials on click the sign up button
-                 String phone = user_phone.getText().toString().trim().replaceAll("\\s+","");
-                 String state = state_auto_complete.getText().toString().trim();
-                 String college = college_auto_complete.getText().toString().trim();
-                 String degree = user_degree.getText().toString().trim();
-                 String branch = user_branch.getText().toString().trim();
-                 String from = start_year.getText().toString().trim().replaceAll("\\s+","");
-                 String to = end_year.getText().toString().trim().replaceAll("\\s+","");
+             //getting credentials on click the sign up button
+             String phone = user_phone.getText().toString().trim().replaceAll("\\s+","");
+             String state = state_auto_complete.getText().toString().trim();
+             String college = college_auto_complete.getText().toString().trim();
+             String degree = user_degree.getText().toString().trim();
+             String branch = user_branch.getText().toString().trim();
+             String from = start_year.getText().toString().trim().replaceAll("\\s+","");
+             String to = end_year.getText().toString().trim().replaceAll("\\s+","");
 
-                 if(phone.isEmpty())
-                 {
-                     user_phone.requestFocus();
-                     user_phone.setError("required");
-                     return;
-                 }
-
-                 if(state.isEmpty())
-                 {
-                     state_auto_complete.requestFocus();
-                     state_auto_complete.setError("required");
-                     return;
-                 }
-
-                 if(college.isEmpty())
-                 {
-                     college_auto_complete.requestFocus();
-                     college_auto_complete.setError("required");
-                     return;
-                 }
-
-                 if(degree.isEmpty())
-                 {
-                     user_degree.requestFocus();
-                     user_degree.setError("required");
-                     return;
-                 }
-
-                 if(branch.isEmpty())
-                 {
-                     user_branch.requestFocus();
-                     user_branch.setError("required");
-                     return;
-                 }
-
-                 if(from.isEmpty())
-                 {
-                     start_year.requestFocus();
-                     start_year.setError("required");
-                     return;
-                 }
-
-                 if(to.isEmpty())
-                 {
-                     end_year.requestFocus();
-                     end_year.setError("required");
-                     return;
-                 }
-
-                 //========>> if all is well
-
-                 proceedToServer(phone, state, college, degree, branch, from, to);
-
+             if(phone.isEmpty())
+             {
+                 user_phone.requestFocus();
+                 user_phone.setError("required");
+                 return;
              }
+
+             if(state.isEmpty())
+             {
+                 state_auto_complete.requestFocus();
+                 state_auto_complete.setError("required");
+                 return;
+             }
+
+             if(college.isEmpty())
+             {
+                 college_auto_complete.requestFocus();
+                 college_auto_complete.setError("required");
+                 return;
+             }
+
+             if(degree.isEmpty())
+             {
+                 user_degree.requestFocus();
+                 user_degree.setError("required");
+                 return;
+             }
+
+             if(branch.isEmpty())
+             {
+                 user_branch.requestFocus();
+                 user_branch.setError("required");
+                 return;
+             }
+
+             if(from.isEmpty())
+             {
+                 start_year.requestFocus();
+                 start_year.setError("required");
+                 return;
+             }
+
+             if(to.isEmpty())
+             {
+                 end_year.requestFocus();
+                 end_year.setError("required");
+                 return;
+             }
+
+             //========>> if all is well
+             proceedToServer(phone, state, college, degree, branch, from, to);
          });
 
     }
@@ -270,8 +259,8 @@ public class CompleteProfile extends AppCompatActivity
     {
         setPreferences();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import me.at.nitsxr.NewsDataBase;
 import me.at.nitsxr.NewsGetterSetter;
+import me.at.nitsxr.StoryGetterSetter;
 import me.at.nitsxr.UserReaction;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -13,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +29,18 @@ public class OnViewPagerClick extends AppCompatActivity
     private TextView newsTitle, newDescp, publish_time, reaction_count;
     private Toolbar toolbar;
     private  ImageView reaction_heart, saveNews, shareNews;
+    private LinearLayout linearLayout;
+    private RelativeLayout relativeLayoutMargin;
+    private View view;
 
       @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState)
+      {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_view_pager_click);
 
+        linearLayout = findViewById(R.id.bottomBar);
+        relativeLayoutMargin = findViewById(R.id.relativeLayoutPadding);
         newsImage = findViewById(R.id.newImage);
         newsTitle = findViewById(R.id.newsTitle);
         newDescp = findViewById(R.id.newDescp);
@@ -40,102 +49,116 @@ public class OnViewPagerClick extends AppCompatActivity
         reaction_heart = findViewById(R.id.reaction_heart);
         saveNews = findViewById(R.id.saveNews);
         shareNews = findViewById(R.id.shareNews);
+        view = findViewById(R.id.view);
 
             Intent intent = getIntent();
-            final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
+            String temp =  intent.getStringExtra("temp");
 
-        Glide.with(this)
-                .load(getterSetter.getImageUrl())
-                .fitCenter()
-                .centerInside()
-                .into(newsImage);
-
-        newsTitle.setText(getterSetter.getNewsTitle());
-        newDescp.setText(getterSetter.getNewsDescp());
-        publish_time.setText(getterSetter.getNewsDate());
-        reaction_count.setText(getterSetter.getCount());
-
-        if(getterSetter.getStatus().equals("1"))
-            reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-        else
-            reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-
-        reaction_heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int updated_status = 0;
-                int updated_count = 0;
-
-                if(getterSetter.getStatus().equals("1"))
-                {
-                    updated_status = 0;
-                    updated_count =  Integer.parseInt(getterSetter.getCount()) - 1;
-                    reaction_count.setText(updated_count+"");
-                    reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                }
-                else
-                {
-                    updated_status = 1;
-                    updated_count  = Integer.parseInt(getterSetter.getCount()) + 1;
-                    reaction_count.setText(updated_count+"");
-                    reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-                }
-
-                getterSetter.setStatus(updated_status+"");
-                getterSetter.setCount(updated_count+"");
-
-                UserReaction userReaction = new UserReaction(getterSetter,
-                        getSharedPreferences("appData", MODE_PRIVATE)
-                                .getString("userId",""), updated_status);
-                userReaction.execute();
-            }
-        });
-
-        setUpToolbarMenu();
-
-
-        shareNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
+            if(temp.equals("1"))
             {
-                Intent intent  = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle()+"\n"+"" +
-                        "Download the app : https://iamannitian.co.in");
-                intent.setType("text/plain");
-                Intent shareIntent = Intent.createChooser(intent, "Share via");
-                startActivity(shareIntent);
-            }
-        });
+                setUpToolbarMenu("News");
+                linearLayout.setVisibility(View.VISIBLE);
+                setMargin(relativeLayoutMargin, 10,0,10,72);
+                view.setVisibility(View.GONE);
+                publish_time.setVisibility(View.VISIBLE);
+                final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
+                Glide.with(this)
+                        .load(getterSetter.getImageUrl())
+                        .fitCenter()
+                        .centerInside()
+                        .into(newsImage);
 
-          final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
+                newsTitle.setText(getterSetter.getNewsTitle());
+                newDescp.setText(getterSetter.getNewsDescp());
+                publish_time.setText(getterSetter.getNewsDate());
+                reaction_count.setText(getterSetter.getCount());
 
-          if(newsDataBase.isPresent(getterSetter.getNewsId()))
-              saveNews.setImageResource(R.drawable.save_article);
-
-         saveNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(newsDataBase.isPresent(getterSetter.getNewsId()))
-                {
-                    newsDataBase.deleteRecord(getterSetter.getNewsId());
-                    saveNews.setImageResource(R.drawable.save_border);
-                    Toast.makeText(getApplicationContext(), "Unsaved", Toast.LENGTH_SHORT).show();
-                }
+                if (getterSetter.getStatus().equals("1"))
+                    reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
                 else
-                {
+                    reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+
+                reaction_heart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int updated_status = 0;
+                        int updated_count = 0;
+
+                        if (getterSetter.getStatus().equals("1")) {
+                            updated_status = 0;
+                            updated_count = Integer.parseInt(getterSetter.getCount()) - 1;
+                            reaction_count.setText(updated_count + "");
+                            reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                        } else {
+                            updated_status = 1;
+                            updated_count = Integer.parseInt(getterSetter.getCount()) + 1;
+                            reaction_count.setText(updated_count + "");
+                            reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
+                        }
+
+                        getterSetter.setStatus(updated_status + "");
+                        getterSetter.setCount(updated_count + "");
+
+                        UserReaction userReaction = new UserReaction(getterSetter,
+                                getSharedPreferences("appData", MODE_PRIVATE)
+                                        .getString("userId", ""), updated_status);
+                        userReaction.execute();
+                    }
+                });
+
+
+                shareNews.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() + "\n" + "" +
+                                "Download the app : https://iamannitian.co.in");
+                        intent.setType("text/plain");
+                        Intent shareIntent = Intent.createChooser(intent, "Share via");
+                        startActivity(shareIntent);
+                    }
+                });
+
+                final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
+
+                if (newsDataBase.isPresent(getterSetter.getNewsId()))
                     saveNews.setImageResource(R.drawable.save_article);
-                    newsDataBase.addOne(getterSetter);
-                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                }
+
+                saveNews.setOnClickListener(v -> {
+                    if (newsDataBase.isPresent(getterSetter.getNewsId())) {
+                        newsDataBase.deleteRecord(getterSetter.getNewsId());
+                        saveNews.setImageResource(R.drawable.save_border);
+                        Toast.makeText(getApplicationContext(), "Unsaved", Toast.LENGTH_SHORT).show();
+                    } else {
+                        saveNews.setImageResource(R.drawable.save_article);
+                        newsDataBase.addOne(getterSetter);
+                        Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        });
+            else
+            {
+                setUpToolbarMenu("Story");
+                setMargin(relativeLayoutMargin, 10,0,10,30);
+                final StoryGetterSetter getterSetter = (StoryGetterSetter) intent.getSerializableExtra("sampleObject");
+                Glide.with(this)
+                        .load(getterSetter.getImageUrl())
+                        .fitCenter()
+                        .centerInside()
+                        .into(newsImage);
+
+                newsTitle.setText(getterSetter.getName()+" | "+getterSetter.getExam()+" | "
+                +getterSetter.getRank()+" | "+ getterSetter.getCollege());
+
+                newDescp.setText(getterSetter.getStory());
+            }
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu() {
+    private void setUpToolbarMenu(String toolBarText) {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("News");
+        toolbar.setTitle(toolBarText);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -161,5 +184,15 @@ public class OnViewPagerClick extends AppCompatActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setMargin(View view, int left, int top, int right, int bottom)
+    {
+        if(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)
+        {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left,top, right, bottom);
+            view.requestLayout();
+        }
     }
 }

@@ -1,6 +1,8 @@
 package me.at.nitsxr;
 
-public class StoryGetterSetter
+import java.io.Serializable;
+
+public class StoryGetterSetter implements Serializable
 {
     private String name;
     private String rank;

@@ -7,14 +7,14 @@
     <string name="login_or_signup">Log in or sign up</string>
     <string name="facebook">Continue with facebook</string>
     <string name="google">Continue with Google</string>
-    <string name="join">Join The \nBiggest\nStudent Community</string>
+    <string name="join">Join The \nBiggest Student\nCommunity</string>
 
     <!--============== Login Strings =================-->
     <string name="welcome">Welcome,</string>
     <string name="welcome_login">Sign in to continue!</string>
-    <string name="login">Log in</string>
+    <string name="login">Sign In</string>
     <string name="signup">Sign up</string>
-    <string name="email_phone_hint">Email or Phone</string>
+    <string name="email_phone_hint">Email</string>
     <string name="pass_hint">Password</string>
     <string name="pass_forg">forgot password?</string>
     <string name="not_have_account">Don\'t have an account?</string>
@@ -38,7 +38,7 @@
     <string name="continue_button">Continue</string>
 
     <!--========= Main Activity Strings ==========-->
-    <string name="headline">Headlines</string>
+    <string name="headline">Top Stories</string>
     <string name="links">Useful Links</string>
     <string name="trending">Trending Now</string>
     <string name="news">News</string>
@@ -69,19 +69,14 @@
     <!--============== App Info Strings =================-->
     <string name="copy">all rights reserved</string>
     <string name="copy_x">2020 I Am An Nitian</string>
-    <string name="version">Version 1.0</string>
-
-    <!--============== Video caption Strings =================-->
-    <string name="jalandhar_desp">A glimpse of campus | Dr. B. R. National Institute of Technology Jalandhar</string>
-    <string name="nitsri_desp">NIT Srinagar | One of the most beautiful college campus of India</string>
-    <string name="agartala_desp">National Institute Of Technology Agartala | A campus tour</string>
+    <string name="version">version 1.0</string>
 
 
     <!--============== complete profile strings =================-->
     <string name="personal"> Personal Details</string>
     <string name="your_state">State</string>
     <string name="your_phone">Phone</string>
-    <string name="your_college">University</string>
+    <string name="your_college">College</string>
     <string name="degree">Degree</string>
     <string name="branch">Branch</string>
     <string name="education">Education</string>
@@ -89,6 +84,9 @@
     <string name="to">End Year</string>
     <string name="proceed">Proceed</string>
     <string name="skip">Skip</string>
+    <string name="quote">Our greatest weakness lies\nin giving up. The most\ncertain way to succeed is always\nto try just one more time.</string>
+    <string name="msg">If your college is not present in the list. Type your college name and
+    press the back arrow.</string>
 
     <!--========= Array Strings ==========-->
     <string-array name="states">

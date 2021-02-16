@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bottom_sheet_shape"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bottomSheet"
+    android:fitsSystemWindows="true"
+    app:behavior_hideable="true"
+    android:padding="12dp"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/topperImage"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:src="@drawable/amir"
+        app:civ_border_width="4dp"
+        app:civ_border_color="@color/textColor1"
+        />
+
+    <TextView
+        android:id="@+id/topperName"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shubham Maurya"
+        android:textColor="@color/textColor1"
+        android:fontFamily="@font/work_sans_semibold"
+        android:layout_below="@id/topperImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        />
+
+    <TextView
+        android:id="@+id/rank"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AIR-1 | Gate 2021 | Computer Science"
+        android:textColor="@color/textColor1"
+        android:fontFamily="@font/work_sans"
+        android:layout_below="@id/topperName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        />
+
+
+    <TextView
+        android:textAlignment="center"
+        android:id="@+id/topperCollege"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="National Institute Of Technology Srinagar"
+        android:fontFamily="@font/work_sans"
+        android:layout_below="@id/rank"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="30dp"
+        />
+
+</RelativeLayout>

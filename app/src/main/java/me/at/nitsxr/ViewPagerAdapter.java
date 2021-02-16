@@ -39,8 +39,8 @@ public class ViewPagerAdapter extends PagerAdapter
   }
 
   @Override
-  public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-
+  public boolean isViewFromObject(@NonNull View view, @NonNull Object object)
+  {
     return  (view == object);
   }
 
@@ -65,17 +65,13 @@ public class ViewPagerAdapter extends PagerAdapter
     final TextView textView = itemView.findViewById(R.id.image_count);
     textView.setText(utils.getNewsTitle());
 
-    itemView.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public  void onClick(View view)
-        {
-          Intent intent =  new Intent(context, OnViewPagerClick.class);
-          Bundle b = new Bundle();
-          b.putSerializable("sampleObject", utils);
-          intent.putExtras(b);
-          context.startActivity(intent);
-        }
-
+    itemView.setOnClickListener(view -> {
+      Intent intent =  new Intent(context, OnViewPagerClick.class);
+      Bundle b = new Bundle();
+      b.putSerializable("sampleObject", utils);
+      intent.putExtra("temp", "1");
+      intent.putExtras(b);
+      context.startActivity(intent);
     });
 
     ViewPager vp = (ViewPager) container;

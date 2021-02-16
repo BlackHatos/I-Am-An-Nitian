@@ -4,9 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     tools:context=".SuccessStory">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:background="@color/colorPrimaryDark"
@@ -71,57 +78,85 @@
                     android:layout_marginTop="12dp"
                     />
 
-                <LinearLayout
+                <RelativeLayout
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/quote_background"
                     android:id="@+id/quote"
                     android:layout_below="@id/topper_recycler_view"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="match_parent"
-                    android:gravity="center"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <View
-                            android:layout_width="6dp"
-                            android:layout_height="52dp"
-                            android:background="#ff0000"/>
-                        <View
-                            android:layout_width="6dp"
-                            android:layout_height="52dp"
-                            android:background="#00ff00"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginStart="30dp"
+                        android:id="@+id/q_im"
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:src="@drawable/qoute1"
+                        />
 
-                        <TextView
-                            android:justificationMode="inter_word"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:fontFamily="@font/work_sans_semibold"
-                            android:text="Success is walking from \nfailure to failure with \nno loss of enthusiasm."
-                            android:textColor="@color/white"
-                            android:textSize="20sp" />
-                        <TextView
-                            android:textColor="@color/white"
-                            android:layout_gravity="end"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="-Wintson Churchil"
-                            android:fontFamily="@font/work_sans_semibold"
-                            android:textSize="15sp"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
+                    <TextView
+                        android:layout_marginTop="4dp"
+                        android:paddingStart="30dp"
+                        android:layout_below="@id/q_im"
+                        android:id="@+id/qt_desp"
+                        android:fontFamily="@font/work_sans"
+                        android:textColor="@color/textColor1"
+                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quote"
+                        />
+
+                   <RelativeLayout
+                       android:layout_marginTop="10dp"
+                       android:layout_marginStart="30dp"
+                       android:layout_below="@id/qt_desp"
+                       android:layout_width="match_parent"
+                       android:layout_height="30dp">
+
+                       <de.hdodenhof.circleimageview.CircleImageView
+                           android:layout_width="30dp"
+                           android:layout_height="30dp"
+                           android:src="@drawable/edison"
+                           android:id="@+id/edison"
+                           android:layout_centerVertical="true"
+                           />
+
+                       <TextView
+                           android:layout_centerVertical="true"
+                           android:layout_toRightOf="@id/edison"
+                           android:id="@+id/edi_txt"
+                           android:fontFamily="@font/work_sans_semibold"
+                           android:layout_marginStart="10dp"
+                           android:textSize="13sp"
+                           android:textColor="@color/textColor1"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Thomas Alva Edison"
+                           />
+
+                   </RelativeLayout>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_marginTop="22dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="18dp"
+                    android:layout_below="@id/quote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stories"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="25sp"
+                    android:textColor="@color/textColor1"
+                    android:id="@+id/heading"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginTop="30dp"
-                    android:layout_below="@id/quote"
+                    android:layout_below="@id/heading"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -131,9 +166,7 @@
                     />
 
             </RelativeLayout>
-
         </androidx.core.widget.NestedScrollView>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

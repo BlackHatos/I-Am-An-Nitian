@@ -22,24 +22,37 @@
             <ImageView
                 android:id="@+id/newsImageView"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="225dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/hacked"
                 />
 
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18 hours ago"
+        android:textColor="@color/textColor4"
+        android:layout_alignParentLeft="true"
+        android:fontFamily="@font/work_sans"
+        android:layout_marginStart="5dp"
+        android:textSize="13sp"
+        android:id="@+id/time"
+        />
 
     <TextView
         android:id="@+id/newsTitle"
         android:textColor="@color/textColor1"
         android:layout_marginStart="5dp"
         android:justificationMode="none"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:textSize="18sp"
         android:maxLines="2"
-        android:layout_below="@id/cardView"
+        android:layout_below="@id/time"
         android:fontFamily="@font/work_sans_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

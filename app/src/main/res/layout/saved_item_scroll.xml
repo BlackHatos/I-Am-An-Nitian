@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -48,7 +49,8 @@
                     android:id="@+id/newsTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
+                    android:maxLines="3"
                     android:fontFamily="@font/work_sans_semibold"
                     android:textColor="@color/textColor1"
                     android:text="This is news heading for demonstration"
@@ -66,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/work_sans"
                         android:text="26 December"
-                        android:textColor="@color/textColor1"
+                        android:textColor="@color/textColor4"
                         android:textSize="12sp" />
 
                     <ImageView

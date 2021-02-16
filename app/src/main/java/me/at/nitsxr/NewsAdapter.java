@@ -107,6 +107,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                    Bundle b = new Bundle();
                    b.putSerializable("sampleObject", getterSetter);
                    intent.putExtras(b);
+                   intent.putExtra("temp", "1");
                    mContext.startActivity(intent);
                }
            });

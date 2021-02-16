@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -60,58 +62,51 @@ public class SignupActivity extends AppCompatActivity
 
         setUpToolbarMenu();
 
-        click_to_sign_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        click_to_sign_up.setOnClickListener(v -> {
 
-                username.setError(null);
-                email.setError(null);
-                password.setError(null);
+            username.setError(null);
+            email.setError(null);
+            password.setError(null);
 
-                //===> getting credentials on click the sign up button
-                String user_name = username.getText().toString().trim();
-                String user_email = email.getText().toString().trim().replaceAll("\\s+","");
-                String user_password = password.getText().toString().trim().replaceAll("\\s+","");
+            //===> getting credentials on click the sign up button
+            String user_name = username.getText().toString().trim();
+            String user_email = email.getText().toString().trim().replaceAll("\\s+","");
+            String user_password = password.getText().toString().trim().replaceAll("\\s+","");
 
-                //===> checking user name
-                if(user_name.isEmpty())
-                {
-                    username.requestFocus();
-                    username.setError("required");
-                    return;
-                }
-
-                //===> checking user email
-                if(user_email.isEmpty())
-                {
-                    email.requestFocus();
-                    email.setError("required");
-                    return;
-                }
-
-                //===> checking user password
-                if(user_password.isEmpty())
-                {
-                    password.requestFocus();
-                    password.setError("required");
-                    return;
-                }
-
-                //===> if every thing is ok then proceed to sign up
-                proceedToSignup(user_name, user_email , user_password);
+            //===> checking user name
+            if(user_name.isEmpty())
+            {
+                username.requestFocus();
+                username.setError("required");
+                return;
             }
 
+            //===> checking user email
+            if(user_email.isEmpty())
+            {
+                email.requestFocus();
+                email.setError("required");
+                return;
+            }
+
+            //===> checking user password
+            if(user_password.isEmpty())
+            {
+                password.requestFocus();
+                password.setError("required");
+                return;
+            }
+            //===> if every thing is ok then proceed to sign up
+            proceedToSignup(user_name, user_email , user_password);
         });
 
         //===> go to login activity
-        go_to_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
+        go_to_login.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
         });
-
     }
 
     private void proceedToSignup(final String user_name,final String user_email,final String user_password)
@@ -123,35 +118,29 @@ public class SignupActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
         final String url = "https://app.thenextsem.com/php_mailer/send_otp.php";
+        //error
         StringRequest sr = new StringRequest(1, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        String response_array[] = response.split(",");
-                        if(response_array[0].equals("1"))
-                        {
-                            //===> dismiss the progress dialog when sign up successful
-                            progressDialog.dismiss();
-                            showBottomSheet();
-                        }
-                        else if(response_array[0].equals("0"))
-                        {
-                            progressDialog.dismiss();
-                            //===> on dialog dismiss back to interaction mode
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
-                        }
-
+                response -> {
+                    String response_array[] = response.split(",");
+                    if(response_array[0].equals("1"))
+                    {
+                        //===> dismiss the progress dialog when sign up successful
+                        progressDialog.dismiss();
+                        showBottomSheet();
                     }
-                }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                progressDialog.dismiss();
-                //===> on dialog dismiss back to interaction mode
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        }){
+                    else if(response_array[0].equals("0"))
+                    {
+                        progressDialog.dismiss();
+                        //===> on dialog dismiss back to interaction mode
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
+                    }
+
+                }, error -> {
+                    progressDialog.dismiss();
+                    //===> on dialog dismiss back to interaction mode
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map =  new HashMap<>();
@@ -170,7 +159,7 @@ public class SignupActivity extends AppCompatActivity
     private void showBottomSheet()
     {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bootm_sheet_layout,null);
-        bottomSheetDialog = new BottomSheetDialog(SignupActivity.this,R.style.BottomSheetDialogTheme);
+        bottomSheetDialog = new BottomSheetDialog(SignupActivity.this,R.style.SheetDialog);
         bottomSheetDialog.setCancelable(false);
         bottomSheetDialog.setCanceledOnTouchOutside(false);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -181,34 +170,28 @@ public class SignupActivity extends AppCompatActivity
         final EditText enterOtp = bottomSheetView.findViewById(R.id.enterOtp);
 
         //===> send data with otp to verify an insertion
-        send_data.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        send_data.setOnClickListener(v -> {
 
-                send_data.setText("Processing...");
-                //===> getting credentials on click the sign up button
-                String user_name = username.getText().toString().trim();
-                String user_email = email.getText().toString().trim().replaceAll("\\s+","");
-                String user_password = password.getText().toString().trim().replaceAll("\\s+","");
-                String otp = enterOtp.getText().toString().trim();
-                enterOtp.setError(null);
-                if(otp.isEmpty())
-                {
-                    enterOtp.requestFocus();
-                    enterOtp.setError("required");
-                    return;
-                }
-
-                finalSignup(user_name, user_email, user_password,otp,token,send_data);
+            send_data.setText("Processing...");
+            //===> getting credentials on click the sign up button
+            String user_name = username.getText().toString().trim();
+            String user_email = email.getText().toString().trim().replaceAll("\\s+","");
+            String user_password = password.getText().toString().trim().replaceAll("\\s+","");
+            String otp = enterOtp.getText().toString().trim();
+            enterOtp.setError(null);
+            if(otp.isEmpty())
+            {
+                enterOtp.requestFocus();
+                enterOtp.setError("required");
+                return;
             }
+
+            finalSignup(user_name, user_email, user_password,otp,token,send_data);
         });
 
-        closeBottomSheet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                send_data.setText("Continue");
-            }
+        closeBottomSheet.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            send_data.setText("Continue");
         });
     }
 
@@ -217,44 +200,36 @@ public class SignupActivity extends AppCompatActivity
     {
         final String url = "https://app.thenextsem.com/app/signup.php";
         StringRequest sr = new StringRequest(1, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                response -> {
 
-                        String response_array[] = response.split(",");
+                    String response_array[] = response.split(",");
 
-                        if(response_array[0].equals("1"))
-                        {
-                            SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("userId",response_array[1]);
-                            editor.putString("userName", response_array[2]);
-                            editor.putString("userEmail",response_array[3]);
-                            editor.putString("activeNotification","1");
-                            editor.apply();
+                    if(response_array[0].equals("1"))
+                    {
+                        SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("userId",response_array[1]);
+                        editor.putString("userName", response_array[2]);
+                        editor.putString("userEmail",response_array[3]);
+                        editor.putString("activeNotification","1");
+                        editor.apply();
 
-                            Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);
-                            //===> finish all previous activities
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-                        }
-                        else if(response_array[0].equals("0"))
-                        {
-                            send_data.setText("Continue");
-                            Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
-                        }
-
+                        Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        finish();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(),"Unable to sign up", Toast.LENGTH_LONG).show();
-                send_data.setText("Continue");
-            }
-        }){
+                    else if(response_array[0].equals("0"))
+                    {
+                        send_data.setText("Continue");
+                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
+                    }
+
+                }, error -> {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Unable to sign up", Toast.LENGTH_LONG).show();
+                    send_data.setText("Continue");
+                }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map =  new HashMap<>();
@@ -289,7 +264,8 @@ public class SignupActivity extends AppCompatActivity
         });
     }
 
-    private void setUpToolbarMenu() {
+    private void setUpToolbarMenu()
+    {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Back");
         setSupportActionBar(toolbar);
@@ -298,5 +274,37 @@ public class SignupActivity extends AppCompatActivity
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
                 PorterDuff.Mode.SRC_ATOP);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            switch (keyCode)
+            {
+                case KeyEvent.KEYCODE_BACK:
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
+                    return  true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

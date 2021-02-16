@@ -93,6 +93,7 @@
             android:inputType="numberDecimal"
             android:id="@+id/user_phone"
             android:layout_marginTop="10dp"
+            android:maxLength="10"
             android:paddingStart="16dp"
             android:paddingEnd="10dp"
             android:background="@drawable/complete_profile_shape"
@@ -169,10 +170,16 @@
             android:hint="@string/your_college"
             android:autofillHints="" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/degree_view"
+            />
+
         <AutoCompleteTextView
             android:popupBackground="@color/colorPrimaryDark"
             android:textSize="16sp"
-            android:layout_marginTop="15dp"
             android:paddingStart="16dp"
             android:dropDownHeight="100dp"
             android:popupElevation="1dp"
@@ -190,16 +197,9 @@
             android:hint="@string/degree"
             />
 
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="7dp"
-          android:id="@+id/degree_view"
-          />
-
-
         <EditText
             android:textSize="16sp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:paddingStart="16dp"
             android:background="@drawable/complete_profile_shape"
             android:inputType="text"
@@ -223,6 +223,7 @@
                 android:textSize="16sp"
                  android:layout_weight="1"
                 android:paddingStart="16dp"
+                android:maxLength="4"
                 android:background="@drawable/complete_profile_shape"
                 android:inputType="numberDecimal"
                 android:paddingEnd="10dp"
@@ -240,6 +241,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:paddingStart="16dp"
+                android:maxLength="4"
                 android:background="@drawable/complete_profile_shape"
                 android:dropDownAnchor="@id/end_year"
                 android:inputType="numberDecimal"

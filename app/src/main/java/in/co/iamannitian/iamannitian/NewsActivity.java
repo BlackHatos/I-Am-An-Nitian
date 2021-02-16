@@ -4,62 +4,48 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.annotation.SuppressLint;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import me.at.nitsxr.NewsAdapter;
 import me.at.nitsxr.NewsGetterSetter;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static me.at.nitsxr.TopicAdapter.TOPIC;
 
 public class NewsActivity extends AppCompatActivity
 {
@@ -68,13 +54,13 @@ public class NewsActivity extends AppCompatActivity
     private BottomNavigationView bottomNavigationView;
     private View notificationBadge;
     private SwipeRefreshLayout refreshScreen;
-    private NetworkInfo activeNetworkInfo;
-    private BroadcastReceiver broadcastReceiver;
-    private Snackbar snackbar;
-    //===>  views
+    private TextView welcome_text, topic_text, topic_tab;
+    private CardView cardView;
     private RecyclerView  newsRecyclerView;
     private NewsAdapter newsAdapter;
     private ArrayList<NewsGetterSetter> mList;
+    private String userName = "";
+    private String topic;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -83,15 +69,26 @@ public class NewsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
+        welcome_text = findViewById(R.id.welcome_text);
+        topic_text = findViewById(R.id.topic_text);
+        cardView = findViewById(R.id.card1);
+        topic_tab = findViewById(R.id.topic_tab);
+
+        // getting topic from main activity
+        Intent intent = getIntent();
+        topic = intent.getStringExtra(TOPIC);
+
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        userName = sharedPreferences
+                .getString("userName", "")
+                .split(" ")[0];
 
         refreshScreen = findViewById(R.id.refreshScreen);
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
-        //===> broadcast receiver
-        setBroadCastReceiver();
 
         bottomNavigationView.setSelectedItemId(R.id.news_icon);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -106,10 +103,8 @@ public class NewsActivity extends AppCompatActivity
                         overridePendingTransition(0, 0);
                         break;
                     case R.id.news_icon:
-                        //
                         break;
                 }
-
                 return true;
             }
         });
@@ -117,26 +112,27 @@ public class NewsActivity extends AppCompatActivity
         setUpToolbarMenu();
         initRecyclerView();
         showBadge();
-        sendRequest();
-        setBroadCastReceiver();
+        getData();
+
+        if(topic != null)
+        {
+            cardView.setVisibility(View.VISIBLE);
+            topic_tab.setText(topic);
+        }
+        else
+        {
+            welcome_text.setText("Welcome, "+userName);
+            topic_text.setText("Here are your today's updates");
+            welcome_text.setVisibility(View.VISIBLE);
+            topic_text.setVisibility(View.VISIBLE);
+        }
+
 
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         refreshScreen.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener()
-                {
-                    @Override
-                    public void onRefresh()
-                    {
-                        // clear the current list before calling it again
-                        mList.clear();
-                        sendRequest();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshScreen.setRefreshing(false);
-                            }
-                        }, 3000);
-                    }
+                () -> {
+                    getData();
+                    new Handler().postDelayed(() -> refreshScreen.setRefreshing(false), 3000);
                 });
     }
 
@@ -186,10 +182,14 @@ public class NewsActivity extends AppCompatActivity
             public boolean onQueryTextChange(String s)
             {
                 if(s.equals(""))
+                {
+                    topic_text.setVisibility(View.VISIBLE);
+                    welcome_text.setText("Welcome, "+userName);
                     newsAdapter.filterList(mList);
+                }
+
                 return false;
             }
-
         });
 
          // restore the news data after closing the search view
@@ -201,6 +201,9 @@ public class NewsActivity extends AppCompatActivity
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+
+                topic_text.setVisibility(View.VISIBLE);
+                welcome_text.setText("Welcome, "+userName);
                 newsAdapter.filterList(mList);
                 return true;
             }
@@ -221,49 +224,14 @@ public class NewsActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*=======>>>>>>> Logout function <<<<<<<<<=========*/
-    void logout()
-    {
-        //logout from facebook sign in
-        Profile profile = Profile.getCurrentProfile().getCurrentProfile();
-        if (profile != null)  //if user logged in
-        {
-            LoginManager.getInstance().logOut();
-        }
-
-        //logout from google sign in
-        GoogleSignIn.getClient(this, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()).signOut();
-
-        sharedPreferences.edit().clear().apply();
-        Intent intent = new Intent(getApplicationContext(), LoginOrSignupActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); //finish all previous activities
-        startActivity(intent);
-    }
-
     /*=======>>>>>>> Show notification Badge <<<<<<<<<=========*/
-    public void showBadge() {
+    public void showBadge()
+    {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.notification_badge, menuView, false);
         itemView.addView(notificationBadge);
     }
-
-    public void showSnackBar() {
-        snackbar = Snackbar.make(findViewById(R.id.relativeLayout),
-                Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
-                Snackbar.LENGTH_INDEFINITE);
-        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
-        snackbar.setAction("Dismiss", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snackbar.dismiss();
-            }
-        });
-        snackbar.show();
-    }
-//------------------------
 
     private void initRecyclerView()
     {
@@ -273,56 +241,21 @@ public class NewsActivity extends AppCompatActivity
         newsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
-
-    //===> setting up broadcast receiver
-    private void setBroadCastReceiver()
+    private void getData()
     {
-        broadcastReceiver = new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //===> check internet connection
-                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
-                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
-                {
-                    mList.clear();
-                    sendRequest();
-                    if(snackbar != null)
-                        snackbar.dismiss();
-                }
-                else
-                    showSnackBar();
-            }
-        };
-        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-    }
-
-    //===> unregister broad cast receiver
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
-    }
-
-    public void sendRequest()
-    {
+        mList.clear();
         final String url = "https://app.thenextsem.com/app/get_news.php";
-
+        //error
         StringRequest sr = new StringRequest(1, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try
+                response -> {
+                    try
+                    {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for(int i=0; i<jsonArray.length(); i++)
                         {
-                            JSONArray jsonArray = new JSONArray(response);
-
-                            for(int i=0; i<jsonArray.length(); i++)
-                            {
-                                NewsGetterSetter newsGetterSetter = new NewsGetterSetter();
-                                try {
-                                    JSONObject object = jsonArray.getJSONObject(i);
+                            NewsGetterSetter newsGetterSetter = new NewsGetterSetter();
+                            try {
+                                JSONObject object = jsonArray.getJSONObject(i);
                                     newsGetterSetter.setImageUrl
                                             ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
                                     newsGetterSetter.setNewsDescp(object.getString("descp"));
@@ -332,27 +265,26 @@ public class NewsActivity extends AppCompatActivity
                                     newsGetterSetter.setImageUrl2(object.getString("image2"));
                                     newsGetterSetter.setStatus(object.getString("status"));
                                     newsGetterSetter.setCount(object.getString("count"));
-
-                                } catch (JSONException ex) {
-                                    ex.printStackTrace();
-                                }
-                                mList.add(newsGetterSetter);
+                            }catch (JSONException ex){
+                                ex.printStackTrace();
                             }
 
-                            newsAdapter = new NewsAdapter(NewsActivity.this, mList);
-                            newsRecyclerView.setAdapter(newsAdapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            if(topic != null)
+                            {
+                                if(newsGetterSetter.getNewsTitle().toLowerCase().contains(topic.toLowerCase()))
+                                    mList.add(newsGetterSetter);
+                            }
+                            else
+                                mList.add(newsGetterSetter);
                         }
+
+                        newsAdapter = new NewsAdapter(NewsActivity.this, mList);
+                        newsRecyclerView.setAdapter(newsAdapter);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                error.printStackTrace();
-            }
-        }){
+                }, error -> error.printStackTrace()){
             @Override
             public Map<String, String> getParams() throws AuthFailureError
             {
@@ -368,24 +300,37 @@ public class NewsActivity extends AppCompatActivity
         rq.add(sr);
     }
 
+
     // filtering the news based on the keyword entered in search bar
     private void filter(String text)
     {
         List<NewsGetterSetter> filteredList = new ArrayList<>();
+        boolean flag  = false;
 
         if(mList.size() != 0)
         {
-            for (NewsGetterSetter item : mList) //here mlist is filtered list
+            for (NewsGetterSetter item : mList) //here mList is filtered list
             {
-                if (item.getNewsTitle().toLowerCase().contains(text.toLowerCase())) {
+                   if (item.getNewsTitle().toLowerCase().contains(text.toLowerCase())) {
                     {
                         filteredList.add(item);
+                        flag = true;
                     }
                 }
+            }
+
+            if(!flag)
+            {
+                topic_text.setVisibility(View.GONE);
+                welcome_text.setText("No results found");
+            }
+            else
+            {
+                topic_text.setVisibility(View.VISIBLE);
+                welcome_text.setText("Welcome, "+userName);
             }
 
             newsAdapter.filterList(filteredList);
         }
     }
 }
-

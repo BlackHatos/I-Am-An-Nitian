@@ -45,23 +45,22 @@
                     android:dropDownAnchor="@id/tempView"
                     android:dropDownWidth="match_parent"
                     android:inputType="textAutoComplete|textAutoCorrect"
-                    android:paddingEnd="10dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="15dp"
                     android:textColorHint="#CAD2DAE2"
                     android:textColor="@color/textColor1"
-                    android:id="@+id/collegeautoComplete"
+                    android:id="@+id/collegeAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:hint="University Name"
+                    android:hint="College Name"
                     android:textSize="16sp"
-                    android:drawablePadding="2dp"
+                    android:drawablePadding="10dp"
                     android:drawableEnd="@drawable/ic_close_black_24dp"
                     android:completionThreshold="1"
                     />
-
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <View
         android:layout_width="match_parent"
@@ -73,12 +72,52 @@
         />
 
     <View
-        app:layout_anchorGravity="bottom"
-        app:layout_anchor="@id/view"
-        android:id="@+id/tempView"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="#00ffffff"
+        android:id="@+id/tempView"
+        />
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        android:id="@+id/other"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:contentDescription="@string/cnt_desp"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:src="@drawable/jossa"
+        />
+
+        <TextView
+            android:textColor="@color/textColor1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/custom"
+            android:text="Your College"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/viewx"
+        android:layout_marginStart="65dp"
+        android:layout_marginEnd="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/elevationShadow"
         />
 
 </LinearLayout>

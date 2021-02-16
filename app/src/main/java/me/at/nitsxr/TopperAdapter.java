@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,8 @@ public class TopperAdapter extends RecyclerView.Adapter<TopperAdapter.MyViewHold
 
     private ArrayList<TopperGetterSetter> mList;
     private Context mContext;
+    private BottomSheetDialog bottomSheetDialog;
+
     public TopperAdapter(Context mContext, ArrayList<TopperGetterSetter> mList)
     {
         this.mContext = mContext;
@@ -50,6 +55,10 @@ public class TopperAdapter extends RecyclerView.Adapter<TopperAdapter.MyViewHold
                 .asBitmap()
                 .load(imageUrl)
                 .into(holder.topperImage);
+
+        holder.clickCard.setOnClickListener(v -> {
+            showBottomSheet(name, rank, branch, imageUrl, college, exam);
+        });
     }
 
     @Override
@@ -64,6 +73,7 @@ public class TopperAdapter extends RecyclerView.Adapter<TopperAdapter.MyViewHold
         public TextView exam;
         public TextView rank;
         public TextView branch;
+        public RelativeLayout clickCard;
 
         MyViewHolder(View itemView)
         {
@@ -73,6 +83,32 @@ public class TopperAdapter extends RecyclerView.Adapter<TopperAdapter.MyViewHold
             rank = itemView.findViewById(R.id.rank);
             exam = itemView.findViewById(R.id.exam);
             branch = itemView.findViewById(R.id.branch);
+            clickCard = itemView.findViewById(R.id.clickCard);
         }
+    }
+
+    private void showBottomSheet(String name, String rank, String branch,
+                                 String imageUrl, String college, String exam)
+    {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View bottomSheetView = inflater.inflate(R.layout.story_bottom_sheet, null);
+        bottomSheetDialog = new BottomSheetDialog(mContext, R.style.SheetDialog);
+        bottomSheetDialog.setCancelable(false);
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        ImageView topperImage = bottomSheetView.findViewById(R.id.topperImage);
+        TextView topperName = bottomSheetView.findViewById(R.id.topperName);
+        TextView topperRank = bottomSheetView.findViewById(R.id.rank);
+        TextView topperCollege = bottomSheetView.findViewById(R.id.topperCollege);
+        Glide.with(mContext)
+                .asBitmap()
+                .placeholder(R.drawable.dark_profile)
+                .load(imageUrl)
+                .into(topperImage);
+        topperCollege.setText(college);
+        topperName.setText(name);
+        topperRank.setText(rank+" | "+exam+" | "+branch);
+        bottomSheetDialog.show();
     }
 }

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorPrimaryDark"
-    tools:context=".LoginOrSignupActivity">
+    tools:context=".LoginOrSignUpActivity">
 
     <LinearLayout
         android:layout_centerInParent="true"
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:paddingStart="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -28,14 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/join"
-                android:textColor="#d2dae2"
-                android:textSize="28sp"
+                android:textColor="@color/textColor1"
+                android:textSize="30sp"
                 />
         </RelativeLayout>
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="210dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:elevation="0dp"
@@ -50,8 +51,10 @@
             android:layout_marginTop="50dp"
             android:elevation="0dp"
             android:id="@+id/logsignbtn"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="45dp"
             android:background="@drawable/mybutton"
             android:text="@string/login_or_signup"
             android:textColor="@color/textColor2"
@@ -75,7 +78,9 @@
             android:fontFamily="@font/work_sans_semibold"
             android:elevation="0dp"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="45dp"
+           android:layout_marginStart="5dp"
+           android:layout_marginEnd="5dp"
             android:textSize="16sp"
             android:background="@drawable/mybutton2"
             android:drawableEnd="@drawable/fbicon_small"
@@ -96,9 +101,11 @@
                 android:fontFamily="@font/work_sans_semibold"
                 android:elevation="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="45dp"
                 android:background="@drawable/mybutton3"
                 android:text="@string/google"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:textColor="@color/textColor2"
                 android:textSize="16sp"
                 android:drawableEnd="@drawable/googleicon_small"/>

@@ -3,7 +3,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -37,17 +36,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -59,11 +53,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,39 +98,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //===> Registering facebook sdk
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
-
-       //===> initializing youtube related widgets
+        setBroadCastReceiver();
         initializeVariables();
 
-        final Handler handler = new Handler();
-        final Runnable update = new Runnable() {
-            @Override
-            public void run() {
+        try{
+            final Handler handler = new Handler();
+            final Runnable update = () -> {
                 if (currentPage == 5)
                     currentPage = 0;
                 viewPager.setCurrentItem(currentPage++, true);
-            }
-        };
+            };
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(update);
-            }
-        }, DELAYS_MS, PERIOD_MS);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(update);
+                }
+            }, DELAYS_MS, PERIOD_MS);
+        }
+        catch(Exception ex){ex.printStackTrace();}
 
         //===> Timer for the headlines
-        final Runnable headline = new Runnable() {
-            @Override
-            public void run() {
-                if (currentHeadline == 5)
-                    currentHeadline = 0;
-                viewPager2.setCurrentItem(currentHeadline++, true);
-            }
+        final Runnable headline = () -> {
+            if (currentHeadline == 5)
+                currentHeadline = 0;
+            viewPager2.setCurrentItem(currentHeadline++, true);
         };
 
         final Handler handler2 = new Handler();
@@ -148,55 +136,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, 1000, 4000);
 
         bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        //do nothing
-                        break;
-                    case R.id.notification:
-                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
-                    case R.id.news_icon:
-                        startActivity(new Intent(getApplicationContext(), NewsActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
-                }
-
-                return true;
+            switch (menuItem.getItemId()) {
+                case R.id.home:
+                    //do nothing
+                    break;
+                case R.id.notification:
+                    startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                    overridePendingTransition(0, 0);
+                    break;
+                case R.id.news_icon:
+                    startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+                    overridePendingTransition(0, 0);
+                    break;
             }
+
+            return true;
         });
 
         setUpToolbarMenu();
         setUpDrawerMenu();
         headerUpdate();
         showBadge();
-        setBroadCastReceiver();
         initTopicVars();
         setTopic();
 
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         refreshScreen.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh()
-            {
-                //clear the list first before calling the function again
-                sliderImg.clear();
-                sendRequest();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                            refreshScreen.setRefreshing(false);
-                    }
-                }, 3000);
-            }
-        });
+                () -> {
+                    sendRequest();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                                refreshScreen.setRefreshing(false);
+                        }
+                    }, 3000);
+                });
     }
 
     //====> setting up toolbar menu
@@ -249,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //===> Setting up overflow menu (when toolbar used as action bar)
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
 
@@ -266,22 +243,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .centerInside()
                 .into(circleImageView);
 
-
-        circleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               startActivity(new Intent(MainActivity.this, UserProfile.class));
-            }
+        circleImageView.setOnClickListener(v -> {
+            if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+                startActivity(new Intent(MainActivity.this, UserProfile.class));
+            else
+                showSnackBar();
         });
-
-        //setup search in toolbar
-      /*  */
         return true;
     }
 
-    //===> Overflow menu item Click listener
+    //===> Overflow menu item Click listener-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId()) {
             case R.id.app_info:
                 startActivity(new Intent(MainActivity.this, AppInfo.class));
@@ -306,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build()).signOut();
 
         sharedPreferences.edit().clear().apply();
-        Intent intent = new Intent(getApplicationContext(), LoginOrSignupActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginOrSignUpActivity.class);
         //===> finish all previous activities
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -327,76 +301,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nit_name = headView.findViewById(R.id.nit_name);
         imageView = headView.findViewById(R.id.profile_pic);
 
+        String str[] = college.split(" ");
+        int len = str.length;
+        String clg_str = "";
+        for(int i=0; i<len-1; i++)
+            clg_str += str[i] + " ";
+
+
         if(college.isEmpty())
-           nit_name.setText("National Institute Of Technology Srinagar");
+            nit_name.setText("Your College Name");
         else
-            nit_name.setText(college);
+        {
+            if(len < 4)
+               nit_name.setText(college);
+            else
+                nit_name.setText(clg_str+
+                        "\n"+str[len-1]);
+        }
 
         if(name.isEmpty())
-            user_name.setText("Shubham Maurya");
+            user_name.setText("Your Name");
         else
             user_name.setText(name);
 
         Glide.with(this)
                 .load(pic_url)
-                .placeholder(R.drawable.yellow_profile)
+                .placeholder(R.drawable.ic_profilepic)
                 .fitCenter()
                 .centerInside()
                 .into(imageView);
     }
 
     //====>how notification Badge
-    public void showBadge() {
+    public void showBadge()
+    {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.notification_badge, menuView, false);
         itemView.addView(notificationBadge);
     }
 
-    public void sendRequest()
+    private void sendRequest()
     {
+        sliderImg.clear();
+        List<NewsGetterSetter> mList2 = new ArrayList<>();
         final String url = "https://app.thenextsem.com/app/get_news.php";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                url, null, new Response.Listener<JSONArray>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(JSONArray response) {
+        //error
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
+                url, null, response -> {
+                    for (int i = 0; i < response.length(); i++)
+                    {
+                        NewsGetterSetter slideUtils = new NewsGetterSetter();
+                        try {
+                            JSONObject object = response.getJSONObject(i);
+                            slideUtils.setImageUrl
+                                    ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
+                            slideUtils.setNewsDescp(object.getString("descp"));
+                            slideUtils.setNewsTitle(object.getString("title"));
+                            slideUtils.setNewsId(object.getString("id"));
+                            slideUtils.setNewsDate(object.getString("date"));
+                            slideUtils.setImageUrl2(object.getString("image2"));
+                            slideUtils.setStatus(object.getString("status"));
+                            slideUtils.setCount(object.getString("count"));
 
-                for (int i = 0; i < 5; i++)
-                {
-                    NewsGetterSetter slideUtils = new NewsGetterSetter();
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        slideUtils.setImageUrl
-                                ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
-                        slideUtils.setNewsDescp(object.getString("descp"));
-                        slideUtils.setNewsTitle(object.getString("title"));
-                        slideUtils.setNewsId(object.getString("id"));
-                        slideUtils.setNewsDate(object.getString("date"));
-                        slideUtils.setImageUrl2(object.getString("image2"));
-                        slideUtils.setStatus(object.getString("status"));
-                        slideUtils.setCount(object.getString("count"));
-
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                        sliderImg.add(slideUtils);
+                        mList2.add(slideUtils);
                     }
-                    sliderImg.add(slideUtils);
-                }
 
-                adapter = new ViewPagerAdapter(sliderImg, MainActivity.this);
-                adapter2 = new HeadLineViewPagerAdapter(sliderImg,MainActivity.this);
-                viewPager.setAdapter(adapter);
-                viewPager2.setAdapter(adapter2);
-            }
-
-        }, new Response.ErrorListener() { //error
+                    adapter = new ViewPagerAdapter(sliderImg.subList(0,5), MainActivity.this);
+                    // sorting the list in descending order of counts
+                    Collections.sort(mList2, (x, y)->Integer.parseInt(y.getCount()) - Integer.parseInt(x.getCount()));
+                    adapter2 = new HeadLineViewPagerAdapter(mList2.subList(0,5),MainActivity.this);
+                    viewPager.setAdapter(adapter);
+                    viewPager2.setAdapter(adapter2);
+                }, error -> error.printStackTrace()){
             @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            public Map<String, String> getParams() throws AuthFailureError
+            public Map<String, String> getParams()
             {
                 SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
                 Map<String, String> map =  new HashMap<>();
@@ -413,17 +396,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
-        //snackbar.setAnchorView(R.id.bottom_navigation_view);
-        snackbar.setAction("Dismiss", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snackbar.dismiss();
-            }
-        });
-        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
+        snackbar.setAction("Dismiss", view -> snackbar.dismiss());
         snackbar.show();
     }
-
 
     public void goToNews(View view)
     {
@@ -450,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         refreshScreen = findViewById(R.id.refreshScreen);
     }
 
-
     //===> setting up broadcast receiver
     private void setBroadCastReceiver()
     {
@@ -463,7 +437,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
-                    sliderImg.clear();
                     sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
@@ -494,33 +467,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setTopic()
     {
-        final String url = "https://app.thenextsem.com/app/get_toppers.php";
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                url, null, new Response.Listener<JSONArray>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    TopicGetterSetter topicGetterSetter = new TopicGetterSetter();
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        topicGetterSetter.setTag(object.getString("name"));
+        TopicGetterSetter getterSetter;
+        String topic_list[] = {"Gate 2021", "Jee Mains", "Jee Advance", "Ese 2021",
+                "Engineering", "Education", "Technology", "Placements", "IIT", "NIT"};
 
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
-                    }
-                    mList3.add(topicGetterSetter);
-                }
-                topicAdapter = new TopicAdapter(MainActivity.this, mList3);
-                topicRecyclerView.setAdapter(topicAdapter);
-            }
-
-        }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
+        for(int i = 0; i< 10; i++)
+        {
+            getterSetter = new TopicGetterSetter();
+            getterSetter.setTag(topic_list[i]);
+            mList3.add(getterSetter);
+        }
+        topicAdapter = new TopicAdapter(MainActivity.this, mList3);
+        topicRecyclerView.setAdapter(topicAdapter);
     }
 }

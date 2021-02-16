@@ -37,13 +37,13 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="1dp"
             android:id="@+id/nit_name"
-            android:textColor="@color/textColor2"
+            android:maxLines="2"
+            android:textColor="@color/textColor3"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:text="@string/nit_name"
-            android:layout_width="match_parent"
+            android:text="National Institute Of Technology Srinagar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
 
     </LinearLayout>
 </LinearLayout>

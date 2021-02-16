@@ -56,8 +56,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-
-public class LoginOrSignupActivity extends AppCompatActivity
+public class LoginOrSignUpActivity extends AppCompatActivity
 {
     private Button login,fb, googleSignInButton;
     private LoginButton fb_login;
@@ -88,12 +87,11 @@ public class LoginOrSignupActivity extends AppCompatActivity
 		fb = findViewById(R.id.fb);
 		googleSignInButton = findViewById(R.id.signInGoogle);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(intent);
-            }
+        login.setOnClickListener(v -> {
+            Intent intent= new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
         });
 
         fb_login.setReadPermissions(Arrays.asList("public_profile","email"));
@@ -104,21 +102,18 @@ public class LoginOrSignupActivity extends AppCompatActivity
             public void onSuccess(LoginResult loginResult)
             {
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        try{
-                            String id = object.getString("id");
-                            String name = object.getString("name");
-                            String email = object.getString("email");
-                            String pic_url = "https://graph.facebook.com/"+id+"/"+"picture?type=large";
-                            sendRequest(name, email, pic_url, "social");
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                        (object, response) -> {
+                            try{
+                                String id = object.getString("id");
+                                String name = object.getString("name");
+                                String email = object.getString("email");
+                                String pic_url = "https://graph.facebook.com/"+id+"/"+"picture?type=large";
+                                sendRequest(name, email, pic_url, "social");
+                            } catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        });
 
                 Bundle parameters = new Bundle();
                 parameters.putString("fields","id,name,email,gender");
@@ -196,9 +191,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
                 String name = acct.getDisplayName();
                 String id = acct.getId();
                 String personPhoto = acct.getPhotoUrl().toString();
-
                 sendRequest(name, email, personPhoto, "social");
-
             }
         }
     }
@@ -249,6 +242,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
     private void sendRequest(final String name, final String email, final String pic_url, final String source)
     {
         final String url = "https://app.thenextsem.com/app/fb_google_signup.php";
+        //error
         StringRequest request = new StringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
             @Override
@@ -273,8 +267,8 @@ public class LoginOrSignupActivity extends AppCompatActivity
 					editor.apply();
 
 					Intent intent  = new Intent(getApplicationContext(),MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(intent);
+					finish();
                 }
                 else if((respo[0].equals("1") && respo[1].equals("0")))
                 {
@@ -301,7 +295,6 @@ public class LoginOrSignupActivity extends AppCompatActivity
                     editor.apply();
 
                     Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
@@ -312,12 +305,7 @@ public class LoginOrSignupActivity extends AppCompatActivity
 				}
             }
 
-        }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        })
+        }, error -> error.printStackTrace())
         {
             @Override
             public Map<String, String> getParams() throws AuthFailureError
@@ -340,15 +328,10 @@ public class LoginOrSignupActivity extends AppCompatActivity
 	 //====> getting user access token from firebase
     private void getTokenFromFirebase()
     {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task)
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
             {
-                if (task.isSuccessful())
-                {
-                    token = task.getResult().getToken();
-                }
+                token = task.getResult().getToken();
             }
         });
     }

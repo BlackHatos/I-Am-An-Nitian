@@ -1,10 +1,13 @@
 package me.at.nitsxr;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import in.co.iamannitian.iamannitian.OnViewPagerClick;
 import in.co.iamannitian.iamannitian.R;
 
 public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHolder>
@@ -49,6 +53,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
                 .asBitmap()
                 .load(imageUrl)
                 .into(holder.storyImage);
+
+        holder.clickStory.setOnClickListener(v -> {
+            Intent intent =  new Intent(mContext, OnViewPagerClick.class);
+            Bundle b = new Bundle();
+            b.putSerializable("sampleObject", getterSetter);
+            intent.putExtras(b);
+            intent.putExtra("temp", "2");
+            mContext.startActivity(intent);
+        });
+
+        holder.storyDescp.setText(story.substring(0,38)+"..");
     }
 
     @Override
@@ -60,12 +75,16 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
       {
           public ImageView storyImage;
           public TextView storyTitle;
+          public TextView storyDescp;
+          public RelativeLayout clickStory;
 
           StoryViewHolder(View itemView)
           {
               super(itemView);
               storyImage = itemView.findViewById(R.id.storyImage);
               storyTitle = itemView.findViewById(R.id.storyTitle);
+              clickStory = itemView.findViewById(R.id.clickStory);
+              storyDescp = itemView.findViewById(R.id.storyDescp);
           }
       }
 }
