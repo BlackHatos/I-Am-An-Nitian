@@ -111,40 +111,31 @@ public class SuccessStory extends AppCompatActivity
     {
         final String url = "https://app.thenextsem.com/app/get_toppers.php";
 
+        //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
-                url, null, new Response.Listener<JSONArray>() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onResponse(JSONArray response) {
+                url, null, response -> {
 
-                for (int i = 0; i < response.length(); i++) {
-                    TopperGetterSetter topperGetterSetter = new TopperGetterSetter();
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        topperGetterSetter.setImage_link(object.getString("image_link"));
-                        topperGetterSetter.setBranch(object.getString("branch"));
-                        topperGetterSetter.setId(object.getString("id"));
-                        topperGetterSetter.setCollege(object.getString("college"));
-                        topperGetterSetter.setName(object.getString("name"));
-                        topperGetterSetter.setExam(object.getString("exam"));
-                        topperGetterSetter.setRank(object.getString("rank"));
+                    for (int i = 0; i < response.length(); i++) {
+                        TopperGetterSetter topperGetterSetter = new TopperGetterSetter();
+                        try {
+                            JSONObject object = response.getJSONObject(i);
+                            topperGetterSetter.setImage_link(object.getString("image_link"));
+                            topperGetterSetter.setBranch(object.getString("branch"));
+                            topperGetterSetter.setId(object.getString("id"));
+                            topperGetterSetter.setCollege(object.getString("college"));
+                            topperGetterSetter.setName(object.getString("name"));
+                            topperGetterSetter.setExam(object.getString("exam"));
+                            topperGetterSetter.setRank(object.getString("rank"));
 
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                        mList.add(topperGetterSetter);
                     }
-                    mList.add(topperGetterSetter);
-                }
 
-                topperAdapter = new TopperAdapter(SuccessStory.this, mList);
-                recyclerView.setAdapter(topperAdapter);
-            }
-
-        }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+                    topperAdapter = new TopperAdapter(SuccessStory.this, mList);
+                    recyclerView.setAdapter(topperAdapter);
+                }, error -> error.printStackTrace());
         HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
     }
 
@@ -152,6 +143,7 @@ public class SuccessStory extends AppCompatActivity
     {
         final String url = "https://app.thenextsem.com/app/get_story.php";
 
+        //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 url, null, new Response.Listener<JSONArray>() {
             @SuppressLint("LongLogTag")
@@ -181,12 +173,7 @@ public class SuccessStory extends AppCompatActivity
                 recyclerView2.setAdapter(storyAdapter);
             }
 
-        }, new Response.ErrorListener() { //error
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+        }, error -> error.printStackTrace());
 
         HeaderVolleyRequest.getInstance(this).addToRequestQueue(jsonArrayRequest);
     }

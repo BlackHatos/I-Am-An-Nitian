@@ -100,15 +100,17 @@ public class TopperAdapter extends RecyclerView.Adapter<TopperAdapter.MyViewHold
         ImageView topperImage = bottomSheetView.findViewById(R.id.topperImage);
         TextView topperName = bottomSheetView.findViewById(R.id.topperName);
         TextView topperRank = bottomSheetView.findViewById(R.id.rank);
+        TextView topperBranch = bottomSheetView.findViewById(R.id.branch);
         TextView topperCollege = bottomSheetView.findViewById(R.id.topperCollege);
         Glide.with(mContext)
                 .asBitmap()
-                .placeholder(R.drawable.dark_profile)
+                .placeholder(R.drawable.usericon)
                 .load(imageUrl)
                 .into(topperImage);
         topperCollege.setText(college);
         topperName.setText(name);
-        topperRank.setText(rank+" | "+exam+" | "+branch);
+        topperRank.setText(rank +" | "+exam);
+        topperBranch.setText(branch);
         bottomSheetDialog.show();
     }
 }

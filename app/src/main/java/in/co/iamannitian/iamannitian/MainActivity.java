@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         if(college.isEmpty())
-            nit_name.setText("Your College Name");
+            nit_name.setText("User College Name");
         else
         {
             if(len < 4)
@@ -320,13 +320,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if(name.isEmpty())
-            user_name.setText("Your Name");
+            user_name.setText("User Name");
         else
             user_name.setText(name);
 
         Glide.with(this)
                 .load(pic_url)
-                .placeholder(R.drawable.ic_profilepic)
+                .placeholder(R.drawable.usericon)
                 .fitCenter()
                 .centerInside()
                 .into(imageView);

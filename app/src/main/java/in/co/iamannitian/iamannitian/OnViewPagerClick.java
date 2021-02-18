@@ -58,7 +58,7 @@ public class OnViewPagerClick extends AppCompatActivity
             {
                 setUpToolbarMenu("News");
                 linearLayout.setVisibility(View.VISIBLE);
-                setMargin(relativeLayoutMargin, 10,0,10,72);
+                //setMargin(relativeLayoutMargin, 10,0,10,72);
                 view.setVisibility(View.GONE);
                 publish_time.setVisibility(View.VISIBLE);
                 final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
@@ -162,6 +162,7 @@ public class OnViewPagerClick extends AppCompatActivity
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setIcon(R.drawable.app_logo);
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         toolbar.getNavigationIcon().setColorFilter(getResources()
                 .getColor(R.color.textColor1),

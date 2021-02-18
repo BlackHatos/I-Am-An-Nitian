@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -145,6 +146,9 @@ public class NewsActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         actionBar.setIcon(R.drawable.app_logo);
+        toolbar.getNavigationIcon().setColorFilter(getResources()
+                        .getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
     }
 
     /*=========>>>>>>> Setting up overflow menu (when toolbar used as action bar) <<<<<<<<<=========*/

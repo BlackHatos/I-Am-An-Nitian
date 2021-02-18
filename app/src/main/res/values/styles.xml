@@ -73,12 +73,13 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:colorBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.3</item>
+        <!--<item name="android:backgroundDimAmount">0.3</item>-->
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+
+    <style name="ProfileStyle" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/cardColor</item>
+    </style>
    </resources>
 
-    <!-- <style name="ToolbarTextStyle">
-          <item name="android:fontFamily">@font/work_sans_semibold</item>
-      </style> -->

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     android:layout_marginStart="12dp"
-    android:layout_marginEnd="12dp"
     android:id="@+id/clickStory"
     android:clickable="true"
     android:focusable="true"
+    android:layout_marginEnd="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/cardView"
         app:cardBackgroundColor="@color/colorPrimaryDark"
         app:cardElevation="0dp"
         app:cardCornerRadius="5dp"
         android:layout_width="match_parent"
-        android:layout_height="115dp">
+        android:layout_height="100dp">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -32,7 +35,7 @@
                 <ImageView
                     android:id="@+id/storyImage"
                     android:scaleType="centerCrop"
-                    android:layout_width="130dp"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/amir"
                     />
@@ -40,35 +43,62 @@
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout
-                android:paddingStart="10dp"
+                android:paddingStart="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     android:id="@+id/storyTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
+                    android:maxLines="3"
                     android:fontFamily="@font/work_sans_semibold"
                     android:textColor="@color/textColor1"
-                    android:text="This is news heading for demonstration"
+                    android:text="This is news heading \nfor demon stration"
                     />
 
-                <TextView
-                    android:id="@+id/storyDescp"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="@font/work_sans"
-                    android:textSize="15sp"
-                    android:textColor="@color/textColor1"
-                    android:layout_below="@id/storyTitle"
+                <RelativeLayout
+                    android:layout_marginBottom="6dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lorem ipsum is a dummy text to test something"
-                    />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/storyDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="10 hours ago"
+                        android:textColor="@color/textColor4"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_toLeftOf="@id/views"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_remove_red_eye_black_24dp" />
+
+                    <TextView
+                        android:layout_marginEnd="55dp"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/views"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/work_sans"
+                        android:text="52"
+                        android:textColor="@color/textColor4"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 </RelativeLayout>

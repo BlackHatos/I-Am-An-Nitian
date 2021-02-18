@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import in.co.iamannitian.iamannitian.OnViewPagerClick;
@@ -46,9 +43,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
        String college = getterSetter.getCollege();
        String exam = getterSetter.getExam();
        String id = getterSetter.getId();
-       String story = getterSetter.getStory();
 
-       holder.storyTitle.setText(name+" | "+exam+" | "+rank+" | "+college);
+       holder.storyTitle.setText(name+" | "+exam+" | "+rank+" | "+college+" | "+branch);
         Glide.with(mContext)
                 .asBitmap()
                 .load(imageUrl)
@@ -63,7 +59,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             mContext.startActivity(intent);
         });
 
-        holder.storyDescp.setText(story.substring(0,38)+"..");
     }
 
     @Override
@@ -75,7 +70,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
       {
           public ImageView storyImage;
           public TextView storyTitle;
-          public TextView storyDescp;
           public RelativeLayout clickStory;
 
           StoryViewHolder(View itemView)
@@ -84,7 +78,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
               storyImage = itemView.findViewById(R.id.storyImage);
               storyTitle = itemView.findViewById(R.id.storyTitle);
               clickStory = itemView.findViewById(R.id.clickStory);
-              storyDescp = itemView.findViewById(R.id.storyDescp);
           }
       }
 }

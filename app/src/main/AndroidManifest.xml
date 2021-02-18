@@ -13,13 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".ContactUs"></activity>
+        <activity
+            android:name=".EditProfile"
+            android:parentActivityName=".UserProfile" />
         <activity
             android:name=".UserProfile"
             android:parentActivityName=".MainActivity"
-            >
-        </activity>
-
+            android:theme="@style/ProfileStyle" />
         <activity
             android:name=".SavedItem"
             android:parentActivityName=".MainActivity" />
@@ -33,9 +34,7 @@
             android:name=".CollegeSuggestions"
             android:parentActivityName=".CompleteProfile"
             android:theme="@style/AutoCompleteStyle"
-            android:windowSoftInputMode="adjustPan|stateHidden" >
-
-        </activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".SuccessStory"
             android:parentActivityName=".MainActivity" />
@@ -45,13 +44,13 @@
             android:parentActivityName=".NewsActivity" />
         <activity
             android:name=".NewsActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleInstance"
-            android:theme="@style/SearchViewStyle"
             android:parentActivityName=".MainActivity"
-            />
+            android:theme="@style/SearchViewStyle"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".NotificationActivity"
+            android:parentActivityName=".MainActivity"
             android:launchMode="singleInstance" />
         <activity
             android:name=".LoginActivity"
@@ -59,16 +58,14 @@
             android:parentActivityName=".LoginOrSignUpActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:launchMode="singleInstance"
             android:name=".SignupActivity"
+            android:launchMode="singleInstance"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance">
-        </activity>
-        <activity android:name=".LoginOrSignUpActivity"
-            />
+            android:launchMode="singleInstance" />
+        <activity android:name=".LoginOrSignUpActivity" />
         <activity
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"
@@ -76,6 +73,7 @@
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

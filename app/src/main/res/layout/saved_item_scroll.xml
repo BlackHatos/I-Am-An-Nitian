@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/work_sans"
-                        android:text="26 December"
+                        android:text="18 hours ago"
                         android:textColor="@color/textColor4"
                         android:textSize="12sp" />
 
@@ -75,8 +75,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:id="@+id/newsHeart"
-                        android:layout_width="26dp"
-                        android:layout_height="21dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@id/newsCount"
                         android:src="@drawable/ic_favorite_border_black_24dp" />
@@ -90,8 +90,8 @@
                         android:layout_toLeftOf="@id/unSaveNews"
                         android:fontFamily="@font/work_sans"
                         android:text="52"
-                        android:textColor="@color/textColor1"
-                        android:textSize="15sp" />
+                        android:textColor="@color/textColor4"
+                        android:textSize="13sp" />
 
                     <ImageView
                         android:clickable="true"
@@ -100,8 +100,8 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="5dp"
                         android:layout_alignParentRight="true"
-                        android:layout_width="26dp"
-                        android:layout_height="21dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/save_article"
                         android:id="@+id/unSaveNews"
                         />

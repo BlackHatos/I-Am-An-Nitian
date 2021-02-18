@@ -6,44 +6,54 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
-    tools:context=".UserProfile">
+    tools:context=".EditProfile">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:background="@color/colorPrimaryDark"
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        app:elevation="0dp"
-        android:elevation="0dp"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-        <androidx.appcompat.widget.Toolbar
-            android:elevation="0dp"
-            android:layout_margin="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:contentInsetStart="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStartWithNavigation="0dp"
-            app:titleMarginStart="6dp"
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:background="@color/colorPrimaryDark"
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
+            app:elevation="0dp"
+            android:elevation="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/cardColor"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:elevation="0dp"
+                android:layout_margin="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleMarginStart="6dp"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/elevationShadow"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            />
 
         <androidx.core.widget.NestedScrollView
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fitsSystemWindows="true"
             android:clipToPadding="true"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
@@ -51,29 +61,29 @@
                 android:layout_height="match_parent">
 
                 <RelativeLayout
-                    android:background="@drawable/profile_background"
+                    android:background="@color/cardColor"
                     android:id="@+id/layout1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <FrameLayout
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="18dp"
                         android:layout_centerHorizontal="true"
                         android:id="@+id/profile_image_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
                         <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="85dp"
+                            android:layout_width="100dp"
                             android:id="@+id/profile_image"
-                            android:layout_height="85dp"
+                            android:layout_height="100dp"
                             app:civ_border_width="4dp"
-                            android:src="@drawable/usericon"
+                            android:src="@drawable/dark_profile"
                             app:civ_border_color="@color/textColor1"
                             />
 
                         <View
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="6dp"
                             android:layout_marginRight="6dp"
                             android:layout_width="20dp"
                             android:layout_gravity="bottom|right"
@@ -129,99 +139,61 @@
                         />
                 </RelativeLayout>
 
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/work_sans_semibold"
-                    android:textSize="18sp"
-                    android:layout_marginStart="20dp"
-                    android:id="@+id/heading"
-                    android:layout_below="@id/layout1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="User Details"
-                    />
-
-            <!-- ========= Home Layout ========== -->
-            <LinearLayout
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/home_layout"
-                android:layout_below="@id/heading"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                <!-- ========= Home Layout ========== -->
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-
-                        <View
-                            android:layout_marginTop="8dp"
-                            android:layout_gravity="center"
-                            android:layout_width="2dp"
-                            android:layout_height="15dp"
-                            android:background="@color/colorAccent"
-                            />
-
-                        <ImageView
-                            android:layout_gravity="center"
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:background="@drawable/ic_album_black_24dp"
-                            />
-
-                        <View
-                            android:layout_gravity="center"
-                            android:layout_width="2dp"
-                            android:layout_height="25dp"
-                            android:background="@color/colorAccent"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:paddingTop="10dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/home_layout"
+                    android:layout_below="@id/layout1"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:textColor="#BDBCBC"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Home"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/work_sans_semibold"
-                        />
-                    <TextView
-                        android:textColor="@color/textColor1"
-                        android:textSize="15sp"
-                        android:id="@+id/state_name"
-                        android:fontFamily="@font/work_sans"
-                        android:layout_marginTop="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Uttar Pradesh"
-                        />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/home"
+                            />
+                        <LinearLayout
+                            android:layout_marginStart="20dp"
+                            android:orientation="vertical"
+                            android:layout_weight="0.8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
+                            <EditText
+                                android:inputType="numberDecimal"
+                                android:id="@+id/user_phone"
+                                android:layout_marginTop="10dp"
+                                android:maxLength="10"
+                                android:paddingStart="16dp"
+                                android:paddingEnd="10dp"
+                                android:background="@drawable/complete_profile_shape"
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:hint="@string/your_phone"
+                                android:textColorHint="@color/hintColor"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="16sp"
+                                android:autofillHints="" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/elevationShadow"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
 
                 <!-- ========= College Layout ========== -->
                 <LinearLayout
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:id="@+id/college_layout"
                     android:layout_below="@id/home_layout"
                     android:orientation="vertical"
@@ -231,41 +203,17 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_height="wrap_content">
-
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_school_black_24dp"
+                            />
                         <LinearLayout
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="25dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                            <ImageView
-                                android:layout_gravity="center"
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:background="@drawable/ic_album_black_24dp"
-                                />
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="25dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:paddingTop="10dp"
                             android:layout_marginStart="20dp"
                             android:orientation="vertical"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -286,6 +234,12 @@
                                 android:layout_height="wrap_content"
                                 android:text="National Institute Of Technology Srinagar"
                                 />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/elevationShadow"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -293,52 +247,27 @@
 
                 <!-- ========= Degree Layout ========== -->
                 <LinearLayout
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:id="@+id/degree_layout"
                     android:layout_below="@id/college_layout"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/user_degree_icx"
+                            />
                         <LinearLayout
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="25dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                            <ImageView
-                                android:layout_gravity="center"
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:background="@drawable/ic_album_black_24dp"
-                                />
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="20dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:paddingTop="10dp"
                             android:layout_marginStart="20dp"
                             android:orientation="vertical"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -359,7 +288,12 @@
                                 android:layout_height="wrap_content"
                                 android:text="Bachelors (2017-2021)"
                                 />
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/elevationShadow"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -367,8 +301,7 @@
 
                 <!-- ========= Branch Layout ========== -->
                 <LinearLayout
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:id="@+id/branch_layout"
                     android:layout_below="@id/degree_layout"
                     android:orientation="vertical"
@@ -378,39 +311,14 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="20dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                            <ImageView
-                                android:layout_gravity="center"
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:background="@drawable/ic_album_black_24dp"
-                                />
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="25dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                        </LinearLayout>
-
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            />
                         <LinearLayout
                             android:layout_marginStart="20dp"
-                            android:paddingTop="10dp"
                             android:orientation="vertical"
                             android:layout_weight="0.8"
                             android:layout_width="match_parent"
@@ -433,6 +341,12 @@
                                 android:layout_height="wrap_content"
                                 android:text="Information Technology"
                                 />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/elevationShadow"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -441,8 +355,6 @@
                 <!-- ========= Phone Layout ========== -->
                 <LinearLayout
                     android:layout_marginBottom="15dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
                     android:id="@+id/phone_layout"
                     android:layout_below="@id/branch_layout"
                     android:orientation="vertical"
@@ -452,40 +364,16 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="30dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="20dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                            <ImageView
-                                android:layout_gravity="center"
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:background="@drawable/ic_album_black_24dp"
-                                />
-
-                            <View
-                                android:layout_gravity="center"
-                                android:layout_width="2dp"
-                                android:layout_height="15dp"
-                                android:background="@color/colorAccent"
-                                />
-
-                        </LinearLayout>
-
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            />
                         <LinearLayout
                             android:layout_marginStart="20dp"
                             android:orientation="vertical"
-                            android:paddingTop="10dp"
+                            android:layout_weight="0.8"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -505,6 +393,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="8130512823"
+                                />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/elevationShadow"
                                 />
                         </LinearLayout>
                     </LinearLayout>

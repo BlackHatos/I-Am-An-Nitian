@@ -19,7 +19,7 @@
             android:layout_width="68dp"
             android:layout_height="68dp"
             android:elevation="0dp"
-            android:src="@drawable/yellow_profile"
+            android:src="@drawable/usericon"
             android:contentDescription="@string/cnt_desp" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:textColor="@color/textColor3"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:text="National Institute Of Technology Srinagar"
+            android:text="User College Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
