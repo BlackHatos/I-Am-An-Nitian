@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,7 +65,7 @@ public class UserProfile extends AppCompatActivity
 
         Glide.with(this)
                 .load(imageUrl)
-                .placeholder(R.drawable.dark_profile)
+                .placeholder(R.drawable.usericon)
                 .fitCenter()
                 .centerInside()
                 .into(profileImage);
@@ -82,4 +84,22 @@ public class UserProfile extends AppCompatActivity
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
                 PorterDuff.Mode.SRC_ATOP);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.other_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_info:
+                startActivity(new Intent(getApplicationContext(), AppInfo.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

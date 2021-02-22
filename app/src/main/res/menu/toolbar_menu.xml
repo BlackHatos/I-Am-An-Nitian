@@ -17,4 +17,10 @@
         app:showAsAction="always"
         app:actionLayout="@layout/profile_layout"
          />
+
+    <item
+        android:id="@+id/contact_us"
+        android:orderInCategory="100"
+        android:title="Contact us"
+        app:showAsAction="never"/>
 </menu>

@@ -49,7 +49,7 @@
     <string name="jossa">Jossa</string>
     <string name="read">Read</string>
     <string name="loading">We are loading the video for you</string>
-    <string name="success_story_read">Read Inspirational Success Stories</string>
+    <string name="success_story_read">Read Motivational Success Stories</string>
 
     <!--============== Splash Strings =================-->
     <string name="splash_msg">Connecting Nitians</string>
@@ -84,9 +84,11 @@
     <string name="to">End Year</string>
     <string name="proceed">Proceed</string>
     <string name="skip">Skip</string>
-    <string name="quote">Our greatest weakness lies\nin giving up. The most\ncertain way to succeed is always\nto try just one more time.</string>
     <string name="msg">If your college is not present in the list. Type your college name and
     press the back arrow.</string>
+    <string name="edison_thoughts">The greatest weakness lies in  giving up. The most
+    certain way to succeed is always to try just one more time. There is no success without
+    hard work because it\'s something you can only earn after much labor.</string>
 
     <!--========= Array Strings ==========-->
     <string-array name="states">

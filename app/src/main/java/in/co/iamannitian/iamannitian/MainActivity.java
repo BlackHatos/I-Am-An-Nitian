@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(pic_url)
-                .placeholder(R.drawable.dark_profile)
+                .placeholder(R.drawable.usericon)
                 .fitCenter()
                 .centerInside()
                 .into(circleImageView);
@@ -259,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.app_info:
                 startActivity(new Intent(MainActivity.this, AppInfo.class));
+                break;
+
+            case R.id.contact_us:
+                startActivity(new Intent(MainActivity.this, ContactUs.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -408,6 +412,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void goToStory(View view)
     {
         startActivity(new Intent(getApplicationContext(), SuccessStory.class));
+    }
+
+    public void goToCollege(View view)
+    {
+        startActivity(new Intent(getApplicationContext(),College.class));
     }
 
     //===> initializing variables

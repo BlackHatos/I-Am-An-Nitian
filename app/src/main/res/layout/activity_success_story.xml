@@ -82,7 +82,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_below="@id/ranker"
-                    android:layout_width="90dp"
+                    android:layout_width="70dp"
                     android:layout_height="2dp"
                     android:id="@+id/view1"
                     android:background="@color/textColor4"
@@ -117,16 +117,17 @@
                         android:src="@drawable/quote2"/>
 
                     <TextView
+                        android:paddingEnd="25dp"
                         android:layout_marginTop="3dp"
                         android:paddingStart="30dp"
                         android:layout_below="@id/q_im"
                         android:id="@+id/qt_desp"
-                        android:fontFamily="@font/work_sans_semibold"
+                        android:fontFamily="sans-serif-medium"
                         android:textColor="@color/textColor3"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/quote"
+                        android:text="@string/edison_thoughts"
                         />
 
                    <RelativeLayout
@@ -148,11 +149,10 @@
                            android:layout_centerVertical="true"
                            android:layout_toRightOf="@id/edison"
                            android:id="@+id/edi_txt"
-                           android:fontFamily="@font/work_sans"
+                           android:fontFamily="@font/work_sans_semibold"
                            android:layout_marginStart="10dp"
-                           android:textSize="13sp"
-                           android:textStyle="bold"
-                           android:textColor="@color/textColor2"
+                           android:textSize="12sp"
+                           android:textColor="@color/textColor3"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:text="Thomas Alva Edison"
@@ -180,7 +180,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_below="@id/heading"
-                    android:layout_width="90dp"
+                    android:layout_width="70dp"
                     android:layout_height="2dp"
                     android:id="@+id/view2"
                     android:background="@color/textColor4"

@@ -3,6 +3,8 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aguafina_script</item>
         <item>@font/alex_brush</item>
+        <item>@font/assistant</item>
+        <item>@font/assistant_light</item>
         <item>@font/bilbo_swash_caps</item>
         <item>@font/condiment</item>
         <item>@font/dancing_script_bold</item>

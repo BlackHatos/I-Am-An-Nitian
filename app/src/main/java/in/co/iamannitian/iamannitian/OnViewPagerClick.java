@@ -58,7 +58,6 @@ public class OnViewPagerClick extends AppCompatActivity
             {
                 setUpToolbarMenu("News");
                 linearLayout.setVisibility(View.VISIBLE);
-                //setMargin(relativeLayoutMargin, 10,0,10,72);
                 view.setVisibility(View.GONE);
                 publish_time.setVisibility(View.VISIBLE);
                 final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
@@ -78,46 +77,40 @@ public class OnViewPagerClick extends AppCompatActivity
                 else
                     reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
-                reaction_heart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int updated_status = 0;
-                        int updated_count = 0;
+                reaction_heart.setOnClickListener(v -> {
+                    int updated_status = 0;
+                    int updated_count = 0;
 
-                        if (getterSetter.getStatus().equals("1")) {
-                            updated_status = 0;
-                            updated_count = Integer.parseInt(getterSetter.getCount()) - 1;
-                            reaction_count.setText(updated_count + "");
-                            reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                        } else {
-                            updated_status = 1;
-                            updated_count = Integer.parseInt(getterSetter.getCount()) + 1;
-                            reaction_count.setText(updated_count + "");
-                            reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-                        }
-
-                        getterSetter.setStatus(updated_status + "");
-                        getterSetter.setCount(updated_count + "");
-
-                        UserReaction userReaction = new UserReaction(getterSetter,
-                                getSharedPreferences("appData", MODE_PRIVATE)
-                                        .getString("userId", ""), updated_status);
-                        userReaction.execute();
+                    if (getterSetter.getStatus().equals("1")) {
+                        updated_status = 0;
+                        updated_count = Integer.parseInt(getterSetter.getCount()) - 1;
+                        reaction_count.setText(updated_count + "");
+                        reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    } else {
+                        updated_status = 1;
+                        updated_count = Integer.parseInt(getterSetter.getCount()) + 1;
+                        reaction_count.setText(updated_count + "");
+                        reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
                     }
+
+                    getterSetter.setStatus(updated_status + "");
+                    getterSetter.setCount(updated_count + "");
+
+                    UserReaction userReaction = new UserReaction(getterSetter,
+                            getSharedPreferences("appData", MODE_PRIVATE)
+                                    .getString("userId", ""), updated_status);
+                    userReaction.execute();
                 });
 
 
-                shareNews.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_SEND);
-                        intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() + "\n" + "" +
-                                "Download the app : https://iamannitian.co.in");
-                        intent.setType("text/plain");
-                        Intent shareIntent = Intent.createChooser(intent, "Share via");
-                        startActivity(shareIntent);
-                    }
+                shareNews.setOnClickListener(v -> {
+                    Intent intent1 = new Intent();
+                    intent1.setAction(Intent.ACTION_SEND);
+                    intent1.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() + "\n" + "" +
+                            "Download the app : https://iamannitian.co.in");
+                    intent1.setType("text/plain");
+                    Intent shareIntent = Intent.createChooser(intent1, "Share via");
+                    startActivity(shareIntent);
                 });
 
                 final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
@@ -140,7 +133,7 @@ public class OnViewPagerClick extends AppCompatActivity
             else
             {
                 setUpToolbarMenu("Story");
-                setMargin(relativeLayoutMargin, 10,0,10,30);
+               // setMargin(relativeLayoutMargin, 10,0,10,30);
                 final StoryGetterSetter getterSetter = (StoryGetterSetter) intent.getSerializableExtra("sampleObject");
                 Glide.with(this)
                         .load(getterSetter.getImageUrl())
@@ -187,7 +180,7 @@ public class OnViewPagerClick extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void setMargin(View view, int left, int top, int right, int bottom)
+   /* public void setMargin(View view, int left, int top, int right, int bottom)
     {
         if(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)
         {
@@ -195,5 +188,5 @@ public class OnViewPagerClick extends AppCompatActivity
             p.setMargins(left,top, right, bottom);
             view.requestLayout();
         }
-    }
+    }*/
 }

@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import me.at.nitsxr.NotificationAdapter;
+import me.at.nitsxr.NotificationGetterSetter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,15 +20,21 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotificationActivity extends AppCompatActivity
 {
     private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private List<NotificationGetterSetter> mList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         setUpToolbarMenu();
+        setData();
     }
 
     private void setUpToolbarMenu()
@@ -56,5 +66,25 @@ public class NotificationActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void setData()
+    {
+        mList = new ArrayList<>();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
+                false));
+        NotificationGetterSetter getterSetter;
 
+        for(int i=0; i<10; i++)
+        {
+            getterSetter = new NotificationGetterSetter();
+            getterSetter.setImageUrl("");
+            getterSetter.setNotification("This is a test notification " +
+                    "please don't mind. Lorem ipsum is a dummy text so please read it");
+            getterSetter.setTime("2 hours ago");
+            mList.add(getterSetter);
+        }
+        NotificationAdapter adapter = new NotificationAdapter(NotificationActivity.this, mList);
+        recyclerView.setAdapter(adapter);
+    }
 }

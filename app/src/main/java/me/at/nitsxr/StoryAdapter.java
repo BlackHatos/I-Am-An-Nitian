@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import in.co.iamannitian.iamannitian.OnViewPagerClick;
 import in.co.iamannitian.iamannitian.R;
@@ -34,7 +37,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StoryViewHolder holder, int position)
+    {
        StoryGetterSetter getterSetter = mList.get(position);
        String name = getterSetter.getName();
        String rank = getterSetter.getRank();
@@ -44,8 +48,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
        String exam = getterSetter.getExam();
        String id = getterSetter.getId();
 
-       holder.storyTitle.setText(name+" | "+exam+" | "+rank+" | "+college+" | "+branch);
-        Glide.with(mContext)
+       //holder.storyTitle.setText(name+" | "+exam+" | "+rank+" | "+college+" | "+branch);
+         Glide.with(mContext)
                 .asBitmap()
                 .load(imageUrl)
                 .into(holder.storyImage);
@@ -70,14 +74,14 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
       {
           public ImageView storyImage;
           public TextView storyTitle;
-          public RelativeLayout clickStory;
+          public CardView clickStory;
 
           StoryViewHolder(View itemView)
           {
               super(itemView);
               storyImage = itemView.findViewById(R.id.storyImage);
               storyTitle = itemView.findViewById(R.id.storyTitle);
-              clickStory = itemView.findViewById(R.id.clickStory);
+              clickStory = itemView.findViewById(R.id.cardView);
           }
       }
 }

@@ -62,7 +62,7 @@ public class EditProfile extends AppCompatActivity {
 
         Glide.with(this)
                 .load(imageUrl)
-                .placeholder(R.drawable.dark_profile)
+                .placeholder(R.drawable.usericon)
                 .fitCenter()
                 .centerInside()
                 .into(profileImage);

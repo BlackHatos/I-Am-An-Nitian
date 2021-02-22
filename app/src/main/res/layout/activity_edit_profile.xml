@@ -78,7 +78,7 @@
                             android:id="@+id/profile_image"
                             android:layout_height="100dp"
                             app:civ_border_width="4dp"
-                            android:src="@drawable/dark_profile"
+                            android:src="@drawable/usericon"
                             app:civ_border_color="@color/textColor1"
                             />
 
