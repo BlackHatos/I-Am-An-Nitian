@@ -8,8 +8,22 @@
     android:layout_height="match_parent"
     tools:context=".College">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        app:elevation="0dp"
+        android:elevation="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
         <androidx.appcompat.widget.Toolbar
-            android:elevation="20dp"
+            android:elevation="0dp"
             android:layout_margin="0dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:contentInsetStart="0dp"
@@ -19,90 +33,260 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
-           />
+            >
 
-        <FrameLayout
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:elevation="4dp"
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <View
             android:layout_width="match_parent"
-            app:layout_collapseMode="parallax"
-            android:layout_height="250dp">
+            android:layout_height="1dp"
+            android:background="@color/elevationShadow"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            />
 
-                <ImageView
-                    android:tint="#92000000"
-                    android:scaleType="centerCrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/nitsri_photo"
+        <androidx.core.widget.NestedScrollView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fitsSystemWindows="true"
+            android:clipToPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_marginTop="22dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/main_head"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textColor="@color/textColor1"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_height="wrap_content"
+                    android:text="Find all colleges and universities\nat one place"
                     />
 
-                <RelativeLayout
+                <EditText
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:layout_below="@id/main_head"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:textColorHint="@color/textColor3"
+                    android:cursorVisible="false"
+                    android:enabled="false"
+                    android:id="@+id/search_college"
+                    android:hint="Search colleges, universities"
+                    android:drawableStart="@drawable/college_search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="40dp"
+                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/search_background"
+                    android:drawablePadding="8dp"
+                    android:textSize="16sp"
+                    android:autofillHints="" />
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical"
+                <RelativeLayout
+                    android:layout_marginTop="28dp"
+                    android:layout_below="@id/search_college"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_marginStart="20dp"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="18sp"
+                        android:textColor="@color/textColor1"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Top Colleges"
+                        android:id="@+id/top"
+                        />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_below="@id/top"
+                        android:id="@+id/topCollegeRecyclerView"
+                        android:layout_marginTop="18dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        />
+
+                    <TextView
+                        android:layout_marginStart="20dp"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="18sp"
+                        android:layout_below="@id/topCollegeRecyclerView"
+                        android:textColor="@color/textColor1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Categories"
+                        android:id="@+id/colleges"
+                        android:layout_marginTop="30dp"
+                        />
+
+                    <RelativeLayout
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_below="@id/colleges"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_marginTop="30dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textColor="@color/textColor4"
-                            android:text="Find all the colleges and universities \nat one place"
-                            android:fontFamily="@font/work_sans_semibold"
-                            android:textSize="15sp"
-                            android:id="@+id/txt"
-                            android:layout_centerHorizontal="true"
-                            />
+                        <LinearLayout
+                            android:id="@+id/card1"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:gravity="center"
+                            android:layout_height="wrap_content">
 
-                        <EditText
-                            android:paddingEnd="20dp"
-                            android:elevation="5dp"
-                            android:layout_below="@id/txt"
-                            android:layout_marginTop="12dp"
-                            android:stateListAnimator="@null"
-                            android:textColorHint="@color/textColor4"
-                            android:textColor="@color/colorAccent"
-                            android:fontFamily="@font/work_sans"
-                            android:inputType="text"
-                            android:id="@+id/search"
-                            android:hint="Search College"
-                            android:drawableStart="@drawable/college_search"
-                            android:layout_width="300dp"
-                            android:layout_height="45dp"
-                            android:paddingHorizontal="15dp"
-                            android:background="@drawable/search_background"
-                            android:drawablePadding="5dp"
-                            android:textSize="18sp"
-                            android:autofillHints=""
-                            />
+                            <androidx.cardview.widget.CardView
+                                app:cardCornerRadius="8dp"
+                                app:cardElevation="0dp"
+                                android:layout_width="140dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_height="100dp">
 
-                        <Button
-                            android:layout_centerHorizontal="true"
-                            android:textAllCaps="false"
-                            android:paddingStart="30dp"
-                            android:paddingEnd="30dp"
-                            android:layout_below="@id/search"
-                            android:background="@drawable/serach_button"
-                            android:textColor="@color/textColor2"
-                            android:elevation="5dp"
-                            android:layout_marginTop="10dp"
-                            android:text="Search"
-                            android:textSize="15sp"
-                            android:fontFamily="@font/work_sans_semibold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="37dp"/>
+                                <ImageView
+                                    android:tint="#45000000"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/agartala_photo"
+                                    />
 
-                    </LinearLayout>
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <TextView
+                                        android:textSize="20sp"
+                                        android:fontFamily="@font/work_sans_semibold"
+                                        android:textColor="@color/textColor1"
+                                        android:layout_gravity="center"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="NITs"
+                                        />
+                                </FrameLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                app:cardElevation="0dp"
+                                app:cardCornerRadius="8dp"
+                                android:layout_width="140dp"
+                                android:layout_height="100dp">
+
+                                <ImageView
+                                    android:tint="#45000000"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/nittrichy"
+                                    />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <TextView
+                                        android:textSize="20sp"
+                                        android:fontFamily="@font/work_sans_semibold"
+                                        android:textColor="@color/textColor1"
+                                        android:layout_gravity="center"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="IITs"
+                                        />
+                                </FrameLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_marginTop="20dp"
+                            android:id="@+id/card2"
+                            android:layout_below="@id/card1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <androidx.cardview.widget.CardView
+                                app:cardCornerRadius="8dp"
+                                app:cardElevation="0dp"
+                                android:layout_width="140dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_height="100dp">
+                                <ImageView
+                                    android:tint="#45000000"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/jamshedpur_photo"
+                                    />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <TextView
+                                        android:textSize="20sp"
+                                        android:fontFamily="@font/work_sans_semibold"
+                                        android:textColor="@color/textColor1"
+                                        android:layout_gravity="center"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="IIITs"
+                                        />
+                                </FrameLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                app:cardElevation="0dp"
+                                app:cardCornerRadius="8dp"
+                                android:layout_width="140dp"
+                                android:layout_height="100dp">
+
+                                <ImageView
+                                    android:tint="#45000000"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/nitsri_photo"
+                                    />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <TextView
+                                        android:textSize="20sp"
+                                        android:fontFamily="@font/work_sans_semibold"
+                                        android:textColor="@color/textColor1"
+                                        android:layout_gravity="center"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="GFITs"
+                                        />
+                                </FrameLayout>
+
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </RelativeLayout>
                 </RelativeLayout>
-        </FrameLayout>
 
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

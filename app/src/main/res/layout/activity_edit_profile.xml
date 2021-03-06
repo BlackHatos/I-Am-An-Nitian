@@ -36,7 +36,9 @@
                 android:background="@color/colorPrimaryDark"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                />
+                >
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -60,13 +62,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <RelativeLayout
-                    android:background="@color/cardColor"
-                    android:id="@+id/layout1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginStart="10dp"
+                android:id="@+id/profile_picture"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/textColor4"
+                android:fontFamily="@font/work_sans_semibold"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile Picture"
+                />
 
                     <FrameLayout
+                        android:layout_below="@id/profile_picture"
                         android:layout_marginTop="18dp"
                         android:layout_centerHorizontal="true"
                         android:id="@+id/profile_image_layout"
@@ -74,337 +83,319 @@
                         android:layout_height="wrap_content">
 
                         <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="100dp"
+                            android:layout_width="87dp"
                             android:id="@+id/profile_image"
-                            android:layout_height="100dp"
+                            android:layout_height="87dp"
                             app:civ_border_width="4dp"
                             android:src="@drawable/usericon"
                             app:civ_border_color="@color/textColor1"
                             />
 
-                        <View
-                            android:layout_marginBottom="6dp"
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/select_image"
+                            android:onClick="selectImage"
+                            android:layout_marginTop="1dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:layout_marginRight="6dp"
-                            android:layout_width="20dp"
+                            android:layout_width="24dp"
                             android:layout_gravity="bottom|right"
-                            android:layout_height="20dp"
-                            android:background="@drawable/yellow_dot"
+                            android:layout_height="24dp"
+                            android:background="@drawable/black_dot"
+                            android:src="@drawable/ic_camera_alt_black_24dp"
                             />
-
                     </FrameLayout>
 
-                    <TextView
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor1"
-                        android:id="@+id/user_name"
-                        android:textSize="20sp"
-                        android:layout_marginTop="8dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/profile_image_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Shubham Maurya"
-                        android:fontFamily="@font/work_sans_semibold"
-                        />
 
-                    <TextView
-                        android:maxLines="1"
-                        android:layout_marginTop="4dp"
-                        android:textAlignment="center"
-                        android:textColor="#BDBCBC"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/user_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:id="@+id/user_email"
-                        android:fontFamily="@font/work_sans"
-                        android:text="mauryask1589@gmail.com"
-                        />
+                <TextView
+                    android:textColor="@color/textColor4"
+                    android:id="@+id/user_details"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="18sp"
+                    android:layout_below="@id/profile_image_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Details"
+                    android:layout_marginStart="10dp"
+                    />
 
-                    <Button
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_width="wrap_content"
-                        android:paddingEnd="15dp"
-                        android:paddingStart="15dp"
-                        android:background="@drawable/edit_profile_button"
-                        android:textColor="@color/colorAccent"
-                        android:text="Edit Profile"
-                        android:textAllCaps="false"
-                        android:layout_height="35dp"
-                        android:id="@+id/edit_profile_button"
-                        android:layout_below="@id/user_email"
-                        />
-                </RelativeLayout>
-
-                <!-- ========= Home Layout ========== -->
-                <LinearLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="15dp"
-                    android:id="@+id/home_layout"
-                    android:layout_below="@id/layout1"
-                    android:orientation="vertical"
+                <RelativeLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/user_details"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/name"
+                        android:text="Name"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/name"
+                        android:inputType="text"
+                        android:id="@+id/user_name"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_name"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/email"
+                        android:text="Email"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/email"
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/user_email"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_email"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/phone"
+                        android:text="Phone"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/phone"
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/user_phone"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_phone"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/state"
+                        android:text="State"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/state"
+                        android:inputType="text"
+                        android:id="@+id/user_state"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_state"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/college"
+                        android:text="College"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/college"
+                        android:inputType="text"
+                        android:id="@+id/user_college"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_college"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/degree"
+                        android:text="Degree"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/degree"
+                        android:inputType="text"
+                        android:id="@+id/user_degree"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/user_degree"
+                        android:layout_marginStart="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/branch"
+                        android:text="Branch"
+                        android:fontFamily="@font/work_sans_semibold"
+                        android:textSize="13sp"
+                        android:textColor="@color/textColor4"
+                        />
+
+                    <EditText
+                        android:layout_below="@id/branch"
+                        android:inputType="text"
+                        android:id="@+id/user_branch"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@drawable/profile_edit_text_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="@color/textColor5"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
+
                     <LinearLayout
+                        android:id="@+id/layoutx"
+                        android:layout_marginBottom="25dp"
+                        android:layout_below="@id/user_branch"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/home"
-                            />
+
                         <LinearLayout
-                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="10dp"
                             android:orientation="vertical"
-                            android:layout_weight="0.8"
-                            android:layout_width="match_parent"
+                            android:layout_weight="0.5"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/start"
+                                android:text="Start Year"
+                                android:fontFamily="@font/work_sans_semibold"
+                                android:textSize="13sp"
+                                android:textColor="@color/textColor4"
+                                />
 
                             <EditText
                                 android:inputType="numberDecimal"
-                                android:id="@+id/user_phone"
+                                android:id="@+id/start_year"
+                                android:maxLength="4"
                                 android:layout_marginTop="10dp"
-                                android:maxLength="10"
-                                android:paddingStart="16dp"
+                                android:paddingStart="10dp"
                                 android:paddingEnd="10dp"
-                                android:background="@drawable/complete_profile_shape"
+                                android:background="@drawable/profile_edit_text_shape"
                                 android:layout_width="match_parent"
-                                android:layout_height="45dp"
-                                android:hint="@string/your_phone"
-                                android:textColorHint="@color/hintColor"
-                                android:textColor="@color/colorAccent"
+                                android:layout_height="40dp"
+                                android:textColor="@color/textColor5"
                                 android:textSize="16sp"
                                 android:autofillHints="" />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@color/elevationShadow"
-                                />
                         </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
 
-                <!-- ========= College Layout ========== -->
-                <LinearLayout
-                    android:layout_marginBottom="15dp"
-                    android:id="@+id/college_layout"
-                    android:layout_below="@id/home_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_school_black_24dp"
-                            />
                         <LinearLayout
-                            android:layout_marginStart="20dp"
                             android:orientation="vertical"
-                            android:layout_weight="0.8"
-                            android:layout_width="match_parent"
+                            android:layout_weight="0.5"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
+
                             <TextView
-                                android:textColor="#BDBCBC"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginStart="2dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="College"
-                                android:textSize="16sp"
+                                android:id="@+id/end"
+                                android:text="End Year"
                                 android:fontFamily="@font/work_sans_semibold"
+                                android:textSize="13sp"
+                                android:textColor="@color/textColor4"
                                 />
-                            <TextView
-                                android:id="@+id/college_name"
-                                android:textColor="@color/textColor1"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/work_sans"
-                                android:layout_marginTop="5dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="National Institute Of Technology Srinagar"
-                                />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
+
+                            <EditText
+                                android:inputType="numberDecimal"
+                                android:id="@+id/end_year"
+                                android:maxLength="4"
                                 android:layout_marginTop="10dp"
-                                android:background="@color/elevationShadow"
-                                />
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:background="@drawable/profile_edit_text_shape"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:textColor="@color/textColor5"
+                                android:textSize="16sp"
+                                android:autofillHints="" />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-
-                <!-- ========= Degree Layout ========== -->
-                <LinearLayout
-                    android:layout_marginBottom="15dp"
-                    android:id="@+id/degree_layout"
-                    android:layout_below="@id/college_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/user_degree_icx"
-                            />
-                        <LinearLayout
-                            android:layout_marginStart="20dp"
-                            android:orientation="vertical"
-                            android:layout_weight="0.8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:textColor="#BDBCBC"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Degree"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/work_sans_semibold"
-                                />
-                            <TextView
-                                android:id="@+id/degree_name"
-                                android:textColor="@color/textColor1"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/work_sans"
-                                android:layout_marginTop="5dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Bachelors (2017-2021)"
-                                />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@color/elevationShadow"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <!-- ========= Branch Layout ========== -->
-                <LinearLayout
-                    android:layout_marginBottom="15dp"
-                    android:id="@+id/branch_layout"
-                    android:layout_below="@id/degree_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            />
-                        <LinearLayout
-                            android:layout_marginStart="20dp"
-                            android:orientation="vertical"
-                            android:layout_weight="0.8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:textColor="#BDBCBC"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Branch"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/work_sans_semibold"
-                                />
-                            <TextView
-                                android:id="@+id/branch_name"
-                                android:textColor="@color/textColor1"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/work_sans"
-                                android:layout_marginTop="5dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Information Technology"
-                                />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@color/elevationShadow"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <!-- ========= Phone Layout ========== -->
-                <LinearLayout
-                    android:layout_marginBottom="15dp"
-                    android:id="@+id/phone_layout"
-                    android:layout_below="@id/branch_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            />
-                        <LinearLayout
-                            android:layout_marginStart="20dp"
-                            android:orientation="vertical"
-                            android:layout_weight="0.8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:textColor="#BDBCBC"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Phone"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/work_sans_semibold"
-                                />
-                            <TextView
-                                android:id="@+id/phone_number"
-                                android:textColor="@color/textColor1"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/work_sans"
-                                android:layout_marginTop="5dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8130512823"
-                                />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@color/elevationShadow"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-
+                </RelativeLayout>
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

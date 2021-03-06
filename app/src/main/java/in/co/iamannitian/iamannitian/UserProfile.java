@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -71,6 +73,11 @@ public class UserProfile extends AppCompatActivity
                 .into(profileImage);
 
         setUpToolbarMenu();
+    }
+
+    public void editProfile(View view)
+    {
+        startActivity(new Intent(UserProfile.this, EditProfile.class));
     }
 
     private void setUpToolbarMenu()

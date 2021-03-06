@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:clipToPadding="false"
+    android:padding="5dp">
+
+    <Button
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="13dp"
+        android:textAllCaps="false"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:background="@drawable/otp_button_shape"
+        android:textColor="@color/textColor2"
+        android:elevation="0dp"
+        android:id="@+id/saveButton"
+        android:layout_marginTop="8dp"
+        android:text="Save"
+        android:textSize="15sp"
+        android:fontFamily="@font/work_sans_semibold"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"/>
+
+</FrameLayout>

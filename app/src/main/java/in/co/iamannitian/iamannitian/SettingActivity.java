@@ -18,50 +18,71 @@ import android.widget.TextView;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private SwitchCompat  notificationSwitch;
-    private ImageView notificationLogo;
+    private SwitchCompat  notificationSwitch, darkModeSwitch;
+    private ImageView notificationLogo, darkModeLogo;
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
         notificationSwitch = findViewById(R.id.turnNotification);
         notificationLogo = findViewById(R.id.logo2);
-        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-        String isCheck = sharedPreferences.getString("activeNotification","");
+        darkModeSwitch = findViewById(R.id.darKMode);
+        darkModeLogo = findViewById(R.id.logo1);
 
-        if(isCheck.equals("1"))
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        String isNotifyCheck = sharedPreferences.getString("activeNotification","");
+        String isDarkCheck = sharedPreferences.getString("activeNotification","");
+
+        if(isNotifyCheck.equals("1"))
             notificationSwitch.setChecked(true);
 
+        if(isDarkCheck.equals("1"))
+           darkModeSwitch.setChecked(true);
 
-        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("activeNotification","1");
-                    editor.apply();
-                    notificationLogo.setImageResource(R.drawable.ic_notifications_active);
-                }
-                else
-                {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("activeNotification","0");
-                    editor.apply();
-                    notificationLogo.setImageResource(R.drawable.ic_notifications_off);
-                }
+        notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("activeNotification","1");
+                editor.apply();
+                notificationLogo.setImageResource(R.drawable.ic_notifications_active);
+            }
+            else
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("activeNotification","0");
+                editor.apply();
+                notificationLogo.setImageResource(R.drawable.ic_notifications_off);
+            }
+        });
+
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("activeDarkMode","1");
+                editor.apply();
+                darkModeLogo.setImageResource(R.drawable.ic_brightness_4_black_24dp);
+            }
+            else
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("activeDarkMode","0");
+                editor.apply();
+                darkModeLogo.setImageResource(R.drawable.ic_brightness_7_black_24dp);
             }
         });
 
         setUpToolbarMenu();
     }
 
-    private void setUpToolbarMenu() {
+    private void setUpToolbarMenu()
+    {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Settings");
         setSupportActionBar(toolbar);
@@ -73,7 +94,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.other_menu, menu);
         return true;
@@ -88,6 +110,4 @@ public class SettingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

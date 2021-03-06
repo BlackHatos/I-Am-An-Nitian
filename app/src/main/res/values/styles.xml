@@ -64,6 +64,10 @@
         <item name="colorAccent">@color/textColor1</item>
     </style>
 
+    <style name="EditProfileStyle" parent="AppTheme">
+        <item name="colorAccent">@color/textColor4</item>
+    </style>
+
     <style name="SearchViewStyle" parent="AppTheme">
            <item name="colorAccent">@color/textColor1</item>
     </style>
@@ -81,5 +85,12 @@
     <style name="ProfileStyle" parent="AppTheme">
         <item name="colorPrimaryDark">@color/cardColor</item>
     </style>
+
+    <style name="ProgressDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/textColor3</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
    </resources>
 

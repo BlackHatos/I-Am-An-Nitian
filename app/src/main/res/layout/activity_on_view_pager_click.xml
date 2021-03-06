@@ -73,7 +73,7 @@
                 app:cardPreventCornerOverlap="false"
                 android:id="@+id/mainCard"
                 app:cardElevation="0dp"
-                app:cardCornerRadius="4dp"
+                app:cardCornerRadius="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

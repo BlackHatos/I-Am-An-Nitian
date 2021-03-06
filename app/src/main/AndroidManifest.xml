@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="in.co.iamannitian.iamannitian">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name="me.at.nitsxr.App"
         android:allowBackup="true"
@@ -13,16 +18,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity android:name=".College"
             android:parentActivityName=".MainActivity"
             >
+
         </activity>
         <activity
             android:name=".ContactUs"
             android:parentActivityName=".ContactUs" />
+
         <activity
             android:name=".EditProfile"
-            android:parentActivityName=".UserProfile" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/EditProfileStyle"
+            android:parentActivityName=".UserProfile">
+
+        </activity>
+
         <activity
             android:name=".UserProfile"
             android:parentActivityName=".MainActivity"
@@ -120,9 +133,5 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

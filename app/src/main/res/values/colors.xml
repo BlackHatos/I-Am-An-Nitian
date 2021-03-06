@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#303952</color>
-    <!--<color name="colorPrimaryDark">#303952</color>-->
     <color name="colorPrimaryDark">#232323</color>
-   <!-- <color name="colorAccent">#f3a683</color> -->
+    <color name="colorPrimary">@color/colorPrimaryDark</color>
     <color name="colorAccent">#E3A432</color>
     <color name="white">#FFFFFF</color>
-    <!--<color name="cardColor">#596275</color>-->
     <color name="cardColor">#434343</color>
-    <!--<color name="textColor1">#d2dae2</color>-->
-    <color name="textColor1">#ffffff</color>
-    <color name="textColor2">#373636</color>
     <color name="hintColor">#B1A3A2A2</color>
     <color name="elevationShadow">#49596275</color>
     <color name="navigationHorizontalLineColor">@color/elevationShadow</color>
     <color name="navigation_background">@color/colorPrimary</color>
-    <color name="ripple_colorx">#29A3A2A2</color>
+    <color name="ripple_colorx">#5FA3A2A2</color>
+    <color name="profileColorPrimaryDark">@color/colorAccent</color>
+    <color name="textColor1">#ffffff</color>
+    <color name="textColor2">#373636</color>
     <color name="textColor3">#474747</color>
     <color name="textColor4">#CFCFCF</color>
-    <color name="profileColorPrimaryDark">@color/colorAccent</color>
+    <color name="textColor5">#AFAFAF</color>
   </resources>

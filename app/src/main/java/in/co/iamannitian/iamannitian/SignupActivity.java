@@ -57,7 +57,7 @@ public class SignupActivity extends AppCompatActivity
         password = findViewById(R.id.password);
         click_to_sign_up = findViewById(R.id.click_to_sign_up);
         go_to_login = findViewById(R.id.go_to_login);
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
         setUpToolbarMenu();

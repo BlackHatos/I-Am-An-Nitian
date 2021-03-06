@@ -193,50 +193,41 @@ public class CompleteProfile extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
        final String url = "https://app.thenextsem.com/app/complete_profile.php";
+        //error
         StringRequest sr = new StringRequest(1, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                response -> {
+                    String response_array[] = response.split(",");
 
-                        Log.d("response: ", response);
+                    if(response_array[0].equals("1"))
+                    {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("userPhone",response_array[1]);
+                        editor.putString("userState", response_array[2]);
+                        editor.putString("userCollege",response_array[3]);
+                        editor.putString("userDegree",response_array[4]);
+                        editor.putString("userBranch",response_array[5]);
+                        editor.putString("userStartYear",response_array[6]);
+                        editor.putString("userEndYear",response_array[7]);
+                        editor.apply();
 
-                        String response_array[] = response.split(",");
-
-                        if(response_array[0].equals("1"))
-                        {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("userPhone",response_array[1]);
-                            editor.putString("userState", response_array[2]);
-                            editor.putString("userCollege",response_array[3]);
-                            editor.putString("userDegree",response_array[4]);
-                            editor.putString("userBranch",response_array[5]);
-                            editor.putString("userStartYear",response_array[6]);
-                            editor.putString("userEndYear",response_array[7]);
-                            editor.apply();
-
-                            progressDialog.dismiss();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }
-                        else if(response_array[0].equals("0"))
-                        {
-                            progressDialog.dismiss();
-                            //===> on dialog dismiss back to interaction mode
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_SHORT).show();
-                        }
-
+                        progressDialog.dismiss();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
-                }, new Response.ErrorListener() { //error
+                    else if(response_array[0].equals("0"))
+                    {
+                        progressDialog.dismiss();
+                        //===> on dialog dismiss back to interaction mode
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_SHORT).show();
+                    }
+
+                }, error -> {
+                    progressDialog.dismiss();
+                    //===> on dialog dismiss back to interaction mode
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }){
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                progressDialog.dismiss();
-                //===> on dialog dismiss back to interaction mode
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        }){
-            @Override
-            public Map<String, String> getParams() throws AuthFailureError {
+            public Map<String, String> getParams() {
                 Map<String, String> map =  new HashMap<>();
                 map.put("idKey", sharedPreferences.getString("userId", ""));
                 map.put("phoneKey", phone);

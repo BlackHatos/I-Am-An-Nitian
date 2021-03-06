@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="5dp"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="8dp"
+        android:layout_width="115dp"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/collegeImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/agartala_photo"
+            android:scaleType="centerCrop"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:padding="3dp"
+                android:background="@drawable/top_college_bottom_card"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/card2"
+                android:layout_width="match_parent"
+                android:layout_height="28dp">
+
+                <TextView
+                    android:textAlignment="center"
+                    android:justificationMode="inter_word"
+                    android:id="@+id/collegeName"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:textSize="12sp"
+                    android:textColor="#434343"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MANIT Bhopal"
+                    />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

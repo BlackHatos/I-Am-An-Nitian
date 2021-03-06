@@ -21,10 +21,10 @@
         <ImageView
             android:layout_gravity="center"
             android:layout_weight="0.2"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:paddingEnd="4dp"
-            android:src="@drawable/satr3"
+            android:src="@drawable/light3"
             />
 
         <LinearLayout
@@ -68,12 +68,8 @@
                 android:textColor="@color/textColor1"
                 android:textSize="15sp" />
 
-            <RelativeLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
                 <TextView
+                    android:layout_marginTop="6dp"
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,20 +78,6 @@
                     android:textSize="12sp"
                     android:textColor="@color/textColor4"
                     />
-
-               <de.hdodenhof.circleimageview.CircleImageView
-                   android:id="@+id/remove"
-                   android:scaleType="centerCrop"
-                   android:clickable="true"
-                   android:foreground="?attr/selectableItemBackground"
-                   android:focusable="true"
-                   android:layout_alignParentEnd="true"
-                   android:layout_width="21dp"
-                   android:layout_height="21dp"
-                   android:src="@drawable/ic_delete_black_24dp"
-                   />
-
-            </RelativeLayout>
 
         </LinearLayout>
     </LinearLayout>

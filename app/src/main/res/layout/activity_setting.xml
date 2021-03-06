@@ -35,7 +35,7 @@
         />
 
     <RelativeLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:paddingStart="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -46,22 +46,70 @@
             android:layout_centerVertical="true"
             android:id="@+id/logo2"
             android:layout_gravity="center"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_notifications_active"
             />
 
         <TextView
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/logo2"
             android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@id/logo2"
+            android:fontFamily="@font/roboto"
+            android:paddingStart="12dp"
+            android:text="Notification"
+            android:textColor="@color/textColor1"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:theme="@style/SwitchStyle"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center|right"
+            android:layout_width="wrap_content"
+            android:id="@+id/turnNotification"
+            android:layout_height="22dp"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#23596275"
+        />
+
+    <RelativeLayout
+        android:layout_marginTop="4dp"
+        android:paddingStart="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:contentDescription="@string/cnt_desp"
+            android:layout_centerVertical="true"
+            android:id="@+id/logo1"
+            android:layout_gravity="center"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_brightness_7_black_24dp"
+            />
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/logo1"
+            android:id="@+id/text1"
             android:paddingStart="12dp"
             android:textColor="@color/textColor1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notification"
+            android:text="Nigth Mode"
             android:fontFamily="@font/roboto"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_gravity="center"
             />
 
@@ -72,8 +120,15 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center|right"
             android:layout_width="wrap_content"
-            android:id="@+id/turnNotification"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/darKMode"
+            android:layout_height="22dp"/>
     </RelativeLayout>
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#23596275"
+        />
 
 </LinearLayout>

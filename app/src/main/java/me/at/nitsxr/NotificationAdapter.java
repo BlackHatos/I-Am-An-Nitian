@@ -37,16 +37,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         String notify_x = getterSetter.getNotification();
         String url = getterSetter.getImageUrl();
 
-        holder.remove.setOnClickListener(v -> {
-            Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show();
-        });
-
         holder.time.setText(time_x);
         holder.notification.setText(notify_x);
 
         Glide.with(mContext)
                 .asBitmap()
-                .placeholder(R.drawable.amir)
+                .placeholder(R.drawable.nitsri_photo)
                 .load(url)
                 .into(holder.notifyImage);
     }
@@ -59,13 +55,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotificationViewHolder extends RecyclerView.ViewHolder
     {
         public TextView time, notification;
-        public ImageView notifyImage, remove;
+        public ImageView notifyImage;
         NotificationViewHolder(View itemView)
         {
             super(itemView);
             time = itemView.findViewById(R.id.time);
             notification = itemView.findViewById(R.id.notification);
-            remove = itemView.findViewById(R.id.remove);
             notifyImage = itemView.findViewById(R.id.notifyImage);
         }
     }
