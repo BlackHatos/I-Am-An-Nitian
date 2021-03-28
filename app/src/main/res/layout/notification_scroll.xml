@@ -44,7 +44,7 @@
                     android:layout_width="25dp"
                     android:id="@+id/notifyImage"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/amir"
+                    android:src="@drawable/user"
                     android:layout_height="25dp"/>
 
                 <TextView
