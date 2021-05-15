@@ -66,22 +66,18 @@
         android:layout_height="50dp"
 		android:layout_marginTop="10dp"
 		>
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/fb_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-       <Button
+
+     <Button
             android:textAllCaps="false"
-            android:onClick="onClick"
 	        android:id="@+id/fb"
             android:fontFamily="@font/work_sans_semibold"
             android:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-           android:layout_marginStart="5dp"
-           android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:textSize="16sp"
+            android:onClick="onClick"
             android:background="@drawable/mybutton2"
             android:drawableEnd="@drawable/fbicon_small"
             android:text="@string/facebook"
@@ -94,9 +90,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             >
-            <Button
+           <Button
                 android:id="@+id/signInGoogle"
-                android:onClick="signIn"
                 android:textAllCaps="false"
                 android:fontFamily="@font/work_sans_semibold"
                 android:elevation="0dp"
@@ -109,13 +104,15 @@
                 android:textColor="@color/textColor2"
                 android:textSize="16sp"
                 android:drawableEnd="@drawable/googleicon_small"/>
+
             <com.google.android.gms.common.SignInButton
                  android:visibility="gone"
                 android:layout_marginTop="10dp"
-                android:id="@+id/sign_in_button"
-                android:layout_width="match_parent"
+                android:id="@+id/google_sign_in_button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </FrameLayout>
+
     </LinearLayout>
 </RelativeLayout>

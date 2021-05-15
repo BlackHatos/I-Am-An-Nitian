@@ -109,7 +109,7 @@ public class SuccessStory extends AppCompatActivity
 
     public void getToppers()
     {
-        final String url = "https://app.thenextsem.com/app/get_toppers.php";
+        final String url = "https://app.iamannitian.com/app/get-toppers.php";
 
         //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,

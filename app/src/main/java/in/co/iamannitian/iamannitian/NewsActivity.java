@@ -248,7 +248,7 @@ public class NewsActivity extends AppCompatActivity
     private void getData()
     {
         mList.clear();
-        final String url = "https://app.thenextsem.com/app/get_news.php";
+        final String url = "https://app.iamannitian.com/app/get-news.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
@@ -261,7 +261,7 @@ public class NewsActivity extends AppCompatActivity
                             try {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                     newsGetterSetter.setImageUrl
-                                            ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
+                                            ("https://app.iamannitian.com/news-images/" + object.getString("image1"));
                                     newsGetterSetter.setNewsDescp(object.getString("descp"));
                                     newsGetterSetter.setNewsTitle(object.getString("title"));
                                     newsGetterSetter.setNewsId(object.getString("id"));
@@ -288,7 +288,9 @@ public class NewsActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }, error -> error.printStackTrace()){
+                }, error -> {
+            error.printStackTrace();
+        }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError
             {

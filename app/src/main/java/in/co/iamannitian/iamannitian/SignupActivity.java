@@ -117,7 +117,7 @@ public class SignupActivity extends AppCompatActivity
         //===> disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        final String url = "https://app.thenextsem.com/php_mailer/send_otp.php";
+        final String url = "https://app.iamannitian.com/php-mailer/send-otp.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
@@ -198,7 +198,7 @@ public class SignupActivity extends AppCompatActivity
     void finalSignup(final String user_name, final String user_email,
                      final  String user_password, final String otp, final String token, final Button send_data)
     {
-        final String url = "https://app.thenextsem.com/app/signup.php";
+        final String url = "https://app.iamannitian.com/app/app-signup.php";
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 

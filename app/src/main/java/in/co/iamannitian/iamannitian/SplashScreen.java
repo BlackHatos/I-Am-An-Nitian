@@ -9,8 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -27,25 +27,26 @@ public class SplashScreen extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-          super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         //======>lets take advantage of the notch
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
         setContentView(R.layout.activity_splash_screen);
 
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-        final String user_id = sharedPreferences.getString("userId", "");
+        String id = sharedPreferences.getString("userId", "");
         bottom_animation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         splash_msg = findViewById(R.id.splash_msg);
         splash_msg.setAnimation(bottom_animation);
 
         new Handler().postDelayed(() -> {
-            if(!user_id.equals(""))
-                 intent= new Intent(getApplicationContext(), MainActivity.class);
+            if(!id.equals(""))
+                 intent= new Intent(SplashScreen.this, MainActivity.class);
             else
-                intent= new Intent(getApplicationContext(), LoginOrSignUpActivity.class);
+                intent= new Intent(SplashScreen.this, LoginOrSignUpActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();

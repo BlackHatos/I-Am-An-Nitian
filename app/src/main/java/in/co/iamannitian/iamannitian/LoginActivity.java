@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity
         //====> disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        final String url = "https://app.thenextsem.com/app/login.php";
+        final String url = "https://app.iamannitian.com/app/app-login.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {

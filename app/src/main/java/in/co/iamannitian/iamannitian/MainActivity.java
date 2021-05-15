@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         sliderImg.clear();
         List<NewsGetterSetter> mList2 = new ArrayList<>();
-        final String url = "https://app.thenextsem.com/app/get_news.php";
+        final String url = "https://app.iamannitian.com/app/get-news.php";
         //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 url, null, response -> {
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         try {
                             JSONObject object = response.getJSONObject(i);
                             slideUtils.setImageUrl
-                                    ("https://app.thenextsem.com/news_images/" + object.getString("image1"));
+                                    ("https://app.iamannitian.com/news_images/" + object.getString("image1"));
                             slideUtils.setNewsDescp(object.getString("descp"));
                             slideUtils.setNewsTitle(object.getString("title"));
                             slideUtils.setNewsId(object.getString("id"));
