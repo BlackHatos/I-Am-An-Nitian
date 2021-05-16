@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,22 +17,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.installations.FirebaseInstallations;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SignupActivity extends AppCompatActivity
 {
@@ -49,7 +53,7 @@ public class SignupActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        //=====> getting token of users device from firebase
+        // Getting token of users device from firebase
         getTokenFromFirebase();
 
         username = findViewById(R.id.username);
@@ -57,23 +61,23 @@ public class SignupActivity extends AppCompatActivity
         password = findViewById(R.id.password);
         click_to_sign_up = findViewById(R.id.click_to_sign_up);
         go_to_login = findViewById(R.id.go_to_login);
+
         progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
         setUpToolbarMenu();
 
         click_to_sign_up.setOnClickListener(v -> {
-
             username.setError(null);
             email.setError(null);
             password.setError(null);
 
-            //===> getting credentials on click the sign up button
+            // Getting credentials on click the sign up button
             String user_name = username.getText().toString().trim();
             String user_email = email.getText().toString().trim().replaceAll("\\s+","");
             String user_password = password.getText().toString().trim().replaceAll("\\s+","");
 
-            //===> checking user name
+            // Checking user name
             if(user_name.isEmpty())
             {
                 username.requestFocus();
@@ -81,7 +85,7 @@ public class SignupActivity extends AppCompatActivity
                 return;
             }
 
-            //===> checking user email
+            // Checking user email
             if(user_email.isEmpty())
             {
                 email.requestFocus();
@@ -89,18 +93,19 @@ public class SignupActivity extends AppCompatActivity
                 return;
             }
 
-            //===> checking user password
+            // Checking user password
             if(user_password.isEmpty())
             {
                 password.requestFocus();
                 password.setError("required");
                 return;
             }
-            //===> if every thing is ok then proceed to sign up
+
+            // Ok, Proceed to sign up
             proceedToSignup(user_name, user_email , user_password);
         });
 
-        //===> go to login activity
+        // Go to login activity
         go_to_login.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
@@ -111,34 +116,49 @@ public class SignupActivity extends AppCompatActivity
 
     private void proceedToSignup(final String user_name,final String user_email,final String user_password)
     {
-        //===> show progress bar first
+        // Show progress bar first
         progressDialog.setMessage("Processing...");
         progressDialog.show();
-        //===> disable user interaction when progress dialog appears
+
+        // Disable user interaction
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
         final String url = "https://app.iamannitian.com/php-mailer/send-otp.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
-                    String response_array[] = response.split(",");
-                    if(response_array[0].equals("1"))
+
+                    try
                     {
-                        //===> dismiss the progress dialog when sign up successful
-                        progressDialog.dismiss();
-                        showBottomSheet();
+                        JSONObject object = new JSONObject(response);
+                        String status = object.getString("status");
+                        String message = object.getString("message");
+
+                        if(status.equals("0"))
+                        {
+                            progressDialog.dismiss();
+                            // Enable user interaction
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(getApplicationContext(),message, Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            // Dismiss progress dialog
+                            progressDialog.dismiss();
+                            showBottomSheet();
+                        }
+
                     }
-                    else if(response_array[0].equals("0"))
+                    catch (JSONException e)
                     {
                         progressDialog.dismiss();
-                        //===> on dialog dismiss back to interaction mode
+                        // Enable user interaction
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
                     }
 
                 }, error -> {
                     progressDialog.dismiss();
-                    //===> on dialog dismiss back to interaction mode
+                    // Enable user interaction
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }){
             @Override
@@ -169,29 +189,34 @@ public class SignupActivity extends AppCompatActivity
         ImageView closeBottomSheet = bottomSheetView.findViewById(R.id.closeBottomSheet);
         final EditText enterOtp = bottomSheetView.findViewById(R.id.enterOtp);
 
-        //===> send data with otp to verify an insertion
+        // Send data with otp to verify if otp exists
+
         send_data.setOnClickListener(v -> {
 
             send_data.setText("Processing...");
-            //===> getting credentials on click the sign up button
+            // Getting credentials on click the sign up button
             String user_name = username.getText().toString().trim();
             String user_email = email.getText().toString().trim().replaceAll("\\s+","");
             String user_password = password.getText().toString().trim().replaceAll("\\s+","");
             String otp = enterOtp.getText().toString().trim();
             enterOtp.setError(null);
+
+            // Check if otp is empty
+
             if(otp.isEmpty())
             {
                 enterOtp.requestFocus();
                 enterOtp.setError("required");
+                send_data.setText("Continue");
                 return;
             }
 
+            // Proceed to final registration
             finalSignup(user_name, user_email, user_password,otp,token,send_data);
         });
 
         closeBottomSheet.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
-            send_data.setText("Continue");
         });
     }
 
@@ -201,33 +226,61 @@ public class SignupActivity extends AppCompatActivity
         final String url = "https://app.iamannitian.com/app/app-signup.php";
         StringRequest sr = new StringRequest(1, url,
                 response -> {
-
-                    String response_array[] = response.split(",");
-
-                    if(response_array[0].equals("1"))
+                    try
                     {
-                        SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userId",response_array[1]);
-                        editor.putString("userName", response_array[2]);
-                        editor.putString("userEmail",response_array[3]);
-                        editor.putString("activeNotification","1");
-                        editor.apply();
+                        JSONObject object = new JSONObject(response);
+                        String status = object.getString("status");
+                        if(status.equals("0"))
+                        {
+                            send_data.setText("Continue");
+                            Toast.makeText(getApplicationContext(),object.getString("message"),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String phone = object.getString("phone");
+                            String state = object.getString("state");
+                            String college = object.getString("college");
+                            String degree = object.getString("degree");
+                            String branch = object.getString("branch");
+                            String start = object.getString("start_year");
+                            String end = object.getString("end_year");
+                            String pic_url = object.getString("pic_url");
 
-                        Intent intent = new Intent(SignupActivity.this, CompleteProfile.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                        finish();
+
+                            SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userId", id);
+                            editor.putString("userName", name);
+                            editor.putString("userEmail", email);
+                            editor.putString("userPicUrl", pic_url);
+                            editor.putString("userPhone", phone);
+                            editor.putString("userState", state);
+                            editor.putString("userCollege",college);
+                            editor.putString("userDegree", degree);
+                            editor.putString("userBranch", branch);
+                            editor.putString("userStartYear", start);
+                            editor.putString("userEndYear", end);
+                            editor.apply();
+
+                            Intent intent  = new Intent(SignupActivity.this,CompleteProfile.class);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                            finish();
+                        }
                     }
-                    else if(response_array[0].equals("0"))
+                    catch (JSONException e)
                     {
                         send_data.setText("Continue");
-                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
 
                 }, error -> {
                     error.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"Unable to sign up", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"signup failed", Toast.LENGTH_LONG).show();
                     send_data.setText("Continue");
                 }){
             @Override
@@ -237,7 +290,6 @@ public class SignupActivity extends AppCompatActivity
                 map.put("emailKey", user_email);
                 map.put("passwordKey", user_password);
                 map.put("Token",token);
-                map.put("sourceKey", "app");
                 map.put("codeKey", "J6T32A-Pubs7/=H~".trim());
                 map.put("otpKey", otp);
                 return map;
@@ -248,21 +300,13 @@ public class SignupActivity extends AppCompatActivity
         rq.add(sr);
     }
 
-    //====> getting user access token from firebase
+    // Getting user access token from firebase
     private void getTokenFromFirebase()
     {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task)
-            {
-                if (task.isSuccessful())
-                {
-                    token = task.getResult().getToken();
-                }
-            }
-        });
+          FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener
+                  (instanceIdResult -> token = instanceIdResult.getToken());
     }
+
 
     private void setUpToolbarMenu()
     {

@@ -89,6 +89,7 @@
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -104,6 +105,7 @@
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">

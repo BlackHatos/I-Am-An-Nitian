@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "611318991674",
-    "project_id": "i-am-an-nitian-1618699585302",
-    "storage_bucket": "i-am-an-nitian-1618699585302.appspot.com"
+    "project_number": "652734911205",
+    "project_id": "i-am-an-nitian",
+    "storage_bucket": "i-am-an-nitian.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:611318991674:android:9cdb73c0332c272c7dde03",
+        "mobilesdk_app_id": "1:652734911205:android:635d3ec450680f73e37a0c",
         "android_client_info": {
           "package_name": "in.co.iamannitian.iamannitian"
         }
       },
       "oauth_client": [
         {
-          "client_id": "611318991674-va6bpn9meclcm3j3rk56e0of54ofsk4c.apps.googleusercontent.com",
+          "client_id": "652734911205-aq8tmnklgulq12iutcvlcef4qlt8e5ga.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "in.co.iamannitian.iamannitian",
-            "certificate_hash": "e8320800c469be1754082068f9f86998a48c9205"
+            "certificate_hash": "dbc2c24af915b17e3eece20ef996898f561c5830"
           }
         },
         {
-          "client_id": "611318991674-861jmj9iistlbd976cl28ejf2d0t59l4.apps.googleusercontent.com",
+          "client_id": "652734911205-3fjhhi2hvd3spi929b03v4tm74mtv5ne.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAjDpjnsRgUea31HbPEXwkFs6OCdR-z8A8"
+          "current_key": "AIzaSyBnIapQ_PGAELO4jaK4X_NfollqvuQneg8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "611318991674-861jmj9iistlbd976cl28ejf2d0t59l4.apps.googleusercontent.com",
+              "client_id": "652734911205-3fjhhi2hvd3spi929b03v4tm74mtv5ne.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

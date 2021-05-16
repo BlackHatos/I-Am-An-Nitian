@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -25,18 +26,25 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
    // private NotificationTarget notificationTarget1, notificationTarget2;
     private Bitmap bitmap;
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        showNotification(remoteMessage.getData().get("message"));
+    public void onMessageReceived(RemoteMessage remoteMessage)
+    {
+        String message = remoteMessage.getData().get("message");
+        String url = remoteMessage.getData().get("url");
+        showNotification(message, url);
     }
 
-    private void showNotification(String message)
+    @Override
+    public void onNewToken(String s)
     {
-        String msg[] = message.split(",");
+        super.onNewToken(s);
 
-        Glide.with(getApplicationContext())
+    }
+
+    private void showNotification(String message, String url)
+    {
+        Glide.with(this)
                 .asBitmap()
-                .load("https://app.thenextsem.com/images/Calicut.jpg")
+                .load(url)
                 .into(new CustomTarget<Bitmap>(){
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -45,34 +53,23 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
-
                     }
                 });
 
-       // RemoteViews collapseView = new RemoteViews(getPackageName(), R.layout.notification_collapse);
-        //RemoteViews expandView = new RemoteViews(getPackageName(), R.layout.notification_expand);
-
-        //===> this is necessary to use this to set image in custom notification image view
-        /*collapseView.setImageViewResource(R.id.collapse_image_view,R.drawable.nitrkl);
-        expandView.setImageViewResource(R.id.image_view_expand,R.drawable.nitrkl);
-
-        //===> setting the text in custom text views
-        collapseView.setTextViewText(R.id.notify_collap_title, msg[1]);
-        expandView.setTextViewText(R.id.text_view_expand, msg[1]);*/
+        // Open specific activity on notification click
 
         Intent i = new Intent(this, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,i,PendingIntent.FLAG_UPDATE_CURRENT);
 
-
-        Bitmap  art  = BitmapFactory.decodeResource(getResources(), R.drawable.nittrichy);
+        //Bitmap  art  = BitmapFactory.decodeResource(getResources(), R.drawable.nittrichy);
 
         Notification builder = new NotificationCompat.Builder(this,CHANNEL_2_ID)
                 .setSmallIcon(R.drawable.imnitian)
                 .setContentTitle("I Am An NITian")
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setContentText(msg[1])
-                .setColor(Color.BLUE)
+                .setContentText(message)
+                .setColor(Color.WHITE)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setLargeIcon(bitmap)
@@ -83,30 +80,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                         .bigPicture(bitmap).bigLargeIcon(null))
                 .build();
 
-        //.setCustomContentView(collapseView)
-        //.setCustomBigContentView(expandView)
-
-       /* notificationTarget1 = new NotificationTarget(this,
-                R.id.collapse_image_view,collapseView,builder, 0);
-
-        notificationTarget2  = new NotificationTarget(this,
-                R.id.image_view_expand,expandView,builder, 0);*/
-
-        //===> setting up images into custom notification image view using glide notification target
-        //===> put url here from data base
-      /*  Glide.with(this)
-                .asBitmap()
-                .load(msg[0].trim())
-                .into(notificationTarget1);
-
-        Glide.with(this)
-                .asBitmap()
-                .load(msg[0].trim())
-                .into(notificationTarget2);*/
-
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(0,builder);
-
     }
 
 }

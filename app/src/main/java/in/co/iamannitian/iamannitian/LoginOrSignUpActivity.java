@@ -94,6 +94,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity
             finish();
         });
 
+         // Get device token from firebase
+         getTokenFromFirebase();
 
         // Facebook Log In
 
@@ -193,6 +195,13 @@ public class LoginOrSignUpActivity extends AppCompatActivity
         }
     }
 
+    // Getting user access token from firebase
+    private void getTokenFromFirebase()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener
+                (instanceIdResult -> token = instanceIdResult.getToken());
+    }
+
     private void sendRequest(final String user_name, final String user_email, final String user_pic_url,
                              final String source)
     {
@@ -230,7 +239,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity
                 editor.putString("userEndYear", end);
                 editor.apply();
 
-                // check if profile is incomplete
+                // Check if profile is incomplete
 
                 if(phone.equals("null") || state.equals("null") || college.equals("null")
                 || degree.equals("null") || branch.equals("null") || start.equals("null")
@@ -252,7 +261,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity
             }
             catch (JSONException e)
             {
-                e.printStackTrace();
+                // Enable user interaction
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
             }
         }, error -> error.printStackTrace()){
             @Override

@@ -1,36 +1,29 @@
 package in.co.iamannitian.iamannitian;
 
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -46,7 +39,10 @@ public class LoginActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Shared Preferences
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         go_to_sign_up = findViewById(R.id.go_to_sign_up);
@@ -59,17 +55,22 @@ public class LoginActivity extends AppCompatActivity
             email.setError(null);
             password.setError(null);
 
-            //==> getting credentials on click the login button
+            // Getting credentials on click the login button
+
             String user_email = email.getText().toString().trim().replaceAll("\\s+","");
             String user_password = password.getText().toString().trim().replaceAll("\\s+","");
-            //===> checking user email
+
+            // Checking user email
+
             if (user_email.isEmpty())
             {
                 email.requestFocus();
                 email.setError("required");
                 return;
             }
-            //===> checking user password
+
+            // Checking user password
+
             if (user_password.isEmpty())
             {
                 password.requestFocus();
@@ -81,7 +82,7 @@ public class LoginActivity extends AppCompatActivity
           });
 
         go_to_sign_up.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
@@ -90,68 +91,95 @@ public class LoginActivity extends AppCompatActivity
 
     private void proceedToLogin(final String user_email, final String user_password)
     {
-        //===> show progress bar first
+        // Show progress bar first
         progressDialog.setMessage("Authenticating....");
         progressDialog.show();
-        //====> disable user interaction when progress dialog appears
+
+        // Disable user interaction
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
         final String url = "https://app.iamannitian.com/app/app-login.php";
-        //error
+
         StringRequest sr = new StringRequest(1, url,
                 response -> {
+                    progressDialog.dismiss();
 
-                 String response_array[] = response.split(",");
-                    if(response_array[0].equals("1") && response_array[1].equals("1"))
+                    try
                     {
-                        progressDialog.dismiss();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userId",response_array[2]);
-                        editor.putString("userName", response_array[3]);
-                        editor.putString("userEmail",response_array[4]);
-                        editor.putString("userPhone",response_array[5]);
-                        editor.putString("userState", response_array[6]);
-                        editor.putString("userCollege",response_array[7]);
-                        editor.putString("userDegree",response_array[8]);
-                        editor.putString("userBranch",response_array[9]);
-                        editor.putString("userStartYear",response_array[10]);
-                        editor.putString("userEndYear",response_array[11]);
-                        editor.putString("userPicUrl",response_array[12]);
-                        editor.apply();
+                        JSONObject object = new JSONObject(response);
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                        finish();
+                        String status = object.getString("status");
+
+                        if(status.equals("0"))
+                        {
+                            String message = object.getString("message");
+                            // Enable user interaction
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String phone = object.getString("phone");
+                            String state = object.getString("state");
+                            String college = object.getString("college");
+                            String degree = object.getString("degree");
+                            String branch = object.getString("branch");
+                            String start = object.getString("start_year");
+                            String end = object.getString("end_year");
+                            String pic_url = object.getString("pic_url");
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userId", id);
+                            editor.putString("userName", name);
+                            editor.putString("userEmail", email);
+                            editor.putString("userPicUrl", pic_url);
+                            editor.putString("userPhone", phone);
+                            editor.putString("userState", state);
+                            editor.putString("userCollege",college);
+                            editor.putString("userDegree", degree);
+                            editor.putString("userBranch", branch);
+                            editor.putString("userStartYear", start);
+                            editor.putString("userEndYear", end);
+                            editor.apply();
+
+
+                            // Check if profile is incomplete
+
+                            if(phone.equals("null") || state.equals("null") || college.equals("null")
+                                    || degree.equals("null") || branch.equals("null") || start.equals("null")
+                                    || end.equals("null")
+                            )
+                            {
+                                Intent intent  = new Intent(LoginActivity.this,CompleteProfile.class);
+                                startActivity(intent);
+                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                finish();
+                            }
+                            else  // If profile is complete
+                            {
+                                Intent intent  = new Intent(LoginActivity.this,MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                finish();
+                            }
+                        }
                     }
-                    else if(response_array[0].equals("1") && response_array[1].equals("0"))
+                    catch (JSONException e)
                     {
-                        progressDialog.dismiss();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userId",response_array[2]);
-                        editor.putString("userName", response_array[3]);
-                        editor.putString("userEmail",response_array[4]);
-                        editor.putString("userPicUrl",response_array[5]);
-                        editor.apply();
-
-                        Intent intent = new Intent(getApplicationContext(), CompleteProfile.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                        finish();
-                    }
-                    else if(response_array[0].equals("0") && response_array[1].equals("0"))
-                    {
-                        progressDialog.dismiss();
-                        //===> on dialog dismiss back to interaction mode
+                        // Enable user interaction
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(getApplicationContext(),
-                                response_array[2], Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
                     progressDialog.dismiss();
-                    //===> on dialog dismiss back to interaction mode
+
+                    // Enable user interaction
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
                 }){
             @Override
             public Map<String, String> getParams() throws AuthFailureError
@@ -170,7 +198,7 @@ public class LoginActivity extends AppCompatActivity
 
     public void forgotPassword(View view)
     {
-        startActivity(new Intent(getApplicationContext(), ForgetPassword.class));
+        startActivity(new Intent(LoginActivity.this, ForgetPassword.class));
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
@@ -186,14 +214,14 @@ public class LoginActivity extends AppCompatActivity
                 PorterDuff.Mode.SRC_ATOP);
     }
 
-    //handling toolbar back button
+    // Handling toolbar back button
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
             case android.R.id.home:
-                Intent intent = new Intent(getApplicationContext(), LoginOrSignUpActivity.class);
+                Intent intent = new Intent(LoginActivity.this, LoginOrSignUpActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
@@ -203,7 +231,7 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-    //handing hardware back button
+    // Handing hardware back button
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -212,7 +240,7 @@ public class LoginActivity extends AppCompatActivity
             switch (keyCode)
             {
                 case KeyEvent.KEYCODE_BACK:
-                    startActivity(new Intent(getApplicationContext(), LoginOrSignUpActivity.class));
+                    startActivity(new Intent(LoginActivity.this, LoginOrSignUpActivity.class));
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     finish();
                     return  true;

@@ -4,7 +4,7 @@
     <string name="close_drawer">Close Drawer</string>
 
     <!--============== Welcome Screen Strings =================-->
-    <string name="login_or_signup">Loign or sign up</string>
+    <string name="login_or_signup">Login or sign up</string>
     <string name="facebook">Continue with facebook</string>
     <string name="google">Continue with Google</string>
     <string name="join">Join The \nBiggest Student\nCommunity</string>
