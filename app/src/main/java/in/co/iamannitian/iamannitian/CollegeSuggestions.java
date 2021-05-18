@@ -46,7 +46,6 @@ public class CollegeSuggestions extends AppCompatActivity
     private TextView custom;
     private LinearLayout other;
     private  View viewx;
-    public static final String NAME_COLLEGE = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,24 +53,23 @@ public class CollegeSuggestions extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_college_suggestions);
         fillCollege();
-        custom = findViewById(R.id.custom);
-        other = findViewById(R.id.other);
-        viewx = findViewById(R.id.viewx);
-        collegeAutoComplete = findViewById(R.id.collegeAutoComplete);
-        // prevent showing keyboard by default
+        custom = findViewById(R.id.custom); // custom college suggestion text
+        other = findViewById(R.id.other); // custom suggestion linear layout
+        viewx = findViewById(R.id.viewx); // horizontal line in custom suggestion
+        collegeAutoComplete = findViewById(R.id.collegeAutoComplete); // Edit text
+
+        // Prevent showing keyboard by default
         collegeAutoComplete.clearFocus();
-        sharedPreferences = getSharedPreferences("appData",MODE_PRIVATE);
+        // Get shared prefs
+        sharedPreferences = getSharedPreferences("tempData",MODE_PRIVATE);
+        // Set adapter
         collegeAdapter = new CollegeAdapter(this,collegeItemList);
         collegeAutoComplete.setAdapter(collegeAdapter);
 
-        //=========> get the college name from CompleteProfile activity
-        Intent intent = getIntent();
-        college_name = intent.getStringExtra(COLLEGE_NAME);
-        collegeAutoComplete.setText(college_name);
-        //========> move the cursor at the end of the autocomplete text view
+        // Move the cursor at the end of the autocomplete text view
         collegeAutoComplete.setSelection(collegeAutoComplete.getText().toString().length());
 
-        //========> add onclick listener with the drawable end
+        // Add onclick listener with the drawable end
         collegeAutoComplete.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2; //index of the right drawable
 
@@ -132,12 +130,11 @@ public class CollegeSuggestions extends AppCompatActivity
             }
         });
 
-           other.setOnClickListener(v -> {
+            other.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("userCollege",custom.getText().toString().trim());
+            editor.putString("tempCollege",custom.getText().toString().trim());
             editor.apply();
-            Intent intent_x = new Intent(getApplicationContext(), CompleteProfile.class);
-            intent_x.putExtra(NAME_COLLEGE,custom.getText().toString().trim());
+            Intent intent_x = new Intent(CollegeSuggestions.this, CompleteProfile.class);
             startActivity(intent_x);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();

@@ -3,16 +3,13 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.NotificationTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.RemoteMessage;
 import androidx.core.app.NotificationManagerCompat;
@@ -23,7 +20,6 @@ import static me.at.nitsxr.App.CHANNEL_2_ID;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService{
 
-   // private NotificationTarget notificationTarget1, notificationTarget2;
     private Bitmap bitmap;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage)
@@ -37,7 +33,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onNewToken(String s)
     {
         super.onNewToken(s);
-
     }
 
     private void showNotification(String message, String url)
@@ -82,6 +77,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(0,builder);
+        notificationManager.notify(1,builder);
     }
-
 }

@@ -48,6 +48,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CompleteProfile"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".CollegeSuggestions"

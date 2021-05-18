@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import in.co.iamannitian.iamannitian.CollegeSuggestions;
 import in.co.iamannitian.iamannitian.CompleteProfile;
 import in.co.iamannitian.iamannitian.R;
 
 import static android.content.Context.MODE_PRIVATE;
-import static in.co.iamannitian.iamannitian.CollegeSuggestions.NAME_COLLEGE;
 
 public class CollegeAdapter extends ArrayAdapter<CollegeItem>
 {
@@ -57,14 +58,15 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
           }
 
         clickCollege.setOnClickListener(v -> {
-            SharedPreferences sharedPreferences = mContext.getSharedPreferences("appData", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = mContext.getSharedPreferences("tempData", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("userCollege",collegeItem.getCollegeName().trim());
+            editor.putString("tempCollege",collegeItem.getCollegeName().trim());
             editor.apply();
             Intent intent = new Intent(mContext, CompleteProfile.class);
-            intent.putExtra(NAME_COLLEGE,collegeItem.getCollegeName().trim());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
+            // finish the current activity
+            ((CollegeSuggestions)mContext).finish();
         });
 
         return convertView;

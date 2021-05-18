@@ -1,12 +1,10 @@
 package in.co.iamannitian.iamannitian;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -14,18 +12,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.lang.reflect.Method;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static in.co.iamannitian.iamannitian.CollegeSuggestions.NAME_COLLEGE;
 
 public class CompleteProfile extends AppCompatActivity
 {
@@ -51,12 +46,18 @@ public class CompleteProfile extends AppCompatActivity
         end_year = findViewById(R.id.end_year);
         proceed  = findViewById(R.id.proceed); //button
 
-        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        // Clear the tempData shared preferences
+        getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
 
-        //===> initializing progress dialog
+        // Get-set shared preferences
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        setPreferences();
+
+        // Initializing progress dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
+        // Autocomplete
         String state_array[] = getResources().getStringArray(R.array.states);
         String degree_array[] = getResources().getStringArray(R.array.degree);
 
@@ -68,35 +69,16 @@ public class CompleteProfile extends AppCompatActivity
                 R.id.custom_drop_down_text_view, degree_array);
         user_degree.setAdapter(degree_adapter);
 
-        //===> get the college name reverse back from CollegeSuggestion activity
-         Intent intent = getIntent();
-         String name_college = intent.getStringExtra(NAME_COLLEGE);
-         college_auto_complete.setText(name_college);
-
-        setPreferences();
-         //===> on click the college edit text go to CollegeSuggestion activity
+         // On Click the college edit text go to College Suggestion activity
          college_auto_complete.setOnTouchListener((v, event) -> {
-             //=========> creating shared preferences
-             SharedPreferences.Editor editor = sharedPreferences.edit();
-             editor.putString("userPhone",user_phone.getText().toString().trim());
-             editor.putString("userState", state_auto_complete.getText().toString().trim());
-             editor.putString("userCollege",college_auto_complete.getText().toString().trim());
-             editor.putString("userDegree",user_degree.getText().toString().trim());
-             editor.putString("userBranch",user_branch.getText().toString().trim());
-             editor.putString("userStartYear",start_year.getText().toString().trim());
-             editor.putString("userEndYear",end_year.getText().toString().trim());
-             editor.apply();
-
-             Intent intent1 = new Intent(getApplicationContext(), CollegeSuggestions.class);
-             intent1.putExtra(COLLEGE_NAME,college_auto_complete.getText().toString().trim());
-             startActivity(intent1);
-             overridePendingTransition(0, 0);
-             return true;
+              startActivity(new Intent(CompleteProfile.this, CollegeSuggestions.class));
+              overridePendingTransition(0, 0);
+              return true;
          });
 
-         //===> insert data into the server
+         // Insert data into the server
          proceed.setOnClickListener(v -> {
-             //setting errors
+             // Setting errors
              state_auto_complete.setError(null);
              user_phone.setError(null);
              college_auto_complete.setError(null);
@@ -105,7 +87,7 @@ public class CompleteProfile extends AppCompatActivity
              start_year.setError(null);
              end_year.setError(null);
 
-             //getting credentials on click the sign up button
+             // Getting credentials on click the sign up button
              String phone = user_phone.getText().toString().trim().replaceAll("\\s+","");
              String state = state_auto_complete.getText().toString().trim();
              String college = college_auto_complete.getText().toString().trim();
@@ -163,7 +145,7 @@ public class CompleteProfile extends AppCompatActivity
                  return;
              }
 
-             //========>> if all is well
+             // If every thing is OK
              proceedToServer(phone, state, college, degree, branch, from, to);
          });
 
@@ -171,14 +153,83 @@ public class CompleteProfile extends AppCompatActivity
 
     public void setPreferences()
     {
-        //====> set the the values in the complete profile edit text
-        user_phone.setText(sharedPreferences.getString("userPhone",""));
-        user_degree.setText(sharedPreferences.getString("userDegree",""));
-        user_branch.setText(sharedPreferences.getString("userBranch",""));
-        start_year.setText(sharedPreferences.getString("userStartYear",""));
-        end_year.setText(sharedPreferences.getString("userEndYear",""));
-        state_auto_complete.setText(sharedPreferences.getString("userState",""));
-        college_auto_complete.setText(sharedPreferences.getString("userCollege",""));
+         String phone = sharedPreferences.getString("userPhone", "null");
+         String state = sharedPreferences.getString("userState", "null");
+         String college = sharedPreferences.getString("userCollege", "null");
+         String degree = sharedPreferences.getString("userDegree", "null");
+         String branch = sharedPreferences.getString("userBranch", "null");
+         String start = sharedPreferences.getString("userStartYear","null");
+         String end =  sharedPreferences.getString("userEndYear","null");
+
+         // Phone
+         if(phone.equals("null"))
+         {
+             user_phone.setText("");
+         }
+         else
+         {
+             user_phone.setText(phone);
+         }
+
+         // State
+        if(state.equals("null"))
+        {
+            state_auto_complete.setText("");
+        }
+        else
+        {
+            state_auto_complete.setText(state);
+        }
+
+        // College
+        if(college.equals("null"))
+        {
+            college_auto_complete.setText("");
+        }
+        else
+        {
+            college_auto_complete.setText(college);
+        }
+
+        // Degree
+        if(degree.equals("null"))
+        {
+            user_degree.setText("");
+        }
+        else
+        {
+            user_degree.setText(degree);
+        }
+
+        // Branch
+        if(branch.equals("null"))
+        {
+            user_branch.setText("");
+        }
+        else
+        {
+             user_branch.setText(branch);
+        }
+
+        // Start year
+        if(start.equals("null"))
+        {
+             start_year.setText("");
+        }
+        else
+        {
+              start_year.setText(start);
+        }
+
+        // End yar
+        if(end.equals("null"))
+        {
+           end_year.setText("");
+        }
+        else
+        {
+            end_year.setText(end);
+        }
     }
 
     private void proceedToServer(final String phone, final  String state,
@@ -189,41 +240,54 @@ public class CompleteProfile extends AppCompatActivity
         //===> show progress bar first
         progressDialog.setMessage("Processing...");
         progressDialog.show();
-        //===> disable user interaction when progress dialog appears
+
+        // Disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-       final String url = "https://app.thenextsem.com/app/complete_profile.php";
+       final String url = "https://app.iamannitian.com/app/complete-profile.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
-                    String response_array[] = response.split(",");
 
-                    if(response_array[0].equals("1"))
+                    progressDialog.dismiss();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                    try
                     {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userPhone",response_array[1]);
-                        editor.putString("userState", response_array[2]);
-                        editor.putString("userCollege",response_array[3]);
-                        editor.putString("userDegree",response_array[4]);
-                        editor.putString("userBranch",response_array[5]);
-                        editor.putString("userStartYear",response_array[6]);
-                        editor.putString("userEndYear",response_array[7]);
-                        editor.apply();
+                        JSONObject object = new JSONObject(response);
+                        String status = object.getString("status");
 
-                        progressDialog.dismiss();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        if(status.equals("1"))
+                        {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userPhone", object.getString("phone"));
+                            editor.putString("userState", object.getString("state"));
+                            editor.putString("userCollege",object.getString("college"));
+                            editor.putString("userDegree", object.getString("degree"));
+                            editor.putString("userBranch", object.getString("branch"));
+                            editor.putString("userStartYear", object.getString("start"));
+                            editor.putString("userEndYear", object.getString("end"));
+                            editor.apply();
+
+                            Intent intent  = new Intent(CompleteProfile.this,MainActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                            finish();
+                        }
+                        else
+                        {
+                            String message = object.getString("message");
+                            Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    else if(response_array[0].equals("0"))
+                    catch (JSONException e)
                     {
-                        progressDialog.dismiss();
-                        //===> on dialog dismiss back to interaction mode
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(getApplicationContext(),response_array[1], Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(),"an error has occurred", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
                     progressDialog.dismiss();
-                    //===> on dialog dismiss back to interaction mode
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }){
             @Override
@@ -246,21 +310,53 @@ public class CompleteProfile extends AppCompatActivity
         rq.add(sr);
     }
 
-    public void goToMain(View view) //===> on clicking skip button
+    public void goToMain(View view) // On click skip button
     {
-        setPreferences();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(CompleteProfile.this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 
-    //===> on back press clear preferences
+    // On back press clear preferences
     @Override
     public void onBackPressed()
     {
         setPreferences();
         super.onBackPressed();
+    }
+
+    // Since activity is declared single instance
+    // on returning back to this activity this method is called
+    // so that we can update the college edit text
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        String college = getSharedPreferences("tempData", MODE_PRIVATE)
+                .getString("tempCollege", "null");
+
+        String college_name =  getSharedPreferences("appData", MODE_PRIVATE)
+                .getString("userCollege", "null");
+
+        if(college.equals("null") && college_name.equals("null"))
+        {
+            college_auto_complete.setText("");
+        }
+        else if(college.equals("null") && !college_name.equals("null"))
+        {
+            college_auto_complete.setText(college_name);
+        }
+        else if(!college.equals("null") && college_name.equals("null"))
+        {
+            college_auto_complete.setText(college);
+        }
+        else if(!college.equals("null") && !college_name.equals("null"))
+        {
+            college_auto_complete.setText(college);
+        }
     }
 }
 
