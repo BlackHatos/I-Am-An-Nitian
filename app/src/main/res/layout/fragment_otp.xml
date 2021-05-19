@@ -5,9 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ForgetPassword"
     android:fitsSystemWindows="true"
-    android:id="@+id/fragmentContainer"
+    android:id="@+id/fragmentContainer2"
     android:background="@color/colorPrimaryDark">
 
 
@@ -48,14 +47,14 @@
             android:id="@+id/msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             >
+            >
 
             <TextView
                 android:id="@+id/top_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/reset_heading"
+                android:text="@string/otp_heading"
                 android:textColor="#d2dae2"
                 android:textSize="22sp" />
 
@@ -64,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/top_text"
                 android:fontFamily="@font/roboto"
-                android:text="@string/password"
+                android:text="@string/one_time"
                 android:textColor="#d2dae2"
                 android:textSize="35sp"
                 android:textStyle="bold" />
@@ -72,35 +71,36 @@
         </RelativeLayout>
 
         <EditText
-        android:stateListAnimator="@null"
-        android:textColor="@color/colorAccent"
-        android:textColorHint="@color/hintColor"
-        android:drawableStart="@drawable/ic_email"
-        android:drawablePadding="8dp"
-        android:fontFamily="@font/work_sans"
-        android:id="@+id/email"
-        android:hint="@string/email_hint"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:paddingHorizontal="10dp"
-        android:background="@drawable/myinput"
-        android:layout_marginTop="80dp"
-        android:textSize="18sp"
-        android:inputType="textEmailAddress"
-        android:autofillHints="" />
+            android:stateListAnimator="@null"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/hintColor"
+            android:drawableStart="@drawable/otp"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/work_sans"
+            android:id="@+id/otp"
+            android:hint="@string/otp_hint"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/myinput"
+            android:layout_marginTop="80dp"
+            android:textSize="18sp"
+            android:inputType="number"
+            android:maxLength="6"
+            android:autofillHints="" />
 
-    <Button
-        android:textAllCaps="false"
-        android:fontFamily="@font/work_sans_semibold"
-        android:stateListAnimator="@null"
-        android:id="@+id/proceed"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@drawable/mybutton"
-        android:layout_marginTop="20dp"
-        android:text="@string/reset"
-        android:textSize="16sp"
-        android:textColor="@color/textColor2"/>
+        <Button
+            android:textAllCaps="false"
+            android:fontFamily="@font/work_sans_semibold"
+            android:stateListAnimator="@null"
+            android:id="@+id/proceed"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/mybutton"
+            android:layout_marginTop="20dp"
+            android:text="@string/continue_button"
+            android:textSize="16sp"
+            android:textColor="@color/textColor2"/>
 
     </LinearLayout>
 </RelativeLayout>

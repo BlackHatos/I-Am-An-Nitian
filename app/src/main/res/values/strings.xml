@@ -28,10 +28,8 @@
     <string name="already_memeber">Already a member?</string>
 
     <!--============== Forgot Password Strings =================-->
-    <string name="otp_hint">OTP</string>
-    <string name="reset_heading">Reset Password</string>
-    <string name="reset">Reset</string>
-    <string name="resend">Resend OTP</string>
+    <string name="reset_heading">Forgot Your</string>
+    <string name="reset">Proceed</string>
 
     <!--============== Bottom Sheet Strings =================-->
     <string name="otp_sent">OTP has been sent to your email</string>
@@ -91,6 +89,9 @@
     certain way to succeed is always to try just one more time. There is no success without
     hard work because it\'s something you can only earn after much labor.</string>
 
+    <string name="password">Password</string>
+    <string name="otp_hint">OTP</string>
+
     <!--========= Array Strings ==========-->
     <string-array name="states">
         <item>Uttar Pradesh</item>
@@ -127,5 +128,14 @@
         <item>Doctoral</item>
         <item></item>
     </string-array>
+
+    <!-- OTP fragment-->
+    <string name="otp_heading">Enter The</string>
+    <string name="one_time">One time password</string>
+    <!-- Reset Password-->
+    <string name="reset_pass">Reset Your</string>
+    <string name="enter_pass">Enter password</string>
+    <string name="reenter_pass">Re-enter password</string>
+    <string name="reset_password">Reset Password</string>
 
 </resources>
