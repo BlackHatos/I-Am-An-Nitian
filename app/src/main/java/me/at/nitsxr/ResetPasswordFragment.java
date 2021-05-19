@@ -1,8 +1,9 @@
 package me.at.nitsxr;
 
-import android.content.Intent;
+
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import in.co.iamannitian.iamannitian.ForgetPassword;
 import in.co.iamannitian.iamannitian.R;
 
 public class ResetPasswordFragment extends Fragment
 {
+    private static String user_mail;
     private Toolbar toolbar;
     public ResetPasswordFragment() {
     }
@@ -55,9 +55,10 @@ public class ResetPasswordFragment extends Fragment
                 PorterDuff.Mode.SRC_ATOP);
     }
 
-    public static ResetPasswordFragment onNewInstance2()
+    public static ResetPasswordFragment onNewInstance2(String mail)
     {
         ResetPasswordFragment fragment = new ResetPasswordFragment();
+        user_mail =  mail;
         return fragment;
     }
 
