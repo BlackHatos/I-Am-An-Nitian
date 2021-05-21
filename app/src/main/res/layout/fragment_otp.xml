@@ -102,5 +102,26 @@
             android:textSize="16sp"
             android:textColor="@color/textColor2"/>
 
+        <TextView
+            android:fontFamily="@font/work_sans"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expire_otp"
+            />
+
+        <TextView
+            android:fontFamily="@font/work_sans_semibold"
+            android:id="@+id/resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/resend_otp"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp" />
+
     </LinearLayout>
 </RelativeLayout>

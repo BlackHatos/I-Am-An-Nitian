@@ -35,9 +35,9 @@ import me.at.nitsxr.OtpFragment;
 public class ForgetPassword extends AppCompatActivity
 {
     private Toolbar toolbar;
-    private Button proceed;
+    private Button proceed; // button
     private EditText email;
-    RelativeLayout fragmentContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -45,46 +45,22 @@ public class ForgetPassword extends AppCompatActivity
         setContentView(R.layout.activity_forget_password);
         proceed = findViewById(R.id.proceed);
         email = findViewById(R.id.email);
-        fragmentContainer = findViewById(R.id.fragmentContainer);
 
         proceed.setOnClickListener(v -> {
-              String mail = email.getText().toString().trim().replaceAll("\\s+","");
-             email.setError(null);
+             String mail = email.getText().toString().trim().replaceAll("\\s+","");
+              email.setError(null);
 
              if(mail.isEmpty())
-            {
+             {
                 email.requestFocus();
                 email.setError("required");
                 return;
-            }
+             }
 
-             sendOtp(mail);
+            sendOtp(mail);
         });
 
         setUpToolbarMenu();
-    }
-
-    private void openFragment(String mail)
-    {
-        OtpFragment fragment = OtpFragment.onNewInstance(mail);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.fragmentContainer, fragment, "OTP_FRAGMENT").commit();
-    }
-
-    private void setUpToolbarMenu()
-    {
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Back");
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
-                PorterDuff.Mode.SRC_ATOP);
     }
 
     public void sendOtp(final String mail)
@@ -107,17 +83,17 @@ public class ForgetPassword extends AppCompatActivity
                         }
                         else
                         {
-                            openFragment(mail);
+                            // here we are taking valid email from server
+                            // because someone can alter it in between
+                            openFragment(object.getString("email"));
                         }
                     }
                     catch (JSONException e)
                     {
-                        e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "failed to send otp", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
-                   error.printStackTrace();
             Toast.makeText(ForgetPassword.this, "failed to send otp", Toast.LENGTH_SHORT).show();
         }){
             @Override
@@ -132,5 +108,29 @@ public class ForgetPassword extends AppCompatActivity
 
         RequestQueue rq = Volley.newRequestQueue(ForgetPassword.this);
         rq.add(sr);
+    }
+
+
+    private void openFragment(String mail)
+    {
+        OtpFragment fragment = OtpFragment.onNewInstance(mail);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.add(R.id.fragmentContainer, fragment, "OTP_FRAGMENT").commit();
+    }
+
+    private void setUpToolbarMenu()
+    {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Back");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
+                PorterDuff.Mode.SRC_ATOP);
     }
 }

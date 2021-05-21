@@ -130,12 +130,14 @@
     </string-array>
 
     <!-- OTP fragment-->
-    <string name="otp_heading">Enter The</string>
+    <string name="otp_heading">Verify Your</string>
     <string name="one_time">One time password</string>
     <!-- Reset Password-->
     <string name="reset_pass">Reset Your</string>
     <string name="enter_pass">Enter password</string>
     <string name="reenter_pass">Re-enter password</string>
     <string name="reset_password">Reset Password</string>
+    <string name="expire_otp">Your OTP will expire in 5 minutes</string>
+    <string name="resend_otp">Resend OTP</string>
 
 </resources>
