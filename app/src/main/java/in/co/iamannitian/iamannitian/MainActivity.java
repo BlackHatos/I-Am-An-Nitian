@@ -312,8 +312,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             clg_str += str[i] + " ";
 
 
-        if(college.isEmpty())
-            nit_name.setText("User College Name");
+        if(college.equals("null"))
+            nit_name.setText("Your College");
         else
         {
             if(len < 4)
@@ -323,8 +323,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "\n"+str[len-1]);
         }
 
-        if(name.isEmpty())
-            user_name.setText("User Name");
+        if(name.equals("null"))
+            user_name.setText("your Name");
         else
             user_name.setText(name);
 

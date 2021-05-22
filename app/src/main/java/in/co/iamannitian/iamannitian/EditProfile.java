@@ -26,6 +26,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,15 +88,79 @@ public class EditProfile extends AppCompatActivity
         String start_year = sharedPreferences.getString("userStartYear", "");
         String end_year = sharedPreferences.getString("userEndYear", "");
 
+
         name.setText(user_name);
         email.setText(user_email);
-        phone.setText(user_phone);
-        state.setText(user_state);
-        college.setText(user_college);
-        degree.setText(user_degree);
-        branch.setText(user_branch);
-        start.setText(start_year);
-        end.setText(end_year);
+
+        // Phone
+        if(user_phone.equals("null"))
+        {
+            phone.setText("");
+        }
+        else
+        {
+            phone.setText(user_phone);
+        }
+
+        // State
+        if(user_state.equals("null"))
+        {
+            state.setText("");
+        }
+        else
+        {
+            state.setText(user_state);
+        }
+
+        // College
+        if(user_college.equals("null"))
+        {
+            college.setText("");
+        }
+        else
+        {
+            college.setText(user_college);
+        }
+
+        // Degree
+        if(user_degree.equals("null"))
+        {
+            degree.setText("");
+        }
+        else
+        {
+            degree.setText(user_degree);
+        }
+
+        // Branch
+        if(user_branch.equals("null"))
+        {
+            branch.setText("");
+        }
+        else
+        {
+            branch.setText(user_branch);
+        }
+
+        // Start year
+        if(start_year.equals("null"))
+        {
+            start.setText("");
+        }
+        else
+        {
+            start.setText(start_year);
+        }
+
+        // End yar
+        if(end_year.equals("null"))
+        {
+            end.setText("");
+        }
+        else
+        {
+            end.setText(end_year);
+        }
 
         Glide.with(this)
                 .load(imageUrl)
@@ -106,7 +174,7 @@ public class EditProfile extends AppCompatActivity
     {
 
         String user_name = name.getText().toString().trim();
-        String user_email = email.getText().toString().trim();
+        String user_email = email.getText().toString().trim().replaceAll("\\s+","");;
         String user_phone = phone.getText().toString().trim();
         String user_state = state.getText().toString().trim();
         String user_college = college.getText().toString().trim();
@@ -115,55 +183,10 @@ public class EditProfile extends AppCompatActivity
         String start_year = start.getText().toString().trim();
         String end_year = end.getText().toString().trim();
 
+        // mandatory fields
 
-        if(user_phone.isEmpty())
-        {
-            phone.requestFocus();
-            phone.setError("required");
-            return;
-        }
-
-        if(user_state.isEmpty())
-        {
-            state.requestFocus();
-            state.setError("required");
-            return;
-        }
-
-        if(user_college.isEmpty())
-        {
-            college.requestFocus();
-            college.setError("required");
-            return;
-        }
-
-        if(user_degree.isEmpty())
-        {
-            degree.requestFocus();
-            degree.setError("required");
-            return;
-        }
-
-        if(user_branch.isEmpty())
-        {
-            branch.requestFocus();
-            branch.setError("required");
-            return;
-        }
-
-        if(start_year.isEmpty())
-        {
-            start.requestFocus();
-            start.setError("required");
-            return;
-        }
-
-        if(end_year.isEmpty())
-        {
-            end.requestFocus();
-            end.setError("required");
-            return;
-        }
+        name.setError(null);
+        email.setError(null);
 
         if(user_name.isEmpty())
         {
@@ -188,19 +211,45 @@ public class EditProfile extends AppCompatActivity
                                  String user_degree, String user_branch,
                                  String start_year, String end_year)
     {
-        //===> show progress bar first
+        // Show progress bar
         progressDialog.setMessage("Saving...");
         progressDialog.show();
-        //===> disable user interaction when progress dialog appears
+        // Disable suer interaction
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-        final String url = "https://app.thenextsem.com/app/update_profile.php";
-        //error
+        final String url = "https://app.iamannitian.com/app/update-profile.php";
+
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 
+                    try
+                    {
+                        JSONObject object = new JSONObject(response);
+                        String status =  object.getString("status");
+                        String message = object.getString("message");
 
+                        if(status.equals("1"))
+                        {
+
+                        }
+                        else
+                        {
+                            progressDialog.dismiss();
+                            // Enable user interaction
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    catch
+                    (JSONException e)
+                    {
+                        progressDialog.dismiss();
+                        // Enable user interaction
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
+                    }
+/*
                     if(response.equals("1"))
                     {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -225,7 +274,7 @@ public class EditProfile extends AppCompatActivity
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Toast.makeText(getApplicationContext(),"failed to update profile", Toast.LENGTH_SHORT).show();
                     }
-
+*/
                 }, error -> {
                     progressDialog.dismiss();
                     //===> on dialog dismiss back to interaction mode

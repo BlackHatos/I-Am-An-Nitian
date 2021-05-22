@@ -59,11 +59,68 @@ public class UserProfile extends AppCompatActivity
 
         userName.setText(name);
         userEmail.setText(email);
-        userPhone.setText(phone);
-        userState.setText(state);
-        userBranch.setText(branch);
-        userCollege.setText(college1+"\n"+collegeArray[collegeArray.length-1]);
-        userDegree.setText(degree+" ("+start+"-"+end+")");
+
+        // Phone
+        if(phone.equals("null"))
+        {
+            userPhone.setText("+91-XXXXXXXXXX");
+        }
+        else
+        {
+            userPhone.setText(phone);
+        }
+
+        // State
+        if(state.equals("null"))
+        {
+            userState.setText("Your State");
+        }
+        else
+        {
+            userState.setText(state);
+        }
+
+        // College
+        if(college.equals("null"))
+        {
+           userCollege.setText("Your College");
+        }
+        else
+        {
+            if(collegeArray.length <= 4)
+                userCollege.setText(college);
+            else
+              userCollege.setText(college1+"\n"+collegeArray[collegeArray.length-1]);
+        }
+
+        // Degree
+        if(degree.equals("null") && start.equals("null") && end.equals("null"))
+        {
+            userDegree.setText("Your Degree"+ " (20XX-20XX)");
+        }
+        else if(!degree.equals("null") && start.equals("null") && end.equals("null"))
+        {
+            userDegree.setText(degree+" (20XX-20XX)");
+        }
+        else if(degree.equals("null") && !start.equals("null") && !end.equals("null"))
+        {
+            userDegree.setText("Your Degree ("+ start +"-"+ end +")");
+        }
+        else
+        {
+            userDegree.setText(degree+" ("+ start +"-"+ end +")");
+        }
+
+        // Branch
+        if(branch.equals("null"))
+        {
+            userBranch.setText("Your Branch");
+        }
+        else
+        {
+            userBranch.setText(branch);
+        }
+
 
         Glide.with(this)
                 .load(imageUrl)
