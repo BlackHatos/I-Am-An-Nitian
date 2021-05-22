@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         });
-        
+
     }
 
     private void proceedToLogin(final String user_email, final String user_password)
@@ -227,10 +227,9 @@ public class LoginActivity extends AppCompatActivity
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
-
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     // Handing hardware back button

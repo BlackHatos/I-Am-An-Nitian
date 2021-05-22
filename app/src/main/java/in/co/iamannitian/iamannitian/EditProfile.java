@@ -12,7 +12,9 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import com.bumptech.glide.Glide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -223,6 +226,10 @@ public class EditProfile extends AppCompatActivity
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 
+                    progressDialog.dismiss();
+                    // Enable user interaction
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                     try
                     {
                         JSONObject object = new JSONObject(response);
@@ -231,58 +238,51 @@ public class EditProfile extends AppCompatActivity
 
                         if(status.equals("1"))
                         {
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String phone = object.getString("phone");
+                            String state = object.getString("state");
+                            String college = object.getString("college");
+                            String degree = object.getString("degree");
+                            String branch = object.getString("branch");
+                            String start = object.getString("from");
+                            String end = object.getString("to");
 
-                        }
-                        else
-                        {
-                            progressDialog.dismiss();
-                            // Enable user interaction
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userName",name);
+                            editor.putString("userEmail",email);
+                            editor.putString("userPhone",phone);
+                            editor.putString("userState", state);
+                            editor.putString("userCollege",college);
+                            editor.putString("userDegree",degree);
+                            editor.putString("userBranch",branch);
+                            editor.putString("userStartYear",start);
+                            editor.putString("userEndYear",end);
+                            editor.apply();
+
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            Intent intent = new Intent(EditProfile.this, UserProfile.class);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                            finish();
                         }
                     }
                     catch
                     (JSONException e)
                     {
-                        progressDialog.dismiss();
-                        // Enable user interaction
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
                     }
-/*
-                    if(response.equals("1"))
-                    {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userName",user_name);
-                        editor.putString("userEmail",user_email);
-                        editor.putString("userPhone",user_phone);
-                        editor.putString("userState", user_state);
-                        editor.putString("userCollege",user_college);
-                        editor.putString("userDegree",user_degree);
-                        editor.putString("userBranch",user_branch);
-                        editor.putString("userStartYear",start_year);
-                        editor.putString("userEndYear",end_year);
-                        editor.apply();
 
-                        progressDialog.dismiss();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    }
-                    else if(response.equals("0"))
-                    {
-                        progressDialog.dismiss();
-                        //===> on dialog dismiss back to interaction mode
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        Toast.makeText(getApplicationContext(),"failed to update profile", Toast.LENGTH_SHORT).show();
-                    }
-*/
                 }, error -> {
                     progressDialog.dismiss();
-                    //===> on dialog dismiss back to interaction mode
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                     Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
                 }){
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> map =  new HashMap<>();
+                String imageKey = imageToString();
                 map.put("idKey", sharedPreferences.getString("userId", ""));
                 map.put("nameKey", user_name);
                 map.put("emailKey", user_email);
@@ -302,6 +302,7 @@ public class EditProfile extends AppCompatActivity
         rq.add(sr);
     }
 
+    // Select Image from gallery
     public void selectImage(View view)
     {
         Intent img = new Intent();
@@ -310,6 +311,7 @@ public class EditProfile extends AppCompatActivity
         startActivityForResult(img,IMAGE_REQUEST_CODE);
     }
 
+    // Set the image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -323,6 +325,16 @@ public class EditProfile extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+    }
+
+    // image to string
+    private String imageToString()
+    {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] imageBytes = stream.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     private void setUpToolbarMenu()
@@ -347,5 +359,37 @@ public class EditProfile extends AppCompatActivity
                 getActionView().findViewById(R.id.saveButton);
        saveProfile.setOnClickListener(v -> saveProfile());
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                Intent intent = new Intent(EditProfile.this, UserProfile.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Handing hardware back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            switch (keyCode)
+            {
+                case KeyEvent.KEYCODE_BACK:
+                    startActivity(new Intent(EditProfile.this, UserProfile.class));
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
+                    return  true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

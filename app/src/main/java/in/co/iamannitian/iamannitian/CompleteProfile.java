@@ -52,7 +52,7 @@ public class CompleteProfile extends AppCompatActivity
         setPreferences();
 
         // Initializing progress dialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCanceledOnTouchOutside(false); //prevent disappearing
 
         // Autocomplete

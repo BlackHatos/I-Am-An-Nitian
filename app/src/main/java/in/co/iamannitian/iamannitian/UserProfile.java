@@ -3,16 +3,15 @@ package in.co.iamannitian.iamannitian;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -135,6 +134,8 @@ public class UserProfile extends AppCompatActivity
     public void editProfile(View view)
     {
         startActivity(new Intent(UserProfile.this, EditProfile.class));
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        finish();
     }
 
     private void setUpToolbarMenu()
@@ -162,8 +163,32 @@ public class UserProfile extends AppCompatActivity
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;
+            case android.R.id.home:
+                Intent intent = new Intent(UserProfile.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Handing hardware back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            switch (keyCode)
+            {
+                case KeyEvent.KEYCODE_BACK:
+                    startActivity(new Intent(UserProfile.this, MainActivity.class));
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
+                    return  true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
