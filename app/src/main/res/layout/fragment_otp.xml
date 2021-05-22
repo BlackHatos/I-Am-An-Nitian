@@ -56,7 +56,7 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/otp_heading"
                 android:textColor="#d2dae2"
-                android:textSize="22sp" />
+                android:textSize="35sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/one_time"
                 android:textColor="#d2dae2"
-                android:textSize="35sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -108,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/expire_otp"
+            android:textSize="11sp"
             />
 
         <TextView

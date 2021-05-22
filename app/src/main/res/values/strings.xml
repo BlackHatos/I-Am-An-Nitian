@@ -12,7 +12,7 @@
     <!--============== Login Strings =================-->
     <string name="welcome">Welcome,</string>
     <string name="welcome_login">Sign in to continue!</string>
-    <string name="login">Sign In</string>
+    <string name="login">Sign in</string>
     <string name="signup">Sign up</string>
     <string name="email_phone_hint">Email</string>
     <string name="pass_hint">Password</string>
@@ -131,13 +131,15 @@
 
     <!-- OTP fragment-->
     <string name="otp_heading">Verify Your</string>
-    <string name="one_time">One time password</string>
+    <string name="one_time">One time password!</string>
     <!-- Reset Password-->
-    <string name="reset_pass">Reset Your</string>
+    <string name="reset_pass">Reset</string>
     <string name="enter_pass">Enter password</string>
     <string name="reenter_pass">Re-enter password</string>
     <string name="reset_password">Reset Password</string>
     <string name="expire_otp">Your OTP will expire in 5 minutes</string>
     <string name="resend_otp">Resend OTP</string>
+    <string name="forgot">Forgot</string>
+    <string name="your_pass">Your Password!</string>
 
 </resources>
