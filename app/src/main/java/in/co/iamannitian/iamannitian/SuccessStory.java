@@ -141,7 +141,7 @@ public class SuccessStory extends AppCompatActivity
 
     public void getStory()
     {
-        final String url = "https://app.thenextsem.com/app/get_story.php";
+        final String url = "https://app.iamannitian.com/app/get-story.php";
 
         //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,

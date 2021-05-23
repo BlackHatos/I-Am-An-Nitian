@@ -77,7 +77,7 @@
             android:paddingHorizontal="15dp"
             android:background="@drawable/myinput"
             android:drawablePadding="8dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
             android:textSize="18sp"
             android:autofillHints="" />
 

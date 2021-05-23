@@ -226,7 +226,7 @@ public class EditProfile extends AppCompatActivity
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 
-                    progressDialog.dismiss();
+                  progressDialog.dismiss();
                     // Enable user interaction
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -260,12 +260,16 @@ public class EditProfile extends AppCompatActivity
                             editor.putString("userEndYear",end);
                             editor.apply();
 
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(EditProfile.this, UserProfile.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                             finish();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         }
                     }
                     catch
@@ -282,7 +286,6 @@ public class EditProfile extends AppCompatActivity
             @Override
             public Map<String, String> getParams() {
                 Map<String, String> map =  new HashMap<>();
-                String imageKey = imageToString();
                 map.put("idKey", sharedPreferences.getString("userId", ""));
                 map.put("nameKey", user_name);
                 map.put("emailKey", user_email);
@@ -327,15 +330,6 @@ public class EditProfile extends AppCompatActivity
         }
     }
 
-    // image to string
-    private String imageToString()
-    {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] imageBytes = stream.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
 
     private void setUpToolbarMenu()
     {

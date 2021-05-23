@@ -289,9 +289,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         sharedPreferences.edit().clear().apply();
         Intent intent = new Intent(getApplicationContext(), LoginOrSignUpActivity.class);
-        //===> finish all previous activities
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 
@@ -363,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         try {
                             JSONObject object = response.getJSONObject(i);
                             slideUtils.setImageUrl
-                                    ("https://app.iamannitian.com/news_images/" + object.getString("image1"));
+                                    ("https://app.iamannitian.com/news-images/" + object.getString("image1"));
                             slideUtils.setNewsDescp(object.getString("descp"));
                             slideUtils.setNewsTitle(object.getString("title"));
                             slideUtils.setNewsId(object.getString("id"));

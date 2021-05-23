@@ -54,7 +54,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private GoogleSignInClient googleSignInClient;
     private NetworkInfo activeNetworkInfo;
-    private BroadcastReceiver broadCastReceiver;
+    private BroadcastReceiver broadcastReceiver;
+    private Snackbar snackbar;
 	private String token = "";
 	private static final int RC_SIGN_IN = 5;
 
@@ -67,6 +68,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity
         appLoginButton = findViewById(R.id.logsignbtn);
         fbLoginButton = findViewById(R.id.fb);
 
+        setBroadCastReceiver();
         // Google sign in
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -76,12 +78,17 @@ public class LoginOrSignUpActivity extends AppCompatActivity
         signInGoogle = findViewById(R.id.signInGoogle);
 
         signInGoogle.setOnClickListener(v -> {
-            // Disable user interaction
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            signInGoogle.setText("Signing you in...");
-            Intent signInIntent = googleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+            {
+                // Disable user interaction
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                signInGoogle.setText("Signing you in...");
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+            else
+                showSnackBar();
         });
 
 
@@ -147,7 +154,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity
             }
         });
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -289,13 +295,58 @@ public class LoginOrSignUpActivity extends AppCompatActivity
 
     public void onClick(View v)
     {
-        fbLoginButton.setText("Signing you in...");
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+        {
+            fbLoginButton.setText("Signing you in...");
             // Disable user interaction
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        LoginManager.getInstance().logInWithReadPermissions(this,
-                Arrays.asList("public_profile","email"));
+            LoginManager.getInstance().logInWithReadPermissions(this,
+                    Arrays.asList("public_profile","email"));
+        }
+        else
+            showSnackBar();
+    }
+
+    //===> setting up broadcast receiver
+    private void setBroadCastReceiver()
+    {
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //======> check internet connection
+                ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
+                if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
+                {
+                    if(snackbar != null)
+                        snackbar.dismiss();
+                }
+                else
+                    showSnackBar();
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    //===> unregister broad cast receiver
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    public void showSnackBar()
+    {
+        snackbar = Snackbar.make(findViewById(R.id.myRelativeLayout),
+                Html.fromHtml("<font color=#ffffff>No Internet connection</font>"),
+                Snackbar.LENGTH_INDEFINITE);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+        snackbar.setAction("Dismiss", view -> snackbar.dismiss());
+        snackbar.show();
     }
 }
 
