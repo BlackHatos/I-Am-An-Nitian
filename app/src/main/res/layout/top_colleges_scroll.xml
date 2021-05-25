@@ -35,7 +35,6 @@
                 android:background="@drawable/top_college_bottom_card"
                 android:orientation="vertical"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/card2"
                 android:layout_width="match_parent"
                 android:layout_height="28dp">
 

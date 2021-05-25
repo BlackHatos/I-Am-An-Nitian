@@ -74,7 +74,6 @@
     <LinearLayout
        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:id="@+id/fill1"
         android:padding="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -136,7 +135,6 @@
         android:padding="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:id="@+id/fill2"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -150,7 +148,7 @@
             android:text="@string/education"
             />
 
-        <EditText
+     <!--   <EditText
             android:focusableInTouchMode="false"
             android:cursorVisible="false"
             android:clickable="true"
@@ -168,7 +166,27 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="@string/your_college"
-            android:autofillHints="" />
+            android:autofillHints="" /> -->
+
+        <Button
+            android:focusableInTouchMode="false"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:paddingStart="16dp"
+            android:id="@+id/setCollege"
+            android:background="@drawable/complete_profile_shape"
+            android:dropDownAnchor="@id/state_auto_complete"
+            android:paddingEnd="10dp"
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:hint="@string/your_college"
+            android:autofillHints=""
+            android:textAlignment="viewStart"
+            />
+
 
         <View
             android:layout_width="match_parent"

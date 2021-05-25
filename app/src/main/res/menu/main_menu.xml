@@ -2,11 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/topItems"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
     <item
-        android:id="@+id/book_upload"
         android:orderInCategory="100"
         android:title="Preferences"
         android:checkable="true"
@@ -25,8 +23,7 @@
 
 
 
-    <group android:id="@+id/bottomItems"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/settings"
@@ -36,14 +33,12 @@
             android:icon="@drawable/settings"/>
 
         <item
-            android:id="@+id/share"
             android:orderInCategory="100"
             android:title="Share App"
             android:checkable="true"
             android:icon="@drawable/ic_share_app"/>
 
         <item
-            android:id="@+id/rate_us"
             android:orderInCategory="100"
             android:title="Rate Us"
             android:checkable="true"

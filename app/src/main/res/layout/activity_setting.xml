@@ -53,7 +53,6 @@
 
         <TextView
             android:layout_centerVertical="true"
-            android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,7 +101,6 @@
         <TextView
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/logo1"
-            android:id="@+id/text1"
             android:paddingStart="12dp"
             android:textColor="@color/textColor1"
             android:layout_width="wrap_content"

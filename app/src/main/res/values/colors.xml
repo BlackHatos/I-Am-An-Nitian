@@ -8,9 +8,7 @@
     <color name="hintColor">#B1A3A2A2</color>
     <color name="elevationShadow">#49596275</color>
     <color name="navigationHorizontalLineColor">@color/elevationShadow</color>
-    <color name="navigation_background">@color/colorPrimary</color>
     <color name="ripple_colorx">#5FA3A2A2</color>
-    <color name="profileColorPrimaryDark">@color/colorAccent</color>
     <color name="textColor1">#ffffff</color>
     <color name="textColor2">#373636</color>
     <color name="textColor3">#474747</color>

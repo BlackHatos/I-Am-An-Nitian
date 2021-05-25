@@ -6,7 +6,6 @@
 
     <TextView
         android:textAlignment="center"
-        android:id="@+id/notify_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"

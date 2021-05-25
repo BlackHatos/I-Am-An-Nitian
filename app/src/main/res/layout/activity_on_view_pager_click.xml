@@ -9,7 +9,6 @@
     tools:context=".OnViewPagerClick">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -48,8 +47,7 @@
         android:layout_below="@id/appBarLayout"
         android:background="@color/elevationShadow"
         app:layout_anchorGravity="bottom"
-        android:id="@+id/top_line"
-        app:layout_anchor="@id/appBarLayout"
+            app:layout_anchor="@id/appBarLayout"
         />
 
         <androidx.core.widget.NestedScrollView

@@ -23,7 +23,8 @@ import java.util.Map;
 public class CompleteProfile extends AppCompatActivity
 {
     private AutoCompleteTextView state_auto_complete,user_degree;
-    private EditText  start_year, end_year, user_phone,user_branch,college_auto_complete;
+    private EditText  start_year, end_year, user_phone,user_branch;
+    private Button setCollege;
     public static final String COLLEGE_NAME = "";
     private SharedPreferences sharedPreferences;
     private Button proceed;
@@ -36,7 +37,7 @@ public class CompleteProfile extends AppCompatActivity
         setContentView(R.layout.activity_complete_profile);
 
         state_auto_complete = findViewById(R.id.state_auto_complete);
-        college_auto_complete = findViewById(R.id.college_auto_complete);
+        setCollege = findViewById(R.id.setCollege);
         user_phone = findViewById(R.id.user_phone);
         user_degree = findViewById(R.id.user_degree);
         user_branch = findViewById(R.id.user_branch);
@@ -68,10 +69,9 @@ public class CompleteProfile extends AppCompatActivity
         user_degree.setAdapter(degree_adapter);
 
          // On Click the college edit text go to College Suggestion activity
-         college_auto_complete.setOnTouchListener((v, event) -> {
-              startActivity(new Intent(CompleteProfile.this, CollegeSuggestions.class));
-              overridePendingTransition(0, 0);
-              return true;
+         setCollege.setOnClickListener(v -> {
+             startActivity(new Intent(CompleteProfile.this, CollegeSuggestions.class));
+             overridePendingTransition(0, 0);
          });
 
          // Insert data into the server
@@ -79,7 +79,7 @@ public class CompleteProfile extends AppCompatActivity
              // Setting errors
              state_auto_complete.setError(null);
              user_phone.setError(null);
-             college_auto_complete.setError(null);
+             setCollege.setError(null);
              user_degree.setError(null);
              user_branch.setError(null);
              start_year.setError(null);
@@ -88,13 +88,13 @@ public class CompleteProfile extends AppCompatActivity
              // Getting credentials on click the sign up button
              String phone = user_phone.getText().toString().trim().replaceAll("\\s+","");
              String state = state_auto_complete.getText().toString().trim();
-             String college = college_auto_complete.getText().toString().trim();
+             String college = setCollege.getText().toString().trim();
              String degree = user_degree.getText().toString().trim();
              String branch = user_branch.getText().toString().trim();
              String from = start_year.getText().toString().trim().replaceAll("\\s+","");
              String to = end_year.getText().toString().trim().replaceAll("\\s+","");
 
-             if(phone.isEmpty())
+           /*  if(phone.isEmpty())
              {
                  user_phone.requestFocus();
                  user_phone.setError("required");
@@ -110,8 +110,8 @@ public class CompleteProfile extends AppCompatActivity
 
              if(college.isEmpty())
              {
-                 college_auto_complete.requestFocus();
-                 college_auto_complete.setError("required");
+                 setCollege.requestFocus();
+                 setCollege.setError("required");
                  return;
              }
 
@@ -141,7 +141,7 @@ public class CompleteProfile extends AppCompatActivity
                  end_year.requestFocus();
                  end_year.setError("required");
                  return;
-             }
+             }*/
 
              // If every thing is OK
              proceedToServer(phone, state, college, degree, branch, from, to);
@@ -182,11 +182,11 @@ public class CompleteProfile extends AppCompatActivity
         // College
         if(college.equals("null"))
         {
-            college_auto_complete.setText("");
+            setCollege.setText("");
         }
         else
         {
-            college_auto_complete.setText(college);
+            setCollege.setText(college);
         }
 
         // Degree
@@ -242,11 +242,12 @@ public class CompleteProfile extends AppCompatActivity
         // Disable user interaction when progress dialog appears
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-       final String url = "https://app.iamannitian.com/app/complete-profile.php";
+       final String url = "https://app.iamannitian.com/app/update-profile.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 
+            Log.d("data: ", response);
                     progressDialog.dismiss();
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -292,6 +293,7 @@ public class CompleteProfile extends AppCompatActivity
             public Map<String, String> getParams() {
                 Map<String, String> map =  new HashMap<>();
                 map.put("idKey", sharedPreferences.getString("userId", ""));
+                map.put("tempKey", "1");
                 map.put("phoneKey", phone);
                 map.put("stateKey", state);
                 map.put("collegeKey", college);
@@ -341,19 +343,19 @@ public class CompleteProfile extends AppCompatActivity
 
         if(college.equals("null") && college_name.equals("null"))
         {
-            college_auto_complete.setText("");
+            setCollege.setText("");
         }
         else if(college.equals("null") && !college_name.equals("null"))
         {
-            college_auto_complete.setText(college_name);
+            setCollege.setText(college_name);
         }
         else if(!college.equals("null") && college_name.equals("null"))
         {
-            college_auto_complete.setText(college);
+            setCollege.setText(college);
         }
         else if(!college.equals("null") && !college_name.equals("null"))
         {
-            college_auto_complete.setText(college);
+            setCollege.setText(college);
         }
     }
 }

@@ -9,7 +9,6 @@
     tools:context=".College">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -215,7 +214,6 @@
 
                         <LinearLayout
                             android:layout_marginTop="20dp"
-                            android:id="@+id/card2"
                             android:layout_below="@id/card1"
                             android:gravity="center"
                             android:orientation="horizontal"

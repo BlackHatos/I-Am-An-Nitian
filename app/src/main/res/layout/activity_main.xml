@@ -10,7 +10,6 @@
     tools:context=".MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -330,7 +329,6 @@
                   <LinearLayout
                       android:layout_marginTop="10dp"
                       android:layout_below="@id/cardList1"
-                      android:id="@+id/cardList2"
                       android:gravity="center"
                       android:orientation="horizontal"
                       android:layout_width="match_parent"
@@ -474,7 +472,6 @@
                   android:paddingStart="10dp"
                   android:paddingEnd="10dp"
                   android:layout_below="@id/cardAfterMainCard"
-                 android:id="@+id/thirdRelativeLayout"
                   android:layout_width="match_parent"
                   android:layout_height="200dp">
 

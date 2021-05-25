@@ -9,7 +9,6 @@
     tools:context=".SuccessStory">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -148,7 +147,6 @@
                        <TextView
                            android:layout_centerVertical="true"
                            android:layout_toRightOf="@id/edison"
-                           android:id="@+id/edi_txt"
                            android:fontFamily="@font/work_sans_semibold"
                            android:layout_marginStart="10dp"
                            android:textSize="12sp"

@@ -1,18 +1,19 @@
 package me.at.nitsxr;
 
+import android.util.Log;
+
 public class CollegeItem
 {
     private String collegeName;
-    private int collegeLogo;
-
-    public CollegeItem(String collegeName, int collegeLogo)
+    private String logoUrl;
+    public CollegeItem(String collegeName, String logoUrl)
     {
-        this.collegeLogo = collegeLogo;
+        this.logoUrl = logoUrl;
         this.collegeName = collegeName;
     }
 
-    public int getCollegeLogo() {
-        return collegeLogo;
+    public String getLogoUrl() {
+        return logoUrl;
     }
 
     public String getCollegeName() {

@@ -25,13 +25,27 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static in.co.iamannitian.iamannitian.CompleteProfile.COLLEGE_NAME;
 
@@ -62,9 +76,6 @@ public class CollegeSuggestions extends AppCompatActivity
         collegeAutoComplete.clearFocus();
         // Get shared prefs
         sharedPreferences = getSharedPreferences("tempData",MODE_PRIVATE);
-        // Set adapter
-        collegeAdapter = new CollegeAdapter(this,collegeItemList);
-        collegeAutoComplete.setAdapter(collegeAdapter);
 
         // Move the cursor at the end of the autocomplete text view
         collegeAutoComplete.setSelection(collegeAutoComplete.getText().toString().length());
@@ -143,46 +154,41 @@ public class CollegeSuggestions extends AppCompatActivity
         setUpToolbarMenu();
     }
 
-        /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
-    private void setUpToolbarMenu() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-       actionBar.setDisplayHomeAsUpEnabled(true);
-            toolbar.getNavigationIcon().setColorFilter(getResources()
-                    .getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
-    }
-
-    private void fillCollege()
+    public void fillCollege()
     {
+        final String url = "https://app.iamannitian.com/app/college_suggestion.php";
         collegeItemList = new ArrayList<>();
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Srinagar", R.drawable.srinagar));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Trichy", R.drawable.trichy));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Rourkela", R.drawable.rourkela));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Sikkim", R.drawable.sikkim));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Silchar", R.drawable.silchar));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Nagpur", R.drawable.nagpur));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Nagaland", R.drawable.nagaland));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Agartala", R.drawable.agartala));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Andhra Pradesh", R.drawable.andhra));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Jamshedpur", R.drawable.jamshedpur));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Jalandhar", R.drawable.jalandhar));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Surat", R.drawable.surat));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Suratkal", R.drawable.suratkal));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Allahabad", R.drawable.allahabad));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Calicut", R.drawable.calicut));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Durgapur", R.drawable.durgapur));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Warangal", R.drawable.warangal));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Puducherry", R.drawable.pudu));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Meghalaya", R.drawable.meghalay));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Manipur", R.drawable.manipur));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Mizoram", R.drawable.mizoram));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Bhopal", R.drawable.bhopal));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Kurukshetra", R.drawable.kurukshetra));
-        collegeItemList.add(new CollegeItem("National Institute Of Technology Jaipur", R.drawable.jaipur));
+
+        StringRequest sr = new StringRequest(0, url,
+                response -> {
+                   try
+                    {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for(int i=0; i<jsonArray.length(); i++)
+                        {
+                            JSONObject object = jsonArray.getJSONObject(i);
+                            String collegeName = object.getString("name");
+                            String imageUrl = object.getString("url");
+                            collegeItemList.add(new CollegeItem(collegeName,imageUrl));
+                        }
+                    }
+                    catch
+                    (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    collegeAdapter = new CollegeAdapter(this,collegeItemList);
+                    collegeAutoComplete.setAdapter(collegeAdapter);
+                    collegeAdapter.notifyDataSetChanged();
+
+                }, error -> {
+            Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
+        });
+
+        RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
+        rq.add(sr);
     }
 
-    //handing hardware back button
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -199,4 +205,15 @@ public class CollegeSuggestions extends AppCompatActivity
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void setUpToolbarMenu()
+    {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar.getNavigationIcon().setColorFilter(getResources()
+                .getColor(R.color.textColor1), PorterDuff.Mode.SRC_ATOP);
+    }
+
 }

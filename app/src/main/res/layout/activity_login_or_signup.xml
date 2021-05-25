@@ -61,8 +61,7 @@
             />
 
        <FrameLayout
-        android:id="@+id/FrameLayout1"
-        android:layout_width="match_parent"
+           android:layout_width="match_parent"
         android:layout_height="50dp"
 		android:layout_marginTop="10dp"
 		>
@@ -85,7 +84,6 @@
     </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/FrameLayout2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
@@ -108,7 +106,6 @@
             <com.google.android.gms.common.SignInButton
                  android:visibility="gone"
                 android:layout_marginTop="10dp"
-                android:id="@+id/google_sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

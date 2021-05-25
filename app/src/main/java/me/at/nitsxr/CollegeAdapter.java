@@ -3,6 +3,7 @@ package me.at.nitsxr;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 
 import in.co.iamannitian.iamannitian.CollegeSuggestions;
 import in.co.iamannitian.iamannitian.CompleteProfile;
@@ -54,7 +57,13 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
           if(collegeItem != null)
           {
               collegeName.setText(collegeItem.getCollegeName());
-              collegeLogo.setImageResource(collegeItem.getCollegeLogo());
+
+              Glide.with(mContext)
+                      .load(collegeItem.getLogoUrl())
+                      .placeholder(R.drawable.jossa)
+                      .fitCenter()
+                      .centerInside()
+                      .into(collegeLogo);
           }
 
         clickCollege.setOnClickListener(v -> {
@@ -111,4 +120,5 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
             return ((CollegeItem) resultValue).getCollegeName();
         }
     };
+
 }

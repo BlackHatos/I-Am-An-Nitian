@@ -9,7 +9,6 @@
     tools:context=".EditProfile">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -319,7 +318,6 @@
                         android:autofillHints="" />
 
                     <LinearLayout
-                        android:id="@+id/layoutx"
                         android:layout_marginBottom="25dp"
                         android:layout_below="@id/user_branch"
                         android:orientation="horizontal"
@@ -338,7 +336,6 @@
                                 android:layout_marginStart="2dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/start"
                                 android:text="Start Year"
                                 android:fontFamily="@font/work_sans_semibold"
                                 android:textSize="13sp"
@@ -371,7 +368,6 @@
                                 android:layout_marginStart="2dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/end"
                                 android:text="End Year"
                                 android:fontFamily="@font/work_sans_semibold"
                                 android:textSize="13sp"
