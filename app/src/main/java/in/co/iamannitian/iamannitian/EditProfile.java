@@ -12,7 +12,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -77,102 +76,6 @@ public class EditProfile extends AppCompatActivity
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void setData()
-    {
-        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-        String user_name = sharedPreferences.getString("userName", "");
-        String user_email = sharedPreferences.getString("userEmail", "");
-        String user_phone = sharedPreferences.getString("userPhone", "");
-        String imageUrl = sharedPreferences.getString("userPicUrl", "");
-        String user_state = sharedPreferences.getString("userState", "");
-        String user_college = sharedPreferences.getString("userCollege", "");
-        String user_branch = sharedPreferences.getString("userBranch", "");
-        String user_degree = sharedPreferences.getString("userDegree", "");
-        String start_year = sharedPreferences.getString("userStartYear", "");
-        String end_year = sharedPreferences.getString("userEndYear", "");
-
-
-        name.setText(user_name);
-        email.setText(user_email);
-
-        // Phone
-        if(user_phone.equals("null"))
-        {
-            phone.setText("");
-        }
-        else
-        {
-            phone.setText(user_phone);
-        }
-
-        // State
-        if(user_state.equals("null"))
-        {
-            state.setText("");
-        }
-        else
-        {
-            state.setText(user_state);
-        }
-
-        // College
-        if(user_college.equals("null"))
-        {
-            college.setText("");
-        }
-        else
-        {
-            college.setText(user_college);
-        }
-
-        // Degree
-        if(user_degree.equals("null"))
-        {
-            degree.setText("");
-        }
-        else
-        {
-            degree.setText(user_degree);
-        }
-
-        // Branch
-        if(user_branch.equals("null"))
-        {
-            branch.setText("");
-        }
-        else
-        {
-            branch.setText(user_branch);
-        }
-
-        // Start year
-        if(start_year.equals("null"))
-        {
-            start.setText("");
-        }
-        else
-        {
-            start.setText(start_year);
-        }
-
-        // End yar
-        if(end_year.equals("null"))
-        {
-            end.setText("");
-        }
-        else
-        {
-            end.setText(end_year);
-        }
-
-        Glide.with(this)
-                .load(imageUrl)
-                .placeholder(R.drawable.usericon)
-                .fitCenter()
-                .centerInside()
-                .into(profilePic);
-    }
-
     public void saveProfile()
     {
 
@@ -229,7 +132,6 @@ public class EditProfile extends AppCompatActivity
                   progressDialog.dismiss();
                     // Enable user interaction
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                     try
                     {
                         JSONObject object = new JSONObject(response);
@@ -275,13 +177,13 @@ public class EditProfile extends AppCompatActivity
                     catch
                     (JSONException e)
                     {
-                        Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "failed to save changes-1", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
                     progressDialog.dismiss();
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                     Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(this, "failed to save changes-2", Toast.LENGTH_SHORT).show();
                 }){
             @Override
             public Map<String, String> getParams() {
@@ -386,4 +288,102 @@ public class EditProfile extends AppCompatActivity
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+    public void setData()
+    {
+        sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+        String user_name = sharedPreferences.getString("userName", "");
+        String user_email = sharedPreferences.getString("userEmail", "");
+        String user_phone = sharedPreferences.getString("userPhone", "");
+        String imageUrl = sharedPreferences.getString("userPicUrl", "");
+        String user_state = sharedPreferences.getString("userState", "");
+        String user_college = sharedPreferences.getString("userCollege", "");
+        String user_branch = sharedPreferences.getString("userBranch", "");
+        String user_degree = sharedPreferences.getString("userDegree", "");
+        String start_year = sharedPreferences.getString("userStartYear", "");
+        String end_year = sharedPreferences.getString("userEndYear", "");
+
+
+        name.setText(user_name);
+        email.setText(user_email);
+
+        // Phone
+        if(user_phone.equals("null"))
+        {
+            phone.setText("");
+        }
+        else
+        {
+            phone.setText(user_phone);
+        }
+
+        // State
+        if(user_state.equals("null"))
+        {
+            state.setText("");
+        }
+        else
+        {
+            state.setText(user_state);
+        }
+
+        // College
+        if(user_college.equals("null"))
+        {
+            college.setText("");
+        }
+        else
+        {
+            college.setText(user_college);
+        }
+
+        // Degree
+        if(user_degree.equals("null"))
+        {
+            degree.setText("");
+        }
+        else
+        {
+            degree.setText(user_degree);
+        }
+
+        // Branch
+        if(user_branch.equals("null"))
+        {
+            branch.setText("");
+        }
+        else
+        {
+            branch.setText(user_branch);
+        }
+
+        // Start year
+        if(start_year.equals("null"))
+        {
+            start.setText("");
+        }
+        else
+        {
+            start.setText(start_year);
+        }
+
+        // End yar
+        if(end_year.equals("null"))
+        {
+            end.setText("");
+        }
+        else
+        {
+            end.setText(end_year);
+        }
+
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.usericon)
+                .fitCenter()
+                .centerInside()
+                .into(profilePic);
+    }
+
 }

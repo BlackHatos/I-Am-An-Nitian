@@ -94,195 +94,73 @@ public class CompleteProfile extends AppCompatActivity
              String from = start_year.getText().toString().trim().replaceAll("\\s+","");
              String to = end_year.getText().toString().trim().replaceAll("\\s+","");
 
-           /*  if(phone.isEmpty())
-             {
-                 user_phone.requestFocus();
-                 user_phone.setError("required");
-                 return;
-             }
-
-             if(state.isEmpty())
-             {
-                 state_auto_complete.requestFocus();
-                 state_auto_complete.setError("required");
-                 return;
-             }
-
-             if(college.isEmpty())
-             {
-                 setCollege.requestFocus();
-                 setCollege.setError("required");
-                 return;
-             }
-
-             if(degree.isEmpty())
-             {
-                 user_degree.requestFocus();
-                 user_degree.setError("required");
-                 return;
-             }
-
-             if(branch.isEmpty())
-             {
-                 user_branch.requestFocus();
-                 user_branch.setError("required");
-                 return;
-             }
-
-             if(from.isEmpty())
-             {
-                 start_year.requestFocus();
-                 start_year.setError("required");
-                 return;
-             }
-
-             if(to.isEmpty())
-             {
-                 end_year.requestFocus();
-                 end_year.setError("required");
-                 return;
-             }*/
-
              // If every thing is OK
              proceedToServer(phone, state, college, degree, branch, from, to);
          });
 
     }
 
-    public void setPreferences()
-    {
-         String phone = sharedPreferences.getString("userPhone", "null");
-         String state = sharedPreferences.getString("userState", "null");
-         String college = sharedPreferences.getString("userCollege", "null");
-         String degree = sharedPreferences.getString("userDegree", "null");
-         String branch = sharedPreferences.getString("userBranch", "null");
-         String start = sharedPreferences.getString("userStartYear","null");
-         String end =  sharedPreferences.getString("userEndYear","null");
-
-         // Phone
-         if(phone.equals("null"))
-         {
-             user_phone.setText("");
-         }
-         else
-         {
-             user_phone.setText(phone);
-         }
-
-         // State
-        if(state.equals("null"))
-        {
-            state_auto_complete.setText("");
-        }
-        else
-        {
-            state_auto_complete.setText(state);
-        }
-
-        // College
-        if(college.equals("null"))
-        {
-            setCollege.setText("");
-        }
-        else
-        {
-            setCollege.setText(college);
-        }
-
-        // Degree
-        if(degree.equals("null"))
-        {
-            user_degree.setText("");
-        }
-        else
-        {
-            user_degree.setText(degree);
-        }
-
-        // Branch
-        if(branch.equals("null"))
-        {
-            user_branch.setText("");
-        }
-        else
-        {
-             user_branch.setText(branch);
-        }
-
-        // Start year
-        if(start.equals("null"))
-        {
-             start_year.setText("");
-        }
-        else
-        {
-              start_year.setText(start);
-        }
-
-        // End yar
-        if(end.equals("null"))
-        {
-           end_year.setText("");
-        }
-        else
-        {
-            end_year.setText(end);
-        }
-    }
-
     private void proceedToServer(final String phone, final  String state,
                                  final String college, final String degree,
                                  final  String branch, final String from, final  String to)
     {
-
         //===> show progress bar first
         progressDialog.setMessage("Processing...");
         progressDialog.show();
 
         // Disable user interaction when progress dialog appears
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
-       final String url = "https://app.iamannitian.com/app/update-profile.php";
+       final String url = "https://app.iamannitian.com/app/complete-profile.php";
         //error
         StringRequest sr = new StringRequest(1, url,
                 response -> {
 
-            Log.d("data: ", response);
                     progressDialog.dismiss();
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                     try
                     {
                         JSONObject object = new JSONObject(response);
-                        String status = object.getString("status");
+                        String status =  object.getString("status");
 
                         if(status.equals("1"))
                         {
+                            String phonex = object.getString("phone");
+                            String statex= object.getString("state");
+                            String collegex = object.getString("college");
+                            String degreex = object.getString("degree");
+                            String branchx = object.getString("branch");
+                            String startx = object.getString("start");
+                            String endx = object.getString("end");
+
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("userPhone", object.getString("phone"));
-                            editor.putString("userState", object.getString("state"));
-                            editor.putString("userCollege",object.getString("college"));
-                            editor.putString("userDegree", object.getString("degree"));
-                            editor.putString("userBranch", object.getString("branch"));
-                            editor.putString("userStartYear", object.getString("start"));
-                            editor.putString("userEndYear", object.getString("end"));
+                            editor.putString("userPhone",phonex);
+                            editor.putString("userState", statex);
+                            editor.putString("userCollege",collegex);
+                            editor.putString("userDegree",degreex);
+                            editor.putString("userBranch",branchx);
+                            editor.putString("userStartYear",startx);
+                            editor.putString("userEndYear",endx);
                             editor.apply();
 
-                            Intent intent  = new Intent(CompleteProfile.this,MainActivity.class);
+                            Toast.makeText(getApplicationContext(), "profile updated successfully", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(CompleteProfile.this, MainActivity.class);
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                             finish();
                         }
                         else
                         {
-                            String message = object.getString("message");
-                            Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, object.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    catch (JSONException e)
+                    catch
+                    (JSONException e)
                     {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),"an error has occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "failed to update profile-2", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
@@ -293,7 +171,6 @@ public class CompleteProfile extends AppCompatActivity
             public Map<String, String> getParams() {
                 Map<String, String> map =  new HashMap<>();
                 map.put("idKey", sharedPreferences.getString("userId", ""));
-                map.put("tempKey", "1");
                 map.put("phoneKey", phone);
                 map.put("stateKey", state);
                 map.put("collegeKey", college);
@@ -356,6 +233,87 @@ public class CompleteProfile extends AppCompatActivity
         else if(!college.equals("null") && !college_name.equals("null"))
         {
             setCollege.setText(college);
+        }
+    }
+
+    public void setPreferences()
+    {
+        String phone = sharedPreferences.getString("userPhone", "null");
+        String state = sharedPreferences.getString("userState", "null");
+        String college = sharedPreferences.getString("userCollege", "null");
+        String degree = sharedPreferences.getString("userDegree", "null");
+        String branch = sharedPreferences.getString("userBranch", "null");
+        String start = sharedPreferences.getString("userStartYear","null");
+        String end =  sharedPreferences.getString("userEndYear","null");
+
+        // Phone
+        if(phone.equals("null"))
+        {
+            user_phone.setText("");
+        }
+        else
+        {
+            user_phone.setText(phone);
+        }
+
+        // State
+        if(state.equals("null"))
+        {
+            state_auto_complete.setText("");
+        }
+        else
+        {
+            state_auto_complete.setText(state);
+        }
+
+        // College
+        if(college.equals("null"))
+        {
+            setCollege.setText("");
+        }
+        else
+        {
+            setCollege.setText(college);
+        }
+
+        // Degree
+        if(degree.equals("null"))
+        {
+            user_degree.setText("");
+        }
+        else
+        {
+            user_degree.setText(degree);
+        }
+
+        // Branch
+        if(branch.equals("null"))
+        {
+            user_branch.setText("");
+        }
+        else
+        {
+            user_branch.setText(branch);
+        }
+
+        // Start year
+        if(start.equals("null"))
+        {
+            start_year.setText("");
+        }
+        else
+        {
+            start_year.setText(start);
+        }
+
+        // End yar
+        if(end.equals("null"))
+        {
+            end_year.setText("");
+        }
+        else
+        {
+            end_year.setText(end);
         }
     }
 }
