@@ -73,4 +73,6 @@ dependencies {
     //firebase cloud messaging
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
+     // uploading files to the server
+     implementation 'com.github.gotev:android-upload-service:4.5.2'
 }

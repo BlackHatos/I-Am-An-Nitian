@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/cancel"
+        android:layout_margin="25dp"
+        android:src="@drawable/ic_close_red_24dp"
+        />
+
+    <Button
+        android:background="@drawable/delete_button_shape"
+        android:paddingStart="10dp"
+        android:id="@+id/deletePhoto"
+        android:paddingEnd="10dp"
+        android:layout_margin="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Delete Photo"
+        />
+
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_centerHorizontal="true"
+            android:layout_width="160dp"
+            android:id="@+id/preview_image"
+            android:layout_height="160dp"
+            app:civ_border_width="4dp"
+            android:src="@drawable/usericon"
+            app:civ_border_color="@color/textColor1"
+            />
+
+           <LinearLayout
+               android:layout_marginTop="30dp"
+               android:layout_centerHorizontal="true"
+            android:layout_below="@id/preview_image"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/select_image"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:background="@drawable/button_background"
+                android:text="Select Photo"
+                android:fontFamily="@font/work_sans_semibold"
+                android:textAllCaps="false"
+                android:textColor="@color/textColor2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"/>
+
+             <Button
+                 android:id="@+id/upload_image"
+                 android:textColor="@color/textColor2"
+                 android:fontFamily="@font/work_sans_semibold"
+                 android:paddingStart="10dp"
+                 android:paddingEnd="10dp"
+                 android:layout_marginStart="20dp"
+                 android:background="@drawable/button_background"
+                 android:text="Upload Photo"
+                 android:textAllCaps="false"
+                 android:layout_width="wrap_content"
+                 android:layout_height="40dp"/>
+            </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

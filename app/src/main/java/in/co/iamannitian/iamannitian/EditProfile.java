@@ -1,19 +1,29 @@
 package in.co.iamannitian.iamannitian;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,19 +32,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
+import net.gotev.uploadservice.data.UploadNotificationConfig;
+import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class EditProfile extends AppCompatActivity
 {
@@ -42,10 +56,12 @@ public class EditProfile extends AppCompatActivity
     private static final int IMAGE_REQUEST_CODE = 1;
     private Toolbar toolbar;
     private EditText name, email, phone, college, degree, state, branch, start, end;
-    private ImageView profilePic, selectImage;
+    private ImageView profilePic, editImage;
     private SharedPreferences sharedPreferences;
     private ProgressDialog progressDialog;
     private Bitmap bitmap;
+    private  Uri picturePath;
+    private ImageView previewImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,7 +71,14 @@ public class EditProfile extends AppCompatActivity
         setUpToolbarMenu();
         initVariables();
         setData();
+        requestStoragePermission();
 
+        editImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
     }
 
     public void initVariables()
@@ -70,7 +93,8 @@ public class EditProfile extends AppCompatActivity
         start = findViewById(R.id.start_year);
         end = findViewById(R.id.end_year);
         profilePic = findViewById(R.id.profile_image);
-        selectImage = findViewById(R.id.select_image);
+        editImage = findViewById(R.id.edit_image);
+        previewImage = findViewById(R.id.preview_image);
 
         progressDialog = new ProgressDialog(this, R.style.ProgressDialogStyle);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -206,32 +230,6 @@ public class EditProfile extends AppCompatActivity
         RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
         rq.add(sr);
     }
-
-    // Select Image from gallery
-    public void selectImage(View view)
-    {
-        Intent img = new Intent();
-        img.setType("image/*");
-        img.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(img,IMAGE_REQUEST_CODE);
-    }
-
-    // Set the image
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data!=null)
-        {
-            Uri path  = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-                profilePic.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     private void setUpToolbarMenu()
     {
@@ -384,6 +382,117 @@ public class EditProfile extends AppCompatActivity
                 .fitCenter()
                 .centerInside()
                 .into(profilePic);
+    }
+
+    public void  showPopup(View view)
+    {
+        final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.upoad_image_popup_layout,null);
+        boolean focusable = false;
+        int width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        int height = RelativeLayout.LayoutParams.MATCH_PARENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView,width,height,focusable);
+        popupWindow.setAnimationStyle(R.style.windowAnimationTransition);
+        popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+        Button selectPhoto = popupView.findViewById(R.id.select_image);
+        previewImage = popupView.findViewById(R.id.preview_image);
+        ImageView cancel = popupView.findViewById(R.id.cancel);
+        Button uploadImage = popupView.findViewById(R.id.upload_image);
+        Button deletePhoto = popupView.findViewById(R.id.deletePhoto);
+
+        selectPhoto.setOnClickListener(v -> selectImage());
+        cancel.setOnClickListener(v -> popupWindow.dismiss());
+        uploadImage.setOnClickListener(v -> uploadPhoto());
+        deletePhoto.setOnClickListener(v -> deletePicture());
+    }
+
+    private void uploadPhoto()
+    {
+        String path = getPath(picturePath);
+        final String my_url = "http://app.iamannitian.com/app/upload_picture.php";
+        try {
+           //String uploadId = UUID.randomUUID().toString();
+            new MultipartUploadRequest(this, my_url).addFileToUpload(path, "uploadFile")
+                    //.setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(3)
+                    .startUpload();
+
+        } catch (Exception ex) {
+            Log.d("errorx", ex+"");
+
+        }
+    }
+
+    private void deletePicture()
+    {
+        // delete profile picture
+    }
+
+    // Select Image from gallery
+    public void selectImage()
+    {
+        Intent img = new Intent();
+        img.setType("image/*");
+        img.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(img,IMAGE_REQUEST_CODE);
+    }
+
+    // Set the image
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data!=null)
+        {
+            picturePath  = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picturePath);
+                previewImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String getPath(Uri uri) {
+
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + "=?", new String[]{document_id}, null
+        );
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
+    }
+
+    private void requestStoragePermission() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            //If the user has denied the permission previously your code will come to this block
+            //Here you can explain why you need this permission
+            //Explain here why you need this permission
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                4655);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 4655) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }
