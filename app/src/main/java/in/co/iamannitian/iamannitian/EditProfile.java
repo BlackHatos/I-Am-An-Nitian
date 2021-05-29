@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -35,33 +34,39 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
-import net.gotev.uploadservice.data.UploadNotificationConfig;
-import net.gotev.uploadservice.protocols.multipart.MultipartUploadRequest;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+
 
 public class EditProfile extends AppCompatActivity
 {
-
-    private static final int IMAGE_REQUEST_CODE = 1;
     private Toolbar toolbar;
     private EditText name, email, phone, college, degree, state, branch, start, end;
     private ImageView profilePic, editImage;
     private SharedPreferences sharedPreferences;
     private ProgressDialog progressDialog;
-    private Bitmap bitmap;
-    private  Uri picturePath;
+    private PopupWindow popupWindow;
     private ImageView previewImage;
+    private Bitmap bitmap;
+    private String filePath;
+    private static final String ROOT_URL = "http://app.iamannitian.com/app/upload_picture.php";
+    private static final int REQUEST_PERMISSIONS = 100;
+    private static final int PICK_IMAGE_REQUEST =1 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -391,7 +396,7 @@ public class EditProfile extends AppCompatActivity
         boolean focusable = false;
         int width = RelativeLayout.LayoutParams.MATCH_PARENT;
         int height = RelativeLayout.LayoutParams.MATCH_PARENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView,width,height,focusable);
+        popupWindow = new PopupWindow(popupView,width,height,focusable);
         popupWindow.setAnimationStyle(R.style.windowAnimationTransition);
         popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
         Button selectPhoto = popupView.findViewById(R.id.select_image);
@@ -402,24 +407,54 @@ public class EditProfile extends AppCompatActivity
 
         selectPhoto.setOnClickListener(v -> selectImage());
         cancel.setOnClickListener(v -> popupWindow.dismiss());
-        uploadImage.setOnClickListener(v -> uploadPhoto());
+        uploadImage.setOnClickListener(v -> uploadPhoto(bitmap));
         deletePhoto.setOnClickListener(v -> deletePicture());
     }
 
-    private void uploadPhoto()
+    private void uploadPhoto(final Bitmap bitmap)
     {
-        String path = getPath(picturePath);
-        final String my_url = "http://app.iamannitian.com/app/upload_picture.php";
-        try {
-           //String uploadId = UUID.randomUUID().toString();
-            new MultipartUploadRequest(this, my_url).addFileToUpload(path, "uploadFile")
-                    //.setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(3)
-                    .startUpload();
+        if(filePath != null)
+        {
+            VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, ROOT_URL,
+                    response -> {
 
-        } catch (Exception ex) {
-            Log.d("errorx", ex+"");
+                        try {
+                            JSONObject obj = new JSONObject(new String(response.data));
+                            String status = obj.getString("status");
+                            String message = obj.getString("message");
 
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                            if(status.equals("1"))
+                            {
+                                popupWindow.dismiss();
+                                startActivity(new Intent(EditProfile.this, EditProfile.class));
+                                overridePendingTransition(0,0);
+                            }
+                        }
+                        catch (JSONException e)
+                        {
+                            Toast.makeText(getApplicationContext(), "error while uploading image-1", Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    error -> {
+                        Toast.makeText(getApplicationContext(), "error while uploading image-2", Toast.LENGTH_LONG).show();
+                    }) {
+
+                @Override
+                protected Map<String, DataPart> getByteData() {
+                    Map<String, DataPart> params = new HashMap<>();
+                    String idKey = sharedPreferences.getString("userId", "");
+                    String imageName = idKey+"-"+System.currentTimeMillis();
+                    params.put("image", new DataPart(imageName + ".png", getFileDataFromDrawable(bitmap)));
+                    return params;
+                }
+            };
+            Volley.newRequestQueue(this).add(volleyMultipartRequest);
+        }
+        else
+        {
+            Toast.makeText(this, "no image selected", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -434,23 +469,41 @@ public class EditProfile extends AppCompatActivity
         Intent img = new Intent();
         img.setType("image/*");
         img.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(img,IMAGE_REQUEST_CODE);
+        startActivityForResult(img,PICK_IMAGE_REQUEST);
     }
 
     // Set the image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data!=null)
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data!=null && data.getData()!= null)
         {
-            picturePath  = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picturePath);
-                previewImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            Uri picUri = data.getData();
+            filePath = getPath(picUri);
+
+            if(filePath != null)
+            {
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
+                    previewImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            else
+            {
+                Toast.makeText(
+                        EditProfile.this,"no image selected",
+                        Toast.LENGTH_LONG).show();
+            }
+
         }
+    }
+
+    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     private String getPath(Uri uri) {
@@ -480,12 +533,12 @@ public class EditProfile extends AppCompatActivity
             //Explain here why you need this permission
         }
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                4655);
+                REQUEST_PERMISSIONS);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 4655) {
+        if (requestCode == REQUEST_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
 
