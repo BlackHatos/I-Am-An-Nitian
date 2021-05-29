@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,19 +32,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -206,13 +198,13 @@ public class EditProfile extends AppCompatActivity
                     catch
                     (JSONException e)
                     {
-                        Toast.makeText(this, "failed to save changes-1", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
                     }
 
                 }, error -> {
                     progressDialog.dismiss();
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                     Toast.makeText(this, "failed to save changes-2", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(this, "failed to save changes", Toast.LENGTH_SHORT).show();
                 }){
             @Override
             public Map<String, String> getParams() {
@@ -308,7 +300,11 @@ public class EditProfile extends AppCompatActivity
         String end_year = sharedPreferences.getString("userEndYear", "");
 
 
-        name.setText(user_name);
+        name.setText(user_name+" ");
+
+        // put cursor at the end of the edit text
+        name.setSelection(name.getText().length());
+
         email.setText(user_email);
 
         // Phone
@@ -405,8 +401,22 @@ public class EditProfile extends AppCompatActivity
         Button uploadImage = popupView.findViewById(R.id.upload_image);
         Button deletePhoto = popupView.findViewById(R.id.deletePhoto);
 
+        if(filePath == null)
+        {
+            Glide.with(this)
+                    .load(sharedPreferences.getString("userPicUrl", ""))
+                    .placeholder(R.drawable.usericon)
+                    .fitCenter()
+                    .centerInside()
+                    .into(previewImage);
+        }
+
         selectPhoto.setOnClickListener(v -> selectImage());
-        cancel.setOnClickListener(v -> popupWindow.dismiss());
+        cancel.setOnClickListener(v -> {
+            popupWindow.dismiss();
+            startActivity(new Intent(EditProfile.this, EditProfile.class));
+            overridePendingTransition(0,0);
+        });
         uploadImage.setOnClickListener(v -> uploadPhoto(bitmap));
         deletePhoto.setOnClickListener(v -> deletePicture());
     }
@@ -427,6 +437,11 @@ public class EditProfile extends AppCompatActivity
 
                             if(status.equals("1"))
                             {
+                                // update pic url
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("userPicUrl",obj.getString("url"));
+                                editor.apply();
+
                                 popupWindow.dismiss();
                                 startActivity(new Intent(EditProfile.this, EditProfile.class));
                                 overridePendingTransition(0,0);
@@ -434,11 +449,11 @@ public class EditProfile extends AppCompatActivity
                         }
                         catch (JSONException e)
                         {
-                            Toast.makeText(getApplicationContext(), "error while uploading image-1", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "error while uploading image", Toast.LENGTH_LONG).show();
                         }
                     },
                     error -> {
-                        Toast.makeText(getApplicationContext(), "error while uploading image-2", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "error while uploading image", Toast.LENGTH_LONG).show();
                     }) {
 
                 @Override
@@ -454,13 +469,57 @@ public class EditProfile extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(this, "no image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void deletePicture()
     {
-        // delete profile picture
+        final String url = "http://app.iamannitian.com/app/delete_picture.php";
+
+        StringRequest sr = new StringRequest(1, url,
+                response -> {
+
+                    try
+                    {
+                        JSONObject object = new JSONObject(response);
+                        String status =  object.getString("status");
+
+                        if(status.equals("1"))
+                        {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userPicUrl","");
+                            editor.apply();
+                            Toast.makeText(this, "Picture deleted successfully", Toast.LENGTH_SHORT).show();
+                            popupWindow.dismiss();
+                            startActivity(new Intent(EditProfile.this, EditProfile.class));
+                            overridePendingTransition(0,0);
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "failed to delete picture", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    catch
+                    (JSONException e)
+                    {
+                        Toast.makeText(this, "failed to delete image", Toast.LENGTH_SHORT).show();
+                    }
+
+                }, error -> {
+            Toast.makeText(this, "failed to delete image", Toast.LENGTH_SHORT).show();
+        }){
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> map =  new HashMap<>();
+                map.put("idKey", sharedPreferences.getString("userId", ""));
+                map.put("codeKey", "J6T32A-Pubs7/=H~");
+                return map;
+            }
+        };
+
+        RequestQueue rq = Volley.newRequestQueue(getApplicationContext());
+        rq.add(sr);
     }
 
     // Select Image from gallery
@@ -493,7 +552,7 @@ public class EditProfile extends AppCompatActivity
             else
             {
                 Toast.makeText(
-                        EditProfile.this,"no image selected",
+                        EditProfile.this,"No image selected",
                         Toast.LENGTH_LONG).show();
             }
 
@@ -547,5 +606,4 @@ public class EditProfile extends AppCompatActivity
             }
         }
     }
-
 }
