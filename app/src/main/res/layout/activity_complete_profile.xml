@@ -148,25 +148,6 @@
             android:text="@string/education"
             />
 
-     <!--   <EditText
-            android:focusableInTouchMode="false"
-            android:cursorVisible="false"
-            android:clickable="true"
-            android:focusable="true"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp"
-            android:paddingStart="16dp"
-            android:background="@drawable/complete_profile_shape"
-            android:dropDownAnchor="@id/state_auto_complete"
-            android:inputType="none"
-            android:paddingEnd="10dp"
-            android:textColorHint="@color/hintColor"
-            android:textColor="@color/colorAccent"
-            android:id="@+id/college_auto_complete"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:hint="@string/your_college"
-            android:autofillHints="" /> -->
 
         <Button
             android:focusableInTouchMode="false"
@@ -176,7 +157,6 @@
             android:paddingStart="16dp"
             android:id="@+id/setCollege"
             android:background="@drawable/complete_profile_shape"
-            android:dropDownAnchor="@id/state_auto_complete"
             android:paddingEnd="10dp"
             android:textColorHint="@color/hintColor"
             android:textColor="@color/colorAccent"
@@ -187,30 +167,17 @@
             android:textAlignment="viewStart"
             />
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="7dp"
-            android:layout_marginTop="8dp"
-            android:id="@+id/degree_view"
-            />
-
-        <AutoCompleteTextView
-            android:popupBackground="@color/colorPrimaryDark"
+        <EditText
+            android:layout_marginTop="15dp"
             android:textSize="16sp"
             android:paddingStart="16dp"
-            android:dropDownHeight="100dp"
-            android:popupElevation="1dp"
-            android:dropDownSelector="@color/colorPrimaryDark"
             android:background="@drawable/complete_profile_shape"
-            android:dropDownAnchor="@id/degree_view"
-            android:inputType="textAutoComplete|textAutoCorrect"
+            android:inputType="text"
             android:paddingEnd="10dp"
             android:textColorHint="@color/hintColor"
             android:textColor="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:completionThreshold="1"
             android:id="@+id/user_degree"
             android:hint="@string/degree"
             />
@@ -254,14 +221,13 @@
                 android:layout_marginEnd="6dp"
                 android:autofillHints="" />
 
-            <AutoCompleteTextView
+            <EditText
                 android:textSize="16sp"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:paddingStart="16dp"
                 android:maxLength="4"
                 android:background="@drawable/complete_profile_shape"
-                android:dropDownAnchor="@id/end_year"
                 android:inputType="numberDecimal"
                 android:paddingEnd="10dp"
                 android:textColorHint="@color/hintColor"

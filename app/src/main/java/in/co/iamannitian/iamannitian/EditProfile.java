@@ -18,6 +18,8 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +39,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.datatransport.cct.internal.LogEvent;
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
@@ -48,14 +53,17 @@ import java.util.Map;
 public class EditProfile extends AppCompatActivity
 {
     private Toolbar toolbar;
-    private EditText name, email, phone, college, degree, state, branch, start, end;
+    private EditText name, email, phone, degree, state, branch, start, end;
+    private Button college;
     private ImageView profilePic, editImage;
     private SharedPreferences sharedPreferences;
     private ProgressDialog progressDialog;
+    private Snackbar snackbar;
+    private RelativeLayout popupLayout;
     private PopupWindow popupWindow;
-    private ImageView previewImage;
+    private ImageView previewImage, previewImage2;
     private Bitmap bitmap;
-    private String filePath;
+    private String filePath = null;
     private static final String ROOT_URL = "http://app.iamannitian.com/app/upload_picture.php";
     private static final int REQUEST_PERMISSIONS = 100;
     private static final int PICK_IMAGE_REQUEST =1 ;
@@ -68,12 +76,22 @@ public class EditProfile extends AppCompatActivity
         setUpToolbarMenu();
         initVariables();
         setData();
+
+        getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
         requestStoragePermission();
 
         editImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopup(v);
+            }
+        });
+
+        college.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditProfile.this, CollegeSuggestions.class));
+                overridePendingTransition(0, 0);
             }
         });
     }
@@ -284,7 +302,6 @@ public class EditProfile extends AppCompatActivity
         return super.onKeyDown(keyCode, event);
     }
 
-
     public void setData()
     {
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -396,27 +413,31 @@ public class EditProfile extends AppCompatActivity
         popupWindow.setAnimationStyle(R.style.windowAnimationTransition);
         popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
         Button selectPhoto = popupView.findViewById(R.id.select_image);
+        popupLayout = popupView.findViewById(R.id.popupLayout);
+
+        // imageview to set image selected from gallery
         previewImage = popupView.findViewById(R.id.preview_image);
+        // this imageview is used to see already set image
+        previewImage2 = popupView.findViewById(R.id.preview_image2);
+
         ImageView cancel = popupView.findViewById(R.id.cancel);
         Button uploadImage = popupView.findViewById(R.id.upload_image);
         Button deletePhoto = popupView.findViewById(R.id.deletePhoto);
 
-        if(filePath == null)
-        {
             Glide.with(this)
                     .load(sharedPreferences.getString("userPicUrl", ""))
                     .placeholder(R.drawable.usericon)
                     .fitCenter()
                     .centerInside()
-                    .into(previewImage);
-        }
+                    .into(previewImage2);
 
         selectPhoto.setOnClickListener(v -> selectImage());
+
         cancel.setOnClickListener(v -> {
             popupWindow.dismiss();
-            startActivity(new Intent(EditProfile.this, EditProfile.class));
-            overridePendingTransition(0,0);
+            filePath = null;
         });
+
         uploadImage.setOnClickListener(v -> uploadPhoto(bitmap));
         deletePhoto.setOnClickListener(v -> deletePicture());
     }
@@ -425,35 +446,48 @@ public class EditProfile extends AppCompatActivity
     {
         if(filePath != null)
         {
+            // show snack bar with message uploading
+            showSnackBar();
             VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, ROOT_URL,
                     response -> {
 
+                        // dismiss snack bar
+                         snackbar.dismiss();
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             String status = obj.getString("status");
                             String message = obj.getString("message");
+                            Log.d("respos", obj+"");
 
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                             if(status.equals("1"))
                             {
+                                filePath = null; //set file path to null
                                 // update pic url
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("userPicUrl",obj.getString("url"));
                                 editor.apply();
 
+                                //update picture in edit profile activity
+                                Glide.with(this)
+                                        .load(sharedPreferences.getString("userPicUrl",obj.getString("url")))
+                                        .placeholder(R.drawable.usericon)
+                                        .fitCenter()
+                                        .centerInside()
+                                        .into(profilePic);
+
                                 popupWindow.dismiss();
-                                startActivity(new Intent(EditProfile.this, EditProfile.class));
-                                overridePendingTransition(0,0);
                             }
                         }
                         catch (JSONException e)
                         {
-                            Toast.makeText(getApplicationContext(), "error while uploading image", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "error while uploading image-1", Toast.LENGTH_LONG).show();
                         }
                     },
                     error -> {
-                        Toast.makeText(getApplicationContext(), "error while uploading image", Toast.LENGTH_LONG).show();
+                        Log.e("Errorx", error+"");
+                        Toast.makeText(this, "error while uploading image-2", Toast.LENGTH_LONG).show();
                     }) {
 
                 @Override
@@ -475,25 +509,40 @@ public class EditProfile extends AppCompatActivity
 
     private void deletePicture()
     {
-        final String url = "http://app.iamannitian.com/app/delete_picture.php";
+        String profile_url = sharedPreferences.getString("userPicUrl", "");
+        if(profile_url.equals("") || profile_url.equals("null"))
+        {
+            Toast.makeText(this, "No picture to delete", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+       final String url = "http://app.iamannitian.com/app/delete_picture.php";
 
         StringRequest sr = new StringRequest(1, url,
                 response -> {
-
+                    filePath = null;
                     try
                     {
                         JSONObject object = new JSONObject(response);
                         String status =  object.getString("status");
+
+                        Toast.makeText(this, object.getString("message"), Toast.LENGTH_SHORT).show();
 
                         if(status.equals("1"))
                         {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("userPicUrl","");
                             editor.apply();
-                            Toast.makeText(this, "Picture deleted successfully", Toast.LENGTH_SHORT).show();
+
+                            //update picture in edit profile activity
+                            Glide.with(this)
+                                    .load(sharedPreferences.getString("userPicUrl", ""))
+                                    .placeholder(R.drawable.usericon)
+                                    .fitCenter()
+                                    .centerInside()
+                                    .into(profilePic);
+
                             popupWindow.dismiss();
-                            startActivity(new Intent(EditProfile.this, EditProfile.class));
-                            overridePendingTransition(0,0);
                         }
                         else
                         {
@@ -539,14 +588,19 @@ public class EditProfile extends AppCompatActivity
         {
             Uri picUri = data.getData();
             filePath = getPath(picUri);
-
+            Log.i("isNull", filePath+"");
             if(filePath != null)
             {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
+                    // hide imageview containing already set image
+                    previewImage2.setVisibility(View.GONE);
+                    // show imageview having image from gallery
+                    previewImage.setVisibility(View.VISIBLE);
+                    //set new image
                     previewImage.setImageBitmap(bitmap);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                  e.printStackTrace();
                 }
             }
             else
@@ -605,5 +659,45 @@ public class EditProfile extends AppCompatActivity
                 Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void showSnackBar()
+    {
+        snackbar = Snackbar.make(popupLayout,
+                Html.fromHtml("<font color=#ffffff>Uploading...</font>"),
+                Snackbar.LENGTH_INDEFINITE);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+        //snackbar.setAction("Dismiss", view -> snackbar.dismiss());
+        snackbar.show();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+/*
+        String temp_college = getSharedPreferences("tempData", MODE_PRIVATE)
+                .getString("tempCollege", "null");
+
+        String college_name =  getSharedPreferences("appData", MODE_PRIVATE)
+                .getString("userCollege", "null");
+
+        if(temp_college.equals("null") && college_name.equals("null"))
+        {
+            college.setText("");
+        }
+        else if(temp_college.equals("null") && !college_name.equals("null"))
+        {
+            college.setText(college_name);
+        }
+        else if(!temp_college.equals("null") && college_name.equals("null"))
+        {
+            college.setText(temp_college);
+        }
+        else if(!temp_college.equals("null") && !college_name.equals("null"))
+        {
+            college.setText(temp_college);
+        }*/
+
     }
 }

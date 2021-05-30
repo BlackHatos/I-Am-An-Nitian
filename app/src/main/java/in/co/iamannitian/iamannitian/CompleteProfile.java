@@ -22,10 +22,9 @@ import java.util.Map;
 
 public class CompleteProfile extends AppCompatActivity
 {
-    private AutoCompleteTextView state_auto_complete,user_degree;
-    private EditText  start_year, end_year, user_phone,user_branch;
+    private AutoCompleteTextView state_auto_complete;
+    private EditText  start_year, end_year, user_phone,user_branch,user_degree;;
     private Button setCollege;
-    public static final String COLLEGE_NAME = "";
     private SharedPreferences sharedPreferences;
     private Button proceed;
     private ProgressDialog progressDialog;
@@ -63,10 +62,6 @@ public class CompleteProfile extends AppCompatActivity
         ArrayAdapter<String> state_adapter = new ArrayAdapter<>(this, R.layout.custom_drop_down_list,
                 R.id.custom_drop_down_text_view, state_array);
         state_auto_complete.setAdapter(state_adapter);
-
-        ArrayAdapter<String> degree_adapter = new ArrayAdapter<>(this, R.layout.custom_drop_down_list,
-                R.id.custom_drop_down_text_view, degree_array);
-        user_degree.setAdapter(degree_adapter);
 
          // On Click the college edit text go to College Suggestion activity
          setCollege.setOnClickListener(v -> {
