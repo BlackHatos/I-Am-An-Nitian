@@ -91,6 +91,7 @@
             android:name=".MainActivity"
             android:launchMode="singleInstance" />
         <activity android:name=".LoginOrSignUpActivity" />
+
         <activity
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"

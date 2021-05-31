@@ -2,35 +2,21 @@ package in.co.iamannitian.iamannitian;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import me.at.nitsxr.OtpFragment;
 
 public class ForgetPassword extends AppCompatActivity
@@ -134,42 +120,4 @@ public class ForgetPassword extends AppCompatActivity
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
                 PorterDuff.Mode.SRC_ATOP);
     }
-
-
-    // Handling toolbar back button
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        Log.d("isCalled", "True");
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                Intent intent = new Intent(ForgetPassword.this, LoginActivity.class);
-                startActivity(intent);
-                //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    // Handing hardware back button
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        Log.d("isCalled", "Yes");
-        if(event.getAction() == KeyEvent.ACTION_DOWN)
-        {
-            switch (keyCode)
-            {
-                case KeyEvent.KEYCODE_BACK:
-                    startActivity(new Intent(ForgetPassword.this, LoginActivity.class));
-                    //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                    finish();
-                    return  true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 }
