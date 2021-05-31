@@ -31,7 +31,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @NonNull
     @Override
-    public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.news_scroll, parent, false);
         return  new NewsViewHolder(itemView);
     }
@@ -47,6 +48,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
            holder.reactionCount.setText(getterSetter.getCount());
 
+           // check reaction of the current user on each article
            if(getterSetter.getStatus().equals("1"))
                holder.reactionHeart.setImageResource(R.drawable.ic_favorite_black_24dp);
            else
@@ -57,93 +59,87 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
            if(isPresent)
                holder.saveNews.setImageResource(R.drawable.save_article);
 
+           // set news heading
      holder.newsTitle.setText(news_title);
 
+     // set news image
      Glide.with(mContext)
                 .asBitmap()
                 .load(image_url)
                 .into(holder.newsImageView);
 
+     // update user reaction on click
+    holder.reactionHeart.setOnClickListener(v -> {
+        int updated_status = 0;
+        int updated_count = 0;
 
-    holder.reactionHeart.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
+        if(getterSetter.getStatus().equals("1"))
         {
-            int updated_status = 0;
-            int updated_count = 0;
+            updated_status = 0;
+            updated_count =  Integer.parseInt(getterSetter.getCount()) - 1;
+            holder.reactionCount.setText(updated_count+"");
+            holder.reactionHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+        else
+        {
+            updated_status = 1;
+            updated_count  = Integer.parseInt(getterSetter.getCount()) + 1;
+            holder.reactionCount.setText(updated_count+"");
+            holder.reactionHeart.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
 
-            if(getterSetter.getStatus().equals("1"))
+        // update status and count
+        getterSetter.setStatus(updated_status+"");
+        getterSetter.setCount(updated_count+"");
+
+        //update local database
+        newsDataBase.updateRecord(getterSetter.getNewsId(),
+                updated_status+"",
+                updated_count+"");
+
+        notifyDataSetChanged();
+
+        // update changes to the database
+        UserReaction userReaction = new UserReaction(getterSetter,
+                mContext.getSharedPreferences("appData", MODE_PRIVATE)
+                        .getString("userId",""), updated_status);
+        userReaction.execute();
+    });
+
+        holder.cardView.setOnClickListener(v -> {
+            Intent intent =  new Intent(mContext,OnViewPagerClick.class);
+            Bundle b = new Bundle();
+            b.putSerializable("sampleObject", getterSetter);
+            intent.putExtras(b);
+            // this is used to check activity type
+            intent.putExtra("temp", "1");
+            mContext.startActivity(intent);
+        });
+
+        holder.shareButton.setOnClickListener(v -> {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() +"\n"+
+                        "Download the app : https://iamannitian.co.in");
+                intent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(intent, "Share Via");
+                mContext.startActivity(shareIntent);
+        });
+
+        holder.saveNews.setOnClickListener(v -> {
+            if(isPresent)
             {
-                updated_status = 0;
-                updated_count =  Integer.parseInt(getterSetter.getCount()) - 1;
-                holder.reactionCount.setText(updated_count+"");
-                holder.reactionHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                newsDataBase.deleteRecord(getterSetter.getNewsId());
+                holder.saveNews.setImageResource(R.drawable.save_border);
+                Toast.makeText(mContext, "Unsaved", Toast.LENGTH_SHORT).show();
             }
             else
             {
-                updated_status = 1;
-                updated_count  = Integer.parseInt(getterSetter.getCount()) + 1;
-                holder.reactionCount.setText(updated_count+"");
-                holder.reactionHeart.setImageResource(R.drawable.ic_favorite_black_24dp);
+                holder.saveNews.setImageResource(R.drawable.save_article);
+                newsDataBase.addOne(getterSetter);
+                Toast.makeText(mContext, "Saved", Toast.LENGTH_SHORT).show();
             }
-
-            getterSetter.setStatus(updated_status+"");
-            getterSetter.setCount(updated_count+"");
-
             notifyDataSetChanged();
-
-            UserReaction userReaction = new UserReaction(getterSetter,
-                    mContext.getSharedPreferences("appData", MODE_PRIVATE)
-                            .getString("userId",""), updated_status);
-            userReaction.execute();
-        }
-    });
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v)
-               {
-                   Intent intent =  new Intent(mContext,OnViewPagerClick.class);
-                   Bundle b = new Bundle();
-                   b.putSerializable("sampleObject", getterSetter);
-                   intent.putExtras(b);
-                   intent.putExtra("temp", "1");
-                   mContext.startActivity(intent);
-               }
-           });
-
-        holder.shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() +"\n"+
-                            "Download the app : https://iamannitian.co.in");
-                    intent.setType("text/plain");
-                    Intent shareIntent = Intent.createChooser(intent, "Share Via");
-                    mContext.startActivity(shareIntent);
-            }
-        });
-
-        holder.saveNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                if(isPresent)
-                {
-                    newsDataBase.deleteRecord(getterSetter.getNewsId());
-                    holder.saveNews.setImageResource(R.drawable.save_border);
-                    Toast.makeText(mContext, "Unsaved", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    holder.saveNews.setImageResource(R.drawable.save_article);
-                    newsDataBase.addOne(getterSetter);
-                    Toast.makeText(mContext, "Saved", Toast.LENGTH_SHORT).show();
-                }
-                notifyDataSetChanged();
-            }
         });
     }
 

@@ -7,7 +7,7 @@ public class NewsGetterSetter implements Serializable
     private String imageUrl;
     private String imageUrl2;
     private String newsTitle;
-    private String newsDescp;
+    private String newsDescription;
     private String newsDate;
     private String newsId;
     private String status;
@@ -55,9 +55,9 @@ public class NewsGetterSetter implements Serializable
         this.newsTitle = newsTitle;
     }
 
-    public  void setNewsDescp(String newsDescp)
+    public  void setNewsDescp(String newsDescription)
     {
-        this.newsDescp = newsDescp;
+        this.newsDescription = newsDescription;
     }
 
     public void setNewsDate(String newsDate)
@@ -76,7 +76,7 @@ public class NewsGetterSetter implements Serializable
 
    public String getNewsDescp()
    {
-       return newsDescp;
+       return newsDescription;
    }
 
    public String getNewsDate()

@@ -54,6 +54,7 @@ public class OnViewPagerClick extends AppCompatActivity
             Intent intent = getIntent();
             String temp =  intent.getStringExtra("temp");
 
+            // check activity type
             if(temp.equals("1"))
             {
                 setUpToolbarMenu("News");
@@ -72,11 +73,13 @@ public class OnViewPagerClick extends AppCompatActivity
                 publish_time.setText(getterSetter.getNewsDate());
                 reaction_count.setText(getterSetter.getCount());
 
+                // check user reaction
                 if (getterSetter.getStatus().equals("1"))
                     reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
                 else
                     reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
+                // update user reaction
                 reaction_heart.setOnClickListener(v -> {
                     int updated_status = 0;
                     int updated_count = 0;
@@ -96,6 +99,7 @@ public class OnViewPagerClick extends AppCompatActivity
                     getterSetter.setStatus(updated_status + "");
                     getterSetter.setCount(updated_count + "");
 
+                    // reflect changes in the database
                     UserReaction userReaction = new UserReaction(getterSetter,
                             getSharedPreferences("appData", MODE_PRIVATE)
                                     .getString("userId", ""), updated_status);
@@ -179,14 +183,4 @@ public class OnViewPagerClick extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-   /* public void setMargin(View view, int left, int top, int right, int bottom)
-    {
-        if(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)
-        {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            p.setMargins(left,top, right, bottom);
-            view.requestLayout();
-        }
-    }*/
 }

@@ -29,6 +29,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -368,8 +369,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             slideUtils.setNewsId(object.getString("id"));
                             slideUtils.setNewsDate(object.getString("date"));
                             slideUtils.setImageUrl2(object.getString("image2"));
+                            // reaction of current user on a particular news
                             slideUtils.setStatus(object.getString("status"));
+                            // number of likes on a particular news
                             slideUtils.setCount(object.getString("count"));
+
+                            Log.d("NewsData", object.getString("id")+" : "
+                                    +object.getString("status")+
+                                    " : "+object.getString("count"));
 
                         } catch (JSONException ex) {
                             ex.printStackTrace();

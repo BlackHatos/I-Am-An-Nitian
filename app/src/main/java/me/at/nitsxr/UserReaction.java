@@ -24,7 +24,7 @@ public class UserReaction extends AsyncTask<String, String, String>
         this.updated_status = updated_status;
     }
 
-    private  final String url  = "https://app.thenextsem.com/app/update_reaction.php";
+    private  final String url  = "https://app.iamannitian.com/app/update-reaction.php";
     @Override
     protected String doInBackground(String...params)
     {

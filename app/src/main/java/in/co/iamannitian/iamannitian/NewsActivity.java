@@ -90,24 +90,21 @@ public class NewsActivity extends AppCompatActivity
 
         bottomNavigationView.setSelectedItemId(R.id.news_icon);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
-                    case R.id.notification:
-                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
-                        overridePendingTransition(0, 0);
-                        break;
-                    case R.id.news_icon:
-                        break;
-                }
-                return true;
+            switch (menuItem.getItemId()) {
+                case R.id.home:
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    overridePendingTransition(0, 0);
+                    break;
+                case R.id.notification:
+                    startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                    overridePendingTransition(0, 0);
+                    break;
+                case R.id.news_icon:
+                    break;
             }
+            return true;
         });
 
         setUpToolbarMenu();
@@ -218,7 +215,8 @@ public class NewsActivity extends AppCompatActivity
 
     /*=======>>>>>>> Overflow menu item Click listener <<<<<<<<<=========*/
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case R.id.app_info:
@@ -267,8 +265,12 @@ public class NewsActivity extends AppCompatActivity
                                     newsGetterSetter.setNewsId(object.getString("id"));
                                     newsGetterSetter.setNewsDate(object.getString("date"));
                                     newsGetterSetter.setImageUrl2(object.getString("image2"));
+
+                                    // user's reaction for each article
                                     newsGetterSetter.setStatus(object.getString("status"));
+                                    // total reactions on each article
                                     newsGetterSetter.setCount(object.getString("count"));
+
                             }catch (JSONException ex){
                                 ex.printStackTrace();
                             }
@@ -339,4 +341,12 @@ public class NewsActivity extends AppCompatActivity
             newsAdapter.filterList(filteredList);
         }
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // update reaction after coming from view pager click listener
+    }
+
 }
