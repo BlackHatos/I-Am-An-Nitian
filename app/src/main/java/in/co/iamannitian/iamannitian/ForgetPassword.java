@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,4 +134,42 @@ public class ForgetPassword extends AppCompatActivity
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.textColor1),
                 PorterDuff.Mode.SRC_ATOP);
     }
+
+
+    // Handling toolbar back button
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.d("isCalled", "True");
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                Intent intent = new Intent(ForgetPassword.this, LoginActivity.class);
+                startActivity(intent);
+                //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Handing hardware back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log.d("isCalled", "Yes");
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            switch (keyCode)
+            {
+                case KeyEvent.KEYCODE_BACK:
+                    startActivity(new Intent(ForgetPassword.this, LoginActivity.class));
+                    //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
+                    return  true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

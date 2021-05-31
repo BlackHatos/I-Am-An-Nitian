@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,10 +36,11 @@ public class CollegeSuggestions extends AppCompatActivity
     private List<CollegeItem> collegeItemList;
     private AppCompatAutoCompleteTextView collegeAutoComplete;
     private CollegeAdapter collegeAdapter;
-    private  String college_name  = "";
     private TextView custom;
     private LinearLayout other;
-    private  View viewx;
+    private  View view_x;
+    private Intent intent2;
+    private int activityType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,8 +50,10 @@ public class CollegeSuggestions extends AppCompatActivity
         fillCollege();
         custom = findViewById(R.id.custom); // custom college suggestion text
         other = findViewById(R.id.other); // custom suggestion linear layout
-        viewx = findViewById(R.id.viewx); // horizontal line in custom suggestion
+        view_x = findViewById(R.id.viewx); // horizontal line in custom suggestion
         collegeAutoComplete = findViewById(R.id.collegeAutoComplete); // Edit text
+
+        activityType = getIntent().getIntExtra("ACTIVITY_TYPE", 2);
 
         // Prevent showing keyboard by default
         collegeAutoComplete.clearFocus();
@@ -67,7 +71,7 @@ public class CollegeSuggestions extends AppCompatActivity
                 if (event.getRawX() >= (collegeAutoComplete.getRight() -
                         collegeAutoComplete.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                     collegeAutoComplete.setText("");
-                    viewx.setVisibility(View.GONE);
+                    view_x.setVisibility(View.GONE);
                     other.setVisibility(View.GONE);
                     return true;
                 }
@@ -80,12 +84,12 @@ public class CollegeSuggestions extends AppCompatActivity
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if(collegeAutoComplete.isPopupShowing())
                 {
-                    viewx.setVisibility(View.GONE);
+                    view_x.setVisibility(View.GONE);
                     other.setVisibility(View.GONE);
                 }
                 else
                 {
-                    viewx.setVisibility(View.VISIBLE);
+                    view_x.setVisibility(View.VISIBLE);
                     other.setVisibility(View.VISIBLE);
                 }
             }
@@ -94,12 +98,12 @@ public class CollegeSuggestions extends AppCompatActivity
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(collegeAutoComplete.isPopupShowing())
                 {
-                    viewx.setVisibility(View.GONE);
+                    view_x.setVisibility(View.GONE);
                     other.setVisibility(View.GONE);
                 }
                 else
                 {
-                    viewx.setVisibility(View.VISIBLE);
+                    view_x.setVisibility(View.VISIBLE);
                     other.setVisibility(View.VISIBLE);
                 }
             }
@@ -109,12 +113,12 @@ public class CollegeSuggestions extends AppCompatActivity
                custom.setText(s.toString());
                 if(collegeAutoComplete.isPopupShowing())
                 {
-                    viewx.setVisibility(View.GONE);
+                    view_x.setVisibility(View.GONE);
                     other.setVisibility(View.GONE);
                 }
                 else
                 {
-                    viewx.setVisibility(View.VISIBLE);
+                    view_x.setVisibility(View.VISIBLE);
                     other.setVisibility(View.VISIBLE);
                 }
             }
@@ -124,10 +128,15 @@ public class CollegeSuggestions extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("tempCollege",custom.getText().toString().trim());
             editor.apply();
-            Intent intent_x = new Intent(CollegeSuggestions.this, CompleteProfile.class);
-            startActivity(intent_x);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            finish();
+
+            if(activityType == 0)
+                intent2 = new Intent(CollegeSuggestions.this, CompleteProfile.class);
+            else if(activityType == 1)
+                intent2 = new Intent(CollegeSuggestions.this, EditProfile.class);
+
+                startActivity(intent2);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
         });
 
         setUpToolbarMenu();
@@ -156,7 +165,7 @@ public class CollegeSuggestions extends AppCompatActivity
                     {
                         e.printStackTrace();
                     }
-                    collegeAdapter = new CollegeAdapter(this,collegeItemList);
+                    collegeAdapter = new CollegeAdapter(this,collegeItemList, activityType);
                     collegeAutoComplete.setAdapter(collegeAdapter);
                     collegeAdapter.notifyDataSetChanged();
 
@@ -176,7 +185,11 @@ public class CollegeSuggestions extends AppCompatActivity
             switch (keyCode)
             {
                 case KeyEvent.KEYCODE_BACK:
-                    startActivity(new Intent(getApplicationContext(), CompleteProfile.class));
+                    if(activityType == 0)
+                       startActivity(new Intent(getApplicationContext(), CompleteProfile.class));
+                    else
+                        startActivity(new Intent(getApplicationContext(), EditProfile.class));
+
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     finish();
                     return  true;

@@ -32,11 +32,9 @@
             android:name=".EditProfile"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/EditProfileStyle"
+            android:launchMode="singleInstance"
             android:parentActivityName=".UserProfile">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity
@@ -99,7 +97,10 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".SplashScreen">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 

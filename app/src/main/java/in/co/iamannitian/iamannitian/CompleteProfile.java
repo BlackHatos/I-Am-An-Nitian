@@ -65,7 +65,9 @@ public class CompleteProfile extends AppCompatActivity
 
          // On Click the college edit text go to College Suggestion activity
          setCollege.setOnClickListener(v -> {
-             startActivity(new Intent(CompleteProfile.this, CollegeSuggestions.class));
+             Intent intent = new Intent(CompleteProfile.this, CollegeSuggestions.class);
+             intent.putExtra("ACTIVITY_TYPE", 0);
+             startActivity(intent);
              overridePendingTransition(0, 0);
          });
 

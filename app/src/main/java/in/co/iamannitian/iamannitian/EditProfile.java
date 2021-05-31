@@ -66,7 +66,7 @@ public class EditProfile extends AppCompatActivity
     private String filePath = null;
     private static final String ROOT_URL = "http://app.iamannitian.com/app/upload_picture.php";
     private static final int REQUEST_PERMISSIONS = 100;
-    private static final int PICK_IMAGE_REQUEST =1 ;
+    private static final int PICK_IMAGE_REQUEST =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,7 +77,9 @@ public class EditProfile extends AppCompatActivity
         initVariables();
         setData();
 
-        getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
+        // Clear the tempData shared preferences
+        getSharedPreferences("tempData2", MODE_PRIVATE).edit().clear().apply();
+
         requestStoragePermission();
 
         editImage.setOnClickListener(new View.OnClickListener() {
@@ -87,12 +89,11 @@ public class EditProfile extends AppCompatActivity
             }
         });
 
-        college.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(EditProfile.this, CollegeSuggestions.class));
-                overridePendingTransition(0, 0);
-            }
+        college.setOnClickListener(v -> {
+            Intent intent = new Intent(EditProfile.this, CollegeSuggestions.class);
+            intent.putExtra("ACTIVITY_TYPE", 1);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
     }
 
@@ -649,17 +650,6 @@ public class EditProfile extends AppCompatActivity
                 REQUEST_PERMISSIONS);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
     public void showSnackBar()
     {
@@ -667,7 +657,6 @@ public class EditProfile extends AppCompatActivity
                 Html.fromHtml("<font color=#ffffff>Uploading...</font>"),
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
-        //snackbar.setAction("Dismiss", view -> snackbar.dismiss());
         snackbar.show();
     }
 
@@ -675,12 +664,13 @@ public class EditProfile extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
-/*
+
         String temp_college = getSharedPreferences("tempData", MODE_PRIVATE)
                 .getString("tempCollege", "null");
 
         String college_name =  getSharedPreferences("appData", MODE_PRIVATE)
                 .getString("userCollege", "null");
+
 
         if(temp_college.equals("null") && college_name.equals("null"))
         {
@@ -697,7 +687,6 @@ public class EditProfile extends AppCompatActivity
         else if(!temp_college.equals("null") && !college_name.equals("null"))
         {
             college.setText(temp_college);
-        }*/
-
+        }
     }
 }

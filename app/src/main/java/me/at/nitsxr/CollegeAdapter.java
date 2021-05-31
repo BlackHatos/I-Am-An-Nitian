@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 
 import in.co.iamannitian.iamannitian.CollegeSuggestions;
 import in.co.iamannitian.iamannitian.CompleteProfile;
+import in.co.iamannitian.iamannitian.EditProfile;
 import in.co.iamannitian.iamannitian.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -29,12 +30,15 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
 {
     private List<CollegeItem> collegeItemList;
     private Context mContext;
+    private int activityType;
+    private Intent intent;
 
-    public CollegeAdapter(@NonNull Context context, @NonNull List<CollegeItem> collegeList)
+    public CollegeAdapter(@NonNull Context context, @NonNull List<CollegeItem> collegeList, int activityType)
     {
         super(context, 0, collegeList);
         mContext = context;
         collegeItemList = new ArrayList<>(collegeList);
+        this.activityType = activityType;
     }
 
     @NonNull
@@ -71,8 +75,12 @@ public class CollegeAdapter extends ArrayAdapter<CollegeItem>
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("tempCollege",collegeItem.getCollegeName().trim());
             editor.apply();
-            Intent intent = new Intent(mContext, CompleteProfile.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // check activity type
+            if(activityType == 0)
+              intent = new Intent(mContext, CompleteProfile.class);
+            else
+                intent = new Intent(mContext, EditProfile.class);
             mContext.startActivity(intent);
             // finish the current activity
             ((CollegeSuggestions)mContext).finish();
