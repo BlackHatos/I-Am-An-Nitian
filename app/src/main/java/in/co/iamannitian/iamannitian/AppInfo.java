@@ -31,6 +31,5 @@ public class AppInfo extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class NewsGetterSetter implements Serializable
 {
     private String imageUrl;
-    private String imageUrl2;
     private String newsTitle;
     private String newsDescription;
     private String newsDate;
@@ -38,11 +37,6 @@ public class NewsGetterSetter implements Serializable
     public void setNewsId(String newsId)
     {
         this.newsId = newsId;
-    }
-
-    public void setImageUrl2(String imageUrl2)
-    {
-        this.imageUrl2 = imageUrl2;
     }
 
     public void setImageUrl(String imageUrl)
@@ -88,11 +82,6 @@ public class NewsGetterSetter implements Serializable
    {
        return newsId;
    }
-
-    public String getImageUrl2()
-    {
-        return imageUrl2;
-    }
 
     public String getStatus() {
         return status;

@@ -65,6 +65,7 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".AppInfo" />
         <activity
+            android:launchMode="singleInstance"
             android:name=".OnViewPagerClick"
             android:parentActivityName=".NewsActivity" />
         <activity

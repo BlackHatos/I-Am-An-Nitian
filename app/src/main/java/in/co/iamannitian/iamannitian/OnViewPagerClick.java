@@ -3,6 +3,8 @@ package in.co.iamannitian.iamannitian;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+
 import me.at.nitsxr.NewsDataBase;
 import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.StoryGetterSetter;
@@ -33,9 +35,9 @@ public class OnViewPagerClick extends AppCompatActivity
     private RelativeLayout relativeLayoutMargin;
     private View view;
 
-      @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState)
-      {
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_view_pager_click);
 
@@ -51,105 +53,105 @@ public class OnViewPagerClick extends AppCompatActivity
         shareNews = findViewById(R.id.shareNews);
         view = findViewById(R.id.view);
 
-            Intent intent = getIntent();
-            String temp =  intent.getStringExtra("temp");
+        Intent intent = getIntent();
+        String temp =  intent.getStringExtra("temp");
 
-            // check activity type
-            if(temp.equals("1"))
-            {
-                setUpToolbarMenu("News");
-                linearLayout.setVisibility(View.VISIBLE);
-                view.setVisibility(View.GONE);
-                publish_time.setVisibility(View.VISIBLE);
-                final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
-                Glide.with(this)
-                        .load(getterSetter.getImageUrl())
-                        .fitCenter()
-                        .centerInside()
-                        .into(newsImage);
+        // check activity type
+        if(temp.equals("1"))
+        {
+            setUpToolbarMenu("News");
+            linearLayout.setVisibility(View.VISIBLE);
+            view.setVisibility(View.GONE);
+            publish_time.setVisibility(View.VISIBLE);
+            final NewsGetterSetter getterSetter = (NewsGetterSetter) intent.getSerializableExtra("sampleObject");
+            Glide.with(this)
+                    .load(getterSetter.getImageUrl())
+                    .fitCenter()
+                    .centerInside()
+                    .into(newsImage);
 
-                newsTitle.setText(getterSetter.getNewsTitle());
-                newDescp.setText(getterSetter.getNewsDescp());
-                publish_time.setText(getterSetter.getNewsDate());
-                reaction_count.setText(getterSetter.getCount());
+            newsTitle.setText(getterSetter.getNewsTitle());
+            newDescp.setText(getterSetter.getNewsDescp());
+            publish_time.setText(getterSetter.getNewsDate());
+            reaction_count.setText(getterSetter.getCount());
 
-                // check user reaction
-                if (getterSetter.getStatus().equals("1"))
-                    reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-                else
-                    reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-
-                // update user reaction
-                reaction_heart.setOnClickListener(v -> {
-                    int updated_status = 0;
-                    int updated_count = 0;
-
-                    if (getterSetter.getStatus().equals("1")) {
-                        updated_status = 0;
-                        updated_count = Integer.parseInt(getterSetter.getCount()) - 1;
-                        reaction_count.setText(updated_count + "");
-                        reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                    } else {
-                        updated_status = 1;
-                        updated_count = Integer.parseInt(getterSetter.getCount()) + 1;
-                        reaction_count.setText(updated_count + "");
-                        reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-                    }
-
-                    getterSetter.setStatus(updated_status + "");
-                    getterSetter.setCount(updated_count + "");
-
-                    // reflect changes in the database
-                    UserReaction userReaction = new UserReaction(getterSetter,
-                            getSharedPreferences("appData", MODE_PRIVATE)
-                                    .getString("userId", ""), updated_status);
-                    userReaction.execute();
-                });
-
-
-                shareNews.setOnClickListener(v -> {
-                    Intent intent1 = new Intent();
-                    intent1.setAction(Intent.ACTION_SEND);
-                    intent1.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() + "\n" + "" +
-                            "Download the app : https://iamannitian.co.in");
-                    intent1.setType("text/plain");
-                    Intent shareIntent = Intent.createChooser(intent1, "Share via");
-                    startActivity(shareIntent);
-                });
-
-                final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
-
-                if (newsDataBase.isPresent(getterSetter.getNewsId()))
-                    saveNews.setImageResource(R.drawable.save_article);
-
-                saveNews.setOnClickListener(v -> {
-                    if (newsDataBase.isPresent(getterSetter.getNewsId())) {
-                        newsDataBase.deleteRecord(getterSetter.getNewsId());
-                        saveNews.setImageResource(R.drawable.save_border);
-                        Toast.makeText(getApplicationContext(), "Unsaved", Toast.LENGTH_SHORT).show();
-                    } else {
-                        saveNews.setImageResource(R.drawable.save_article);
-                        newsDataBase.addOne(getterSetter);
-                        Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            // check user reaction
+            if (getterSetter.getStatus().equals("1"))
+                reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
             else
-            {
-                setUpToolbarMenu("Story");
-               // setMargin(relativeLayoutMargin, 10,0,10,30);
-                final StoryGetterSetter getterSetter = (StoryGetterSetter) intent.getSerializableExtra("sampleObject");
-                Glide.with(this)
-                        .load(getterSetter.getImageUrl())
-                        .fitCenter()
-                        .centerInside()
-                        .into(newsImage);
+                reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
-                newsTitle.setText(getterSetter.getName()+" | "+getterSetter.getExam()+" | "
-                +getterSetter.getRank()+" | "+ getterSetter.getCollege());
+            // update user reaction
+            reaction_heart.setOnClickListener(v -> {
+                int updated_status = 0;
+                int updated_count = 0;
 
-                newDescp.setText(getterSetter.getStory());
-            }
+                if (getterSetter.getStatus().equals("1")) {
+                    updated_status = 0;
+                    updated_count = Integer.parseInt(getterSetter.getCount()) - 1;
+                    reaction_count.setText(updated_count + "");
+                    reaction_heart.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                } else {
+                    updated_status = 1;
+                    updated_count = Integer.parseInt(getterSetter.getCount()) + 1;
+                    reaction_count.setText(updated_count + "");
+                    reaction_heart.setImageResource(R.drawable.ic_favorite_black_24dp);
+                }
+
+                getterSetter.setStatus(updated_status + "");
+                getterSetter.setCount(updated_count + "");
+
+                // reflect changes in the database
+                UserReaction userReaction = new UserReaction(getterSetter,
+                        getSharedPreferences("appData", MODE_PRIVATE)
+                                .getString("userId", ""), updated_status);
+                userReaction.execute();
+            });
+
+
+            shareNews.setOnClickListener(v -> {
+                Intent intent1 = new Intent();
+                intent1.setAction(Intent.ACTION_SEND);
+                intent1.putExtra(Intent.EXTRA_TEXT, getterSetter.getNewsTitle() + "\n" + "" +
+                        "Download the app : https://iamannitian.co.in");
+                intent1.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(intent1, "Share via");
+                startActivity(shareIntent);
+            });
+
+            final NewsDataBase newsDataBase = new NewsDataBase(OnViewPagerClick.this);
+
+            if (newsDataBase.isPresent(getterSetter.getNewsId()))
+                saveNews.setImageResource(R.drawable.save_article);
+
+            saveNews.setOnClickListener(v -> {
+                if (newsDataBase.isPresent(getterSetter.getNewsId())) {
+                    newsDataBase.deleteRecord(getterSetter.getNewsId());
+                    saveNews.setImageResource(R.drawable.save_border);
+                    Toast.makeText(getApplicationContext(), "Unsaved", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveNews.setImageResource(R.drawable.save_article);
+                    newsDataBase.addOne(getterSetter);
+                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else
+        {
+            setUpToolbarMenu("Story");
+            // setMargin(relativeLayoutMargin, 10,0,10,30);
+            final StoryGetterSetter getterSetter = (StoryGetterSetter) intent.getSerializableExtra("sampleObject");
+            Glide.with(this)
+                    .load(getterSetter.getImageUrl())
+                    .fitCenter()
+                    .centerInside()
+                    .into(newsImage);
+
+            newsTitle.setText(getterSetter.getName()+" | "+getterSetter.getExam()+" | "
+                    +getterSetter.getRank()+" | "+ getterSetter.getCollege());
+
+            newDescp.setText(getterSetter.getStory());
+        }
     }
 
     /*=======>>>>>>> Setting up toolbar menu <<<<<<<<<=========*/
@@ -162,9 +164,9 @@ public class OnViewPagerClick extends AppCompatActivity
         actionBar.setIcon(R.drawable.app_logo);
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor1));
         toolbar.getNavigationIcon().setColorFilter(getResources()
-                .getColor(R.color.textColor1),
+                        .getColor(R.color.textColor1),
                 PorterDuff.Mode.SRC_ATOP);
-     }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,8 +181,14 @@ public class OnViewPagerClick extends AppCompatActivity
         {
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
-                break;
+                return  true;
+            case android.R.id.home:
+                Intent intent = new Intent(OnViewPagerClick.this, NewsActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+                default:
+                   return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

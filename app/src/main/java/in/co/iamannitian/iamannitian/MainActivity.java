@@ -362,13 +362,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         NewsGetterSetter slideUtils = new NewsGetterSetter();
                         try {
                             JSONObject object = response.getJSONObject(i);
-                            slideUtils.setImageUrl
-                                    ("https://app.iamannitian.com/news-images/" + object.getString("image1"));
+                            slideUtils.setImageUrl(object.getString("url"));
                             slideUtils.setNewsDescp(object.getString("descp"));
                             slideUtils.setNewsTitle(object.getString("title"));
                             slideUtils.setNewsId(object.getString("id"));
                             slideUtils.setNewsDate(object.getString("date"));
-                            slideUtils.setImageUrl2(object.getString("image2"));
                             // reaction of current user on a particular news
                             slideUtils.setStatus(object.getString("status"));
                             // number of likes on a particular news

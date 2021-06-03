@@ -16,6 +16,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -222,6 +223,13 @@ public class NewsActivity extends AppCompatActivity
             case R.id.app_info:
                 startActivity(new Intent(getApplicationContext(), AppInfo.class));
                 break;
+
+            case android.R.id.home:
+                Intent intent = new Intent(NewsActivity.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -258,14 +266,11 @@ public class NewsActivity extends AppCompatActivity
                             NewsGetterSetter newsGetterSetter = new NewsGetterSetter();
                             try {
                                 JSONObject object = jsonArray.getJSONObject(i);
-                                    newsGetterSetter.setImageUrl
-                                            ("https://app.iamannitian.com/news-images/" + object.getString("image1"));
+                                    newsGetterSetter.setImageUrl(object.getString("url"));
                                     newsGetterSetter.setNewsDescp(object.getString("descp"));
                                     newsGetterSetter.setNewsTitle(object.getString("title"));
                                     newsGetterSetter.setNewsId(object.getString("id"));
                                     newsGetterSetter.setNewsDate(object.getString("date"));
-                                    newsGetterSetter.setImageUrl2(object.getString("image2"));
-
                                     // user's reaction for each article
                                     newsGetterSetter.setStatus(object.getString("status"));
                                     // total reactions on each article
@@ -342,11 +347,19 @@ public class NewsActivity extends AppCompatActivity
         }
     }
 
+    // prevent loading entire page
     @Override
     public void onResume()
     {
         super.onResume();
-        // update reaction after coming from view pager click listener
-    }
+        // need to refresh the news activity
+      /*  sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        String isReactionClicked = sharedPreferences.getString("isReactionClicked", "0");
 
+       if(isReactionClicked.equals("1"))
+        {
+            getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
+            getData();
+        }*/
+    }
 }
