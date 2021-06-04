@@ -218,19 +218,17 @@ public class NewsActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
-        {
-            case R.id.app_info:
-                startActivity(new Intent(getApplicationContext(), AppInfo.class));
-                break;
 
-            case android.R.id.home:
-                Intent intent = new Intent(NewsActivity.this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                finish();
-                break;
+        if(item.getItemId() == R.id.app_info)
+            startActivity(new Intent(getApplicationContext(), AppInfo.class));
+        else if(sharedPreferences.getString("isFromNotification", "0").equals("1") &&
+                item.getItemId() == android.R.id.home)
+        {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -353,13 +351,29 @@ public class NewsActivity extends AppCompatActivity
     {
         super.onResume();
         // need to refresh the news activity
-      /*  sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
         String isReactionClicked = sharedPreferences.getString("isReactionClicked", "0");
-
        if(isReactionClicked.equals("1"))
         {
             getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
             getData();
-        }*/
+        }
+    }
+
+    // Handing hardware back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            if(sharedPreferences.getString("isFromNotification", "0").equals("1")
+                    && keyCode == KeyEvent.KEYCODE_BACK)
+            {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

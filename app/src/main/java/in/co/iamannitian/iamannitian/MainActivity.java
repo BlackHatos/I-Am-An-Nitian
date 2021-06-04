@@ -81,18 +81,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NetworkInfo activeNetworkInfo;
     private BroadcastReceiver broadcastReceiver;
     private Snackbar snackbar;
-
     private TopicAdapter topicAdapter;
     private ArrayList<TopicGetterSetter> mList3;
     private RecyclerView topicRecyclerView;
-
     int currentPage = 0;
     int currentHeadline = 0;
     final long DELAYS_MS = 500;
     final long PERIOD_MS = 3000;
+    private Handler handler, handler2;
 
     RequestQueue rq;
-    private List<NewsGetterSetter> sliderImg;
+    // news data array list
+    private List<NewsGetterSetter> sliderImg, mList2;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -100,46 +100,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setBroadCastReceiver();
+       // setBroadCastReceiver();
         initializeVariables();
-
-        try{
-            final Handler handler = new Handler();
-            final Runnable update = () -> {
-                if (currentPage == 5)
-                    currentPage = 0;
-                viewPager.setCurrentItem(currentPage++, true);
-            };
-
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(update);
-                }
-            }, DELAYS_MS, PERIOD_MS);
-        }
-        catch(Exception ex){ex.printStackTrace();}
-
-        //===> Timer for the headlines
-        final Runnable headline = () -> {
-            if (currentHeadline == 5)
-                currentHeadline = 0;
-            viewPager2.setCurrentItem(currentHeadline++, true);
-        };
-
-        final Handler handler2 = new Handler();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler2.post(headline);
-            }
-        }, 1000, 4000);
 
         bottomNavigationView.setSelectedItemId(R.id.home);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 
-            switch (menuItem.getItemId()) {
+            switch (menuItem.getItemId())
+            {
                 case R.id.home:
                     //do nothing
                     break;
@@ -159,20 +127,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setUpToolbarMenu();
         setUpDrawerMenu();
         headerUpdate();
+        setBroadCastReceiver();
         showBadge();
+        sendRequest();
         initTopicVars();
         setTopic();
+
+        runnableHandlers();
 
         refreshScreen.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         refreshScreen.setOnRefreshListener(
                 () -> {
-                    sendRequest();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                                refreshScreen.setRefreshing(false);
-                        }
-                    }, 3000);
+                    //RunnableHandlers();
+                   // sendRequest();
+                    new Handler().postDelayed(() ->
+                            refreshScreen.setRefreshing(false),
+                            3000);
                 });
     }
 
@@ -265,7 +235,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.app_info:
                 startActivity(new Intent(MainActivity.this, AppInfo.class));
                 break;
-
+            case R.id.report_bug:
+                startActivity(new Intent(MainActivity.this, ReportBug.class));
+                break;
             case R.id.contact_us:
                 startActivity(new Intent(MainActivity.this, ContactUs.class));
                 break;
@@ -351,8 +323,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void sendRequest()
     {
+        // news data for view pager
         sliderImg.clear();
-        List<NewsGetterSetter> mList2 = new ArrayList<>();
+        // news data for headline
+        mList2.clear();
+
         final String url = "https://app.iamannitian.com/app/get-news.php";
         //error
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
@@ -372,23 +347,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             // number of likes on a particular news
                             slideUtils.setCount(object.getString("count"));
 
-                            Log.d("NewsData", object.getString("id")+" : "
-                                    +object.getString("status")+
-                                    " : "+object.getString("count"));
-
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
+
+                        // add objects to the list
                         sliderImg.add(slideUtils);
                         mList2.add(slideUtils);
                     }
+                            adapter = new ViewPagerAdapter(sliderImg.subList(0,5), MainActivity.this);
 
-                    adapter = new ViewPagerAdapter(sliderImg.subList(0,5), MainActivity.this);
-                    // sorting the list in descending order of counts
-                    Collections.sort(mList2, (x, y)->Integer.parseInt(y.getCount()) - Integer.parseInt(x.getCount()));
-                    adapter2 = new HeadLineViewPagerAdapter(mList2.subList(0,5),MainActivity.this);
-                    viewPager.setAdapter(adapter);
-                    viewPager2.setAdapter(adapter2);
+                            //sorting the list in descending order of counts (likes)
+                            Collections.sort(mList2, (x, y)->Integer.parseInt(y.getCount()) - Integer.parseInt(x.getCount()));
+                            adapter2 = new HeadLineViewPagerAdapter(mList2.subList(0,5),MainActivity.this);
+
+                            viewPager.setAdapter(adapter);
+                            viewPager2.setAdapter(adapter2);
+
                 }, error -> error.printStackTrace()){
             @Override
             public Map<String, String> getParams()
@@ -427,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(new Intent(getApplicationContext(),College.class));
     }
 
-    //===> initializing variables
+    //===> Initializing variables
     private void initializeVariables()
     {
         rq = Volley.newRequestQueue(this);
@@ -440,11 +415,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager2, true);
         refreshScreen = findViewById(R.id.refreshScreen);
+
+        // headline data array list
+        mList2 = new ArrayList<>();
     }
 
     //===> setting up broadcast receiver
     private void setBroadCastReceiver()
     {
+
         broadcastReceiver = new BroadcastReceiver()
         {
             @Override
@@ -454,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeNetworkInfo=  connectivityManager.getActiveNetworkInfo();
                 if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
                 {
-                    sendRequest();
+                    //sendRequest();
                     if(snackbar != null)
                         snackbar.dismiss();
                 }
@@ -496,5 +475,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         topicAdapter = new TopicAdapter(MainActivity.this, mList3);
         topicRecyclerView.setAdapter(topicAdapter);
+    }
+
+    // setting up view pagers
+    public void runnableHandlers()
+    {
+        currentPage = 0;
+        currentHeadline = 0;
+        try{
+            handler = new Handler();
+            final Runnable update = () -> {
+                if (currentPage == 5)
+                    currentPage = 0;
+                viewPager.setCurrentItem(currentPage++, true);
+            };
+
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(update);
+                }
+            }, DELAYS_MS, PERIOD_MS);
+        }
+        catch(Exception ex){ex.printStackTrace();}
+
+        //===> Timer for the headlines
+        try{
+            final Runnable headline = () -> {
+                if (currentHeadline == 5)
+                    currentHeadline = 0;
+                viewPager2.setCurrentItem(currentHeadline++, true);
+            };
+
+            handler2 = new Handler();
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler2.post(headline);
+                }
+            }, 1000, 4000);
+        }catch(Exception ex){ ex.printStackTrace();}
+
     }
 }

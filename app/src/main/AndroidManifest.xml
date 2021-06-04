@@ -18,25 +18,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".College"
+        <activity android:name=".ReportBug"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             >
-
         </activity>
+        <activity
+            android:name=".College"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ContactUs"
             android:parentActivityName=".ContactUs" />
-
         <activity
             android:name=".EditProfile"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/EditProfileStyle"
             android:launchMode="singleInstance"
-            android:parentActivityName=".UserProfile">
-
-        </activity>
-
+            android:parentActivityName=".UserProfile"
+            android:theme="@style/EditProfileStyle"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".UserProfile"
             android:parentActivityName=".MainActivity"
@@ -50,23 +48,19 @@
         <activity
             android:name=".CompleteProfile"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustPan">
-
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".CollegeSuggestions"
             android:parentActivityName=".CompleteProfile"
             android:theme="@style/AutoCompleteStyle"
-            android:windowSoftInputMode="adjustPan|stateHidden">
-
-        </activity>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".SuccessStory"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".AppInfo" />
         <activity
-            android:launchMode="singleInstance"
             android:name=".OnViewPagerClick"
+            android:launchMode="singleInstance"
             android:parentActivityName=".NewsActivity" />
         <activity
             android:name=".NewsActivity"
@@ -92,7 +86,6 @@
             android:name=".MainActivity"
             android:launchMode="singleInstance" />
         <activity android:name=".LoginOrSignUpActivity" />
-
         <activity
             android:name=".ForgetPassword"
             android:parentActivityName=".LoginActivity"
@@ -105,22 +98,23 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>

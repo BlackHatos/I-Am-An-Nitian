@@ -88,6 +88,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         intent.putExtra("temp", "1");
 
 
+                getSharedPreferences("tempData", MODE_PRIVATE)
+                .edit()
+                .putString("isFromNotification", "1").apply();
+
        if(!userId.equals(""))
            pendingIntent = PendingIntent.getActivity(this,0,intent,
                    PendingIntent.FLAG_UPDATE_CURRENT);

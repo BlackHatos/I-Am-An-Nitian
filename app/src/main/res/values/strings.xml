@@ -133,4 +133,9 @@
     <string name="forgot">Forgot</string>
     <string name="your_pass">Your Password!</string>
 
+    <!-- Bug Report -->
+ <string name="message">If you have found a security or an abuse
+               risk related bug in this app and want to report it to us,
+     you have come to the right place. Please fill out the following form and we will
+                be in touch shortly. Thank you for helping us to make this app bug free.</string>
 </resources>

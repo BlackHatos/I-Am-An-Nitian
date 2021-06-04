@@ -10,8 +10,10 @@ import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.StoryGetterSetter;
 import me.at.nitsxr.UserReaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +34,7 @@ public class OnViewPagerClick extends AppCompatActivity
     private Toolbar toolbar;
     private  ImageView reaction_heart, saveNews, shareNews;
     private LinearLayout linearLayout;
-    private RelativeLayout relativeLayoutMargin;
+    private SharedPreferences sharedPreferences;
     private View view;
 
     @Override
@@ -42,7 +44,6 @@ public class OnViewPagerClick extends AppCompatActivity
         setContentView(R.layout.activity_on_view_pager_click);
 
         linearLayout = findViewById(R.id.bottomBar);
-        relativeLayoutMargin = findViewById(R.id.relativeLayoutPadding);
         newsImage = findViewById(R.id.newImage);
         newsTitle = findViewById(R.id.newsTitle);
         newDescp = findViewById(R.id.newDescp);
@@ -52,6 +53,9 @@ public class OnViewPagerClick extends AppCompatActivity
         saveNews = findViewById(R.id.saveNews);
         shareNews = findViewById(R.id.shareNews);
         view = findViewById(R.id.view);
+
+        sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Intent intent = getIntent();
         String temp =  intent.getStringExtra("temp");
@@ -85,6 +89,9 @@ public class OnViewPagerClick extends AppCompatActivity
             reaction_heart.setOnClickListener(v -> {
                 int updated_status = 0;
                 int updated_count = 0;
+
+                editor.putString("isReactionClicked", "1");
+                editor.apply();
 
                 if (getterSetter.getStatus().equals("1")) {
                     updated_status = 0;
@@ -125,6 +132,9 @@ public class OnViewPagerClick extends AppCompatActivity
                 saveNews.setImageResource(R.drawable.save_article);
 
             saveNews.setOnClickListener(v -> {
+                editor.putString("isReactionClicked", "1");
+                editor.apply();
+
                 if (newsDataBase.isPresent(getterSetter.getNewsId())) {
                     newsDataBase.deleteRecord(getterSetter.getNewsId());
                     saveNews.setImageResource(R.drawable.save_border);
@@ -177,18 +187,36 @@ public class OnViewPagerClick extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
+
+        if (item.getItemId() == R.id.app_info) {
+            startActivity(new Intent(getApplicationContext(), AppInfo.class));
+        } else if (sharedPreferences.getString("isFromNotification", "0")
+                .equals("1")
+                && (item.getItemId() == android.R.id.home))
         {
-            case R.id.app_info:
-                startActivity(new Intent(getApplicationContext(), AppInfo.class));
-                return  true;
-            case android.R.id.home:
-                Intent intent = new Intent(OnViewPagerClick.this, NewsActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
-                default:
-                   return super.onOptionsItemSelected(item);
+            Intent intent = new Intent(OnViewPagerClick.this, NewsActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
         }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Handing hardware back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(event.getAction() == KeyEvent.ACTION_DOWN)
+        {
+            if(sharedPreferences.getString("isFromNotification", "0").equals("1")
+                    && keyCode == KeyEvent.KEYCODE_BACK)
+            {
+                startActivity(new Intent(getApplicationContext(), NewsActivity.class));
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

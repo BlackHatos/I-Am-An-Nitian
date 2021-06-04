@@ -34,20 +34,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="28dp"
                     android:id="@+id/notifyImage"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/user"
+                    android:src="@drawable/usericon"
                     android:layout_height="25dp"/>
 
                 <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/notifyImage"
                     android:fontFamily="@font/work_sans_semibold"
                     android:layout_marginStart="10dp"
                     android:textSize="12sp"
@@ -56,7 +57,8 @@
                     android:layout_height="wrap_content"
                     android:text="News for you"
                     />
-            </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/notification"

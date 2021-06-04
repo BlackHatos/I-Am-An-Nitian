@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import java.util.List;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import in.co.iamannitian.iamannitian.OnViewPagerClick;
@@ -107,6 +108,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     });
 
         holder.cardView.setOnClickListener(v -> {
+            // clear shared prefs
+            mContext.getSharedPreferences("tempData", MODE_PRIVATE).edit().clear().apply();
+
             Intent intent =  new Intent(mContext,OnViewPagerClick.class);
             Bundle b = new Bundle();
             b.putSerializable("sampleObject", getterSetter);

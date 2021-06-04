@@ -1,28 +1,33 @@
 package in.co.iamannitian.iamannitian;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 import me.at.nitsxr.NotificationAdapter;
 import me.at.nitsxr.NotificationGetterSetter;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class NotificationActivity extends AppCompatActivity
 {
@@ -35,7 +40,8 @@ public class NotificationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         setUpToolbarMenu();
-        setData();
+        initRecyclerView();
+        getNotification();
     }
 
     private void setUpToolbarMenu()
@@ -70,25 +76,80 @@ public class NotificationActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void setData()
+    public void initRecyclerView()
     {
         mList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
                 false));
-        NotificationGetterSetter getterSetter;
+    }
 
-        for(int i=0; i<10; i++)
-        {
-            getterSetter = new NotificationGetterSetter();
-            getterSetter.setImageUrl("");
-            getterSetter.setNotification("This is a test notification " +
-                    "please don't mind. Lorem ipsum is a dummy text so please read it");
-            getterSetter.setTime("2 hours ago");
-            mList.add(getterSetter);
-        }
-        NotificationAdapter adapter = new NotificationAdapter(NotificationActivity.this, mList);
-        recyclerView.setAdapter(adapter);
+    public void getNotification()
+    {
+        final String url = "http://app.iamannitian.com/app/get_notification.php";
+
+        StringRequest sr = new StringRequest(1, url,
+                response -> {
+                    try
+                    {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for(int i=0; i<jsonArray.length(); i++)
+                        {
+                            NotificationGetterSetter getterSetter = new NotificationGetterSetter();
+                            try
+                            {
+                                JSONObject object = jsonArray.getJSONObject(i);
+
+                                getterSetter.setId(object.getString("id"));
+                                getterSetter.setTitle(object.getString("title"));
+                                getterSetter.setTime(object.getString("date"));
+                                getterSetter.setImageUrl(object.getString("url"));
+
+                            }catch (JSONException ex){
+                                ex.printStackTrace();
+                            }
+
+                            mList.add(getterSetter);
+                        }
+
+                        NotificationAdapter adapter = new NotificationAdapter(NotificationActivity.this, mList);
+                        recyclerView.setAdapter(adapter);
+
+                        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                            @Override
+                            public boolean onMove(@NonNull  RecyclerView recyclerView, @NonNull  RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                return false;
+                            }
+
+                            @Override
+                            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                                adapter.deleteItem(viewHolder.getAdapterPosition());
+                            }
+
+                            @Override
+                            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull
+                                    RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+                                                    boolean isCurrentlyActive) {
+
+                                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                                        .addBackgroundColor(ContextCompat.getColor(NotificationActivity.this, R.color.cardColor))
+                                        .addActionIcon(R.drawable.delete)
+                                        .create()
+                                        .decorate();
+
+                                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                            }
+                        }).attachToRecyclerView(recyclerView);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            error.printStackTrace();
+        });
+
+        RequestQueue rq = Volley.newRequestQueue(NotificationActivity.this);
+        rq.add(sr);
     }
 }
