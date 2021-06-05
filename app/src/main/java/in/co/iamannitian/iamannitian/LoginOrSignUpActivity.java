@@ -165,8 +165,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity
         // Google signing-in stuff
         if (requestCode == RC_SIGN_IN)
         {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            try{
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+            }
+            catch(Exception ex){ex.printStackTrace();}
         }
     }
 
@@ -229,6 +232,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity
                 String start = object.getString("start_year");
                 String end = object.getString("end_year");
                 String pic_url = object.getString("pic_url");
+                String isNotify = object.getString("is_notify");
 
                 sharedPreferences = this.getSharedPreferences("appData", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -243,6 +247,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity
                 editor.putString("userBranch", branch);
                 editor.putString("userStartYear", start);
                 editor.putString("userEndYear", end);
+                editor.putString("isNotify",isNotify);
                 editor.apply();
 
                 // Check if profile is incomplete

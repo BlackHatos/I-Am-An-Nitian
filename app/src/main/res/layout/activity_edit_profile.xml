@@ -259,6 +259,7 @@
                         android:paddingEnd="10dp"
                         android:background="@drawable/profile_edit_text_shape"
                         android:layout_width="match_parent"
+                        android:textStyle="normal"
                         android:layout_height="40dp"
                         android:ellipsize="marquee"
                         android:textColor="@color/textColor5"

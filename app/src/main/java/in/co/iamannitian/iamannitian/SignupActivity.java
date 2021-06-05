@@ -240,6 +240,7 @@ public class SignupActivity extends AppCompatActivity
                             String start = object.getString("start_year");
                             String end = object.getString("end_year");
                             String pic_url = object.getString("pic_url");
+                            String isNotify = object.getString("is_notify");
 
 
                             SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
@@ -255,6 +256,7 @@ public class SignupActivity extends AppCompatActivity
                             editor.putString("userBranch", branch);
                             editor.putString("userStartYear", start);
                             editor.putString("userEndYear", end);
+                            editor.putString("isNotify", isNotify);
                             editor.apply();
 
                             Intent intent  = new Intent(SignupActivity.this,CompleteProfile.class);
@@ -297,7 +299,6 @@ public class SignupActivity extends AppCompatActivity
           FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener
                   (instanceIdResult -> token = instanceIdResult.getToken());
     }
-
 
     private void setUpToolbarMenu()
     {

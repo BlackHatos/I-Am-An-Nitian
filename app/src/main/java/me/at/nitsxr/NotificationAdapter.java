@@ -1,12 +1,15 @@
 package me.at.nitsxr;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,14 +33,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import in.co.iamannitian.iamannitian.NotificationActivity;
+import in.co.iamannitian.iamannitian.OnViewPagerClick;
 import in.co.iamannitian.iamannitian.R;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>
 {
-    private List<NotificationGetterSetter> mList;
+    private List<NewsGetterSetter> mList;
     private Context mContext;
-    public NotificationAdapter(Context mContext, List<NotificationGetterSetter> mList)
+    public NotificationAdapter(Context mContext, List<NewsGetterSetter> mList)
     {
         this.mContext = mContext;
         this.mList = mList;
@@ -53,11 +59,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position)
     {
-        NotificationGetterSetter getterSetter = mList.get(position);
-        String date = getterSetter.getTime();
-        String title = getterSetter.getTitle();
+        NewsGetterSetter getterSetter = mList.get(position);
+        String date = getterSetter.getNewsDate();
+        String title = getterSetter.getNewsTitle();
         String url = getterSetter.getImageUrl();
-        String id = getterSetter.getId();
 
         holder.time.setText(date);
         holder.notification.setText(title);
@@ -68,17 +73,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 .load(url)
                 .into(holder.notifyImage);
 
-        ItemTouchHelper.SimpleCallback itemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull  RecyclerView recyclerView, @NonNull  RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        };
+        holder.top_layout.setOnClickListener(v -> {
+            Intent intent =  new Intent(mContext, OnViewPagerClick.class);
+            Bundle b = new Bundle();
+            b.putSerializable("sampleObject", getterSetter);
+            intent.putExtras(b);
+            // this is used to check activity type
+            intent.putExtra("temp", "1");
+            mContext.startActivity(intent);
+        });
     }
 
     @Override
@@ -90,21 +93,28 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     {
         public TextView time, notification;
         public ImageView notifyImage;
+        public LinearLayout top_layout;
         NotificationViewHolder(View itemView)
         {
             super(itemView);
             time = itemView.findViewById(R.id.time);
             notification = itemView.findViewById(R.id.notification);
             notifyImage = itemView.findViewById(R.id.notifyImage);
+            top_layout = itemView.findViewById(R.id.top_layout);
         }
     }
 
     public void deleteItem(int position)
     {
-        String newsId = mList.get(position).getId();
+        String newsId = mList.get(position).getNewsId();
         String userId=  mContext
-                .getSharedPreferences("appData", Context.MODE_PRIVATE)
+                .getSharedPreferences("appData", MODE_PRIVATE)
                 .getString("userId", "");
+
+        mList.remove(position);
+        notifyItemRemoved(position);
+        // this line gives the animation
+        notifyItemRangeChanged(position, getItemCount());
 
         final String url = "http://app.iamannitian.com/app/deleted_notification.php";
 
@@ -115,10 +125,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         String status = object.getString("status");
                         if(status.equals("1"))
                         {
-                            mList.remove(position);
-                            notifyItemRemoved(position);
-                            // this line gives the animation
-                            notifyItemRangeChanged(position, getItemCount());
                             Toast.makeText(mContext, "Deleted successfully", Toast.LENGTH_SHORT).show();
                         }
                         else

@@ -9,12 +9,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -35,30 +49,32 @@ public class SettingActivity extends AppCompatActivity {
         darkModeLogo = findViewById(R.id.logo1);
 
         sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
-        String isNotifyCheck = sharedPreferences.getString("activeNotification","");
-        String isDarkCheck = sharedPreferences.getString("activeNotification","");
+        String isNotify = sharedPreferences.getString("isNotify","");
 
-        if(isNotifyCheck.equals("1"))
+        if(isNotify.equals("1"))
             notificationSwitch.setChecked(true);
-
-        if(isDarkCheck.equals("1"))
-           darkModeSwitch.setChecked(true);
+        else
+            notificationSwitch.setChecked(false);
 
         notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            if(isChecked)
             {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("activeNotification","1");
-                editor.apply();
+
+                editor.putString("isNotify","1");
                 notificationLogo.setImageResource(R.drawable.ic_notifications_active);
+                changeState("1");
             }
             else
             {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("activeNotification","0");
-                editor.apply();
+                editor.putString("isNotify","0");
                 notificationLogo.setImageResource(R.drawable.ic_notifications_off);
+                changeState("0");
             }
+
+            editor.apply();
         });
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -109,5 +125,29 @@ public class SettingActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void changeState(final String state)
+    {
+        final String url = "https://app.iamannitian.com/app/change-notification-state.php";
+
+        StringRequest sr = new StringRequest(1, url,
+                response -> {
+                   // do nothing
+                }, error -> {
+                    error.printStackTrace();
+        }){
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> map =  new HashMap<>();
+                map.put("idKey", sharedPreferences.getString("userId", ""));
+                map.put("stateKey", state);
+                return map;
+            }
+        };
+
+        RequestQueue rq = Volley.newRequestQueue(SettingActivity.this);
+        rq.add(sr);
     }
 }

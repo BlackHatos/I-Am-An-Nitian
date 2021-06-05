@@ -132,6 +132,7 @@ public class LoginActivity extends AppCompatActivity
                             String start = object.getString("start_year");
                             String end = object.getString("end_year");
                             String pic_url = object.getString("pic_url");
+                            String isNotify = object.getString("is_notify");
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("userId", id);
@@ -145,6 +146,7 @@ public class LoginActivity extends AppCompatActivity
                             editor.putString("userBranch", branch);
                             editor.putString("userStartYear", start);
                             editor.putString("userEndYear", end);
+                            editor.putString("isNotify", isNotify);
                             editor.apply();
 
 

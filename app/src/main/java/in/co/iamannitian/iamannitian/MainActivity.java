@@ -215,14 +215,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .into(circleImageView);
 
         circleImageView.setOnClickListener(v -> {
-            if(activeNetworkInfo != null && activeNetworkInfo.isConnected())
-            {
+
                 startActivity(new Intent(MainActivity.this, UserProfile.class));
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 finish();
-            }
-            else
-                showSnackBar();
         });
         return true;
     }

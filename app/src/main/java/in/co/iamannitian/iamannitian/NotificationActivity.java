@@ -1,4 +1,5 @@
 package in.co.iamannitian.iamannitian;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,11 +8,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import me.at.nitsxr.NewsGetterSetter;
 import me.at.nitsxr.NotificationAdapter;
-import me.at.nitsxr.NotificationGetterSetter;
-
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,14 +27,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class NotificationActivity extends AppCompatActivity
 {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private List<NotificationGetterSetter> mList;
+    private List<NewsGetterSetter> mList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -88,7 +91,7 @@ public class NotificationActivity extends AppCompatActivity
     public void getNotification()
     {
         final String url = "http://app.iamannitian.com/app/get_notification.php";
-
+       // mList.clear();
         StringRequest sr = new StringRequest(1, url,
                 response -> {
                     try
@@ -96,21 +99,26 @@ public class NotificationActivity extends AppCompatActivity
                         JSONArray jsonArray = new JSONArray(response);
                         for(int i=0; i<jsonArray.length(); i++)
                         {
-                            NotificationGetterSetter getterSetter = new NotificationGetterSetter();
+                            NewsGetterSetter newsGetterSetter = new NewsGetterSetter();
                             try
                             {
                                 JSONObject object = jsonArray.getJSONObject(i);
 
-                                getterSetter.setId(object.getString("id"));
-                                getterSetter.setTitle(object.getString("title"));
-                                getterSetter.setTime(object.getString("date"));
-                                getterSetter.setImageUrl(object.getString("url"));
+                                newsGetterSetter.setImageUrl(object.getString("url"));
+                                newsGetterSetter.setNewsDescp(object.getString("descp"));
+                                newsGetterSetter.setNewsTitle(object.getString("title"));
+                                newsGetterSetter.setNewsId(object.getString("id"));
+                                newsGetterSetter.setNewsDate(object.getString("date"));
+                                // user's reaction for each article
+                                newsGetterSetter.setStatus(object.getString("status"));
+                                // total reactions on each article
+                                newsGetterSetter.setCount(object.getString("count"));
 
                             }catch (JSONException ex){
                                 ex.printStackTrace();
                             }
 
-                            mList.add(getterSetter);
+                            mList.add(newsGetterSetter);
                         }
 
                         NotificationAdapter adapter = new NotificationAdapter(NotificationActivity.this, mList);
@@ -133,8 +141,8 @@ public class NotificationActivity extends AppCompatActivity
                                                     boolean isCurrentlyActive) {
 
                                 new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                                        .addBackgroundColor(ContextCompat.getColor(NotificationActivity.this, R.color.cardColor))
-                                        .addActionIcon(R.drawable.delete)
+                                        .addBackgroundColor(ContextCompat.getColor(NotificationActivity.this, R.color.deleteButtonColor))
+                                        .addActionIcon(R.drawable.ic_baseline_delete_24)
                                         .create()
                                         .decorate();
 
@@ -147,9 +155,20 @@ public class NotificationActivity extends AppCompatActivity
                     }
                 }, error -> {
             error.printStackTrace();
-        });
+        }){
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError
+            {
+                Map<String, String> map =  new HashMap<>();
+                SharedPreferences sharedPreferences = getSharedPreferences("appData", MODE_PRIVATE);
+                String id = sharedPreferences.getString("userId", "");
+                map.put("idKey", id);
+                return map;
+            }
+        };
 
         RequestQueue rq = Volley.newRequestQueue(NotificationActivity.this);
         rq.add(sr);
     }
+
 }

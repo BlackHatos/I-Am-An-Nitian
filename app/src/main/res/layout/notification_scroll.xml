@@ -21,8 +21,8 @@
         <ImageView
             android:layout_gravity="center"
             android:layout_weight="0.2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="43dp"
             android:paddingEnd="4dp"
             android:src="@drawable/light3"
             />
@@ -71,13 +71,13 @@
                 android:textSize="15sp" />
 
                 <TextView
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="18 hours ago"
                     android:fontFamily="@font/work_sans"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textColor="@color/textColor4"
                     />
 
