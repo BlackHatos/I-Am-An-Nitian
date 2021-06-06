@@ -513,4 +513,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }catch(Exception ex){ ex.printStackTrace();}
 
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        bottomNavigationView.setSelectedItemId(R.id.home);
+    }
 }

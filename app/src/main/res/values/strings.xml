@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">I Am An NITian</string>
+    <string name="splash_msg">Connecting Nitians</string>
+    <string name="cnt_desp">Image</string>
+
+
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
+
+
+
 
     <!--============== Welcome Screen Strings =================-->
     <string name="login_or_signup">Login or sign up</string>
@@ -46,11 +53,6 @@
     <string name="read">Read</string>
     <string name="success_story_read">Read Motivational Success Stories</string>
 
-    <!--============== Splash Strings =================-->
-    <string name="splash_msg">Connecting Nitians</string>
-
-    <!--========= Content Description Strings ==========-->
-    <string name="cnt_desp">NIT SXR</string>
 
     <!--========= Drawer Headers Strings ==========-->
     <string name="user_name">User Name</string>

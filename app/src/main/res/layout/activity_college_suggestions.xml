@@ -54,7 +54,7 @@
                     android:layout_height="?actionBarSize"
                     android:hint="College Name"
                     android:textSize="16sp"
-                    android:drawablePadding="10dp"
+                    android:drawablePadding="15dp"
                     android:drawableEnd="@drawable/ic_close_black_24dp"
                     android:completionThreshold="1"
                     />

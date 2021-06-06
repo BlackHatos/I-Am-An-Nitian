@@ -170,5 +170,4 @@ public class NotificationActivity extends AppCompatActivity
         RequestQueue rq = Volley.newRequestQueue(NotificationActivity.this);
         rq.add(sr);
     }
-
 }

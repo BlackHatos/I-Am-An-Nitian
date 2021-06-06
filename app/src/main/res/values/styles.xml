@@ -14,10 +14,6 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <!-- ===============    Hiding toolbar only   ================= -->
-
-    <!-- ===============    Hiding toolbar and status bar   ================= -->
-
     <!-- ===============   navigation drawer horizontal line color   ================= -->
     <style name="NavigationDrawerStyle">
         <item name="android:listDivider">@color/navigationHorizontalLineColor</item>

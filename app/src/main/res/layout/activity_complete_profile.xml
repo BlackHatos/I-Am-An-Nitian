@@ -163,6 +163,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="@string/your_college"
+            android:textStyle="normal"
             android:autofillHints=""
             android:textAlignment="viewStart"
             />

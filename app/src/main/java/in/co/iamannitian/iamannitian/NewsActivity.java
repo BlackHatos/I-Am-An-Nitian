@@ -289,6 +289,7 @@ public class NewsActivity extends AppCompatActivity
 
                         newsAdapter = new NewsAdapter(NewsActivity.this, mList);
                         newsRecyclerView.setAdapter(newsAdapter);
+                        newsAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -350,6 +351,7 @@ public class NewsActivity extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
+        bottomNavigationView.setSelectedItemId(R.id.news_icon);
         // need to refresh the news activity
         sharedPreferences = getSharedPreferences("tempData", MODE_PRIVATE);
         String isReactionClicked = sharedPreferences.getString("isReactionClicked", "0");

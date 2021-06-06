@@ -18,7 +18,6 @@
             android:layout_height="95dp"
             android:contentDescription="@string/cnt_desp"
             android:src="@drawable/imnitian" />
-
     </LinearLayout>
 
     <RelativeLayout
